@@ -4,9 +4,9 @@ require_relative 'helpers/tex_play_helper'
 require 'fidgit/gosu_ext'
 include Gosu
 
-require 'fidgit/icon'
+require 'fidgit/thumbnail'
 
-def check_icon_is_square(dimension)
+def check_thumbnail_is_square(dimension)
   {square: [10, 10], tall: [5, 12], wide: [6, 5]}.each_pair do |type, dimensions|
     context "with a #{type} image" do
       it "should be square and just large enough to contain the image" do
@@ -19,13 +19,13 @@ def check_icon_is_square(dimension)
 end
 
 module Fidgit
-  describe Icon do
+  describe Thumbnail do
     before :all do
       $window = Gosu::Window.new(100, 100, false)
       @image = Image.create(10, 10)
     end
 
-    subject { Icon.new(@image) }
+    subject { Thumbnail.new(@image) }
 
     describe '#image' do
       it "should have the image set" do
@@ -43,11 +43,11 @@ module Fidgit
     end
 
     describe '#width' do
-      check_icon_is_square :width
+      check_thumbnail_is_square :width
     end
 
     describe '#height' do
-      check_icon_is_square :height
+      check_thumbnail_is_square :height
     end
   end
 end

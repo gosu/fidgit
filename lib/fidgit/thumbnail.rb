@@ -2,7 +2,7 @@
 
 module Fidgit
   # Wrapper for Gosu::Image that always pads the image out to being square.
-  class Icon
+  class Thumbnail
     DEFAULT_COLOR = Gosu::Color.rgb(255, 255, 255)
 
     attr_reader :image, :height, :width
