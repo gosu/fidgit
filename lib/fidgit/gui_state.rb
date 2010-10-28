@@ -2,6 +2,9 @@
 
 module Fidgit
   class GuiState < Chingu::GameState
+    # A 1x1 white pixel used for drawing.
+    PIXEL_IMAGE = File.join(File.dirname(__FILE__), '..', '..', 'media', 'images', 'pixel.png')
+
     DEFAULT_INPUTS = [
       :left_mouse_button, :right_mouse_button,
       :holding_left_mouse_button, :holding_right_mouse_button,
@@ -40,7 +43,7 @@ module Fidgit
       @mouse_x, @mouse_y = 0, 0
       @focus = nil
 
-      @@draw_pixel ||= Gosu::Image.create(1, 1, color: [1, 1, 1])
+      @@draw_pixel ||= Gosu::Image.new($window, PIXEL_IMAGE, true) # Must be tileable or it will blur.
 
       super()
       add_inputs *DEFAULT_INPUTS
@@ -73,7 +76,7 @@ module Fidgit
 
       # Check if the mouse has moved, and no menu is shown, so we can show a tooltip.
       if [x, y] == [@mouse_x, @mouse_y] and (not @menu)
-        if @mouse_over and (milliseconds - @mouse_moved_at) > tool_tip_delay
+        if @mouse_over and (Gosu::milliseconds - @mouse_moved_at) > tool_tip_delay
           if text = @mouse_over.tip and not text.empty?
             @tool_tip ||= ToolTip.new(nil)
             @tool_tip.text = text

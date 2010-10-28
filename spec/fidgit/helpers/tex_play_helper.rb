@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-# Temporary patch.
+require 'texplay'
 
 module Gosu
   class Image
