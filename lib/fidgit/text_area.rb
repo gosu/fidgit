@@ -126,7 +126,7 @@ module Fidgit
       publish :focus unless focused?
 
       # Move caret to position the user clicks on.
-      mouse_x, mouse_y = $window.cursor.x - x - padding_x, $window.cursor.y - y - padding_y
+      mouse_x, mouse_y = $window.mouse_x - x - padding_x, $window.mouse_y - y - padding_y
       @text_positions.each.with_index do |data, index|
         x, y, width = data
         if mouse_x.between?(x, x + width) and mouse_y.between?(y, y + font_size)
