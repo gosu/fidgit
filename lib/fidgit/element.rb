@@ -102,6 +102,7 @@ module Fidgit
     # Redraw the element.
     def draw
       draw_background
+      draw_border
       draw_foreground
       nil
     end
@@ -122,6 +123,10 @@ module Fidgit
     protected
     def draw_background
       draw_rect(x, y, width, height, z, @background_color) unless @background_color.transparent?
+    end
+
+    protected
+    def draw_border
       draw_frame(x, y, width, height, z, @border_color) unless @border_color.transparent?
     end
 
