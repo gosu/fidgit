@@ -2,17 +2,32 @@
 
 require_relative 'event'
 
+# The Fidgit GUI framework for Gosu.
 module Fidgit
-  @@font_name = '' # Just use the default Gosu font.
-  def self.font_name; @@font_name; end
-  def self.font_name=(name); @@font_name = name; end
+  class << self
+    attr_accessor :default_font_name, :default_font_size, :fonts, :debug_mode
+  end
+
+  self.default_font_name = '' # Just use the default Gosu font.
+  self.default_font_size = 15
+  self.fonts = Hash.new { |fonts, name| fonts[name] = Hash.new { |sizes, size| sizes[size] = Gosu::Font.new($window, name, size) } }
+  self.debug_mode = false
+
+  def default_font_name; Fidgit.default_font_name; end
+  def default_font_name=(name); Fidgit.default_font_name = name; end
+
+  def default_font_size; Fidgit.default_font_size; end
+  def default_font_size=(size); Fidgit.default_font_size = size; end
+
+  def default_font; Fidgit.fonts[default_font_name][default_font_size]; end
+
+  def debug_mode?; Fidgit.debug_mode; end
+  def debug_mode=(value); Fidgit.debug_mode = value; end
 
   # An element within the GUI environment.
   # @abstract
   class Element
     include Event
-
-    DEFAULT_FONT_SIZE = 15
 
     DEFAULT_PADDING_X, DEFAULT_PADDING_Y = 4, 4
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
@@ -22,12 +37,6 @@ module Fidgit
 
     attr_accessor :parent
 
-    @@fonts = {}
-    def self.font(size = DEFAULT_FONT_SIZE)
-      @@fonts[size] ||= Gosu::Font.new($window, Fidgit.font_name, size)
-    end
-
-    def font; self.class.font @font_size; end
     def x; rect.x; end
     def x=(value); rect.x = value; end
     def y; rect.y; end
@@ -37,12 +46,9 @@ module Fidgit
     def enabled?; @enabled; end
     def enabled=(value); @enabled = value; end
 
-    @@debug_mode = false
-    def self.debug_mode?; @@debug_mode; end
-    def self.debug_mode=(value); @@debug_mode = value; end
+    def font; Fidgit.fonts[@font_name][@font_size]; end
 
     def rect; @rect; end; protected :rect
-    def debug_mode?; @@debug_mode; end
 
     class << self
       alias_method :original_new, :new
@@ -54,6 +60,23 @@ module Fidgit
       end
     end
 
+    # @param [Element, nil] parent
+    #
+    # @option [Number] :x (0)
+    # @option [Number] :y (0)
+    # @option [Number] :z (0)
+    # @option [Number] :width (0)
+    # @option [Number] :height (0)
+    # @option [String] :tip Tool-tip text ('')
+    # @option [String] :font_name ('')
+    # @option [String] :font_size (Fidgit.default_font_size)
+    # @option [String] :debug (Fidgit.debug_mode?)
+    # @option [Gosu::Color] :background_color (transparent)
+    # @option [Gosu::Color] :border_color (transparent)
+    # @option [Boolean] :enabled (true)
+    # @option [Number] :padding (4)
+    # @option [Number] :padding_x (:padding option)
+    # @option [Number] :padding_y (:padding option)
     def initialize(parent, options = {}, &block)
       options = {
         x: 0,
@@ -62,8 +85,9 @@ module Fidgit
         width: 0,
         height: 0,
         tip: '',
-        font_size: DEFAULT_FONT_SIZE,
-        debug: @@debug_mode,
+        font_name: default_font_name,
+        font_size: default_font_size,
+        debug: debug_mode?,
         background_color: DEFAULT_BACKGROUND_COLOR.dup,
         border_color: DEFAULT_BORDER_COLOR.dup,
         enabled: true,
@@ -80,6 +104,7 @@ module Fidgit
 
       @z = options[:z]
       @tip = options[:tip]
+      @font_name = options[:font_name].dup
       @font_size = options[:font_size]
 
       @rect = Chingu::Rect.new(0, 0, options[:width], options[:height])

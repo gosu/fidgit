@@ -1,6 +1,8 @@
 require_relative '../../lib/fidgit'
 include Fidgit
 
+Element.default_font_size = 30
+
 class Window < Chingu::Window
   def initialize
     super(640, 480, false)

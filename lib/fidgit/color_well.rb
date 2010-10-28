@@ -10,7 +10,7 @@ module Fidgit
 
     OUTLINE_COLOR = Gosu::Color.rgb(0, 0, 0)
 
-    DEFAULT_SIZE = DEFAULT_FONT_SIZE + 2 * DEFAULT_PADDING_Y
+    DEFAULT_SIZE = 20 * DEFAULT_PADDING_Y
 
     attr_accessor :color
 
