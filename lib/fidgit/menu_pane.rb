@@ -10,6 +10,9 @@ module Fidgit
       DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
       attr_reader :value, :shortcut
 
+      # @param (see Button#initialize)
+      #
+      # @option (see Button#initialize)
       # @param [any] value Value if the user picks this item
       # @option options [Boolean] :enabled (true)
       # @option options [String] :shortcut ('')
@@ -46,7 +49,10 @@ module Fidgit
     class Separator < Item
       DEFAULT_LINE_HEIGHT = 1
 
-      def initialize(parent, options)
+      # @param (see Item#initialize)
+      #
+      # @option (see Item#initialize)
+      def initialize(parent, options = {})
         options = {
           enabled: false,
           line_height: DEFAULT_LINE_HEIGHT,
@@ -71,6 +77,7 @@ module Fidgit
     def size; inner_container.size; end
     def [](index); inner_container[index]; end
 
+    # @option (see Composite#initialize)
     def initialize(options = {}, &block)
       options = {
         background_color: DEFAULT_BACKGROUND_COLOR.dup,

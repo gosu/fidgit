@@ -20,6 +20,10 @@ module Fidgit
       #       end
       #     end
       #    end
+      #
+      # @param (see Packer#initialize)
+      #
+      # @option (see Packer#initialize)
       def initialize(parent, options = {}, &block)
         options = {
           padding_x: 0,
@@ -79,11 +83,16 @@ module Fidgit
 
     def checked?; @checked; end
 
+    # @param (see Button#initialize)
+    # @param [Object] value
+    #
+    # @option (see Button#initialize)
+    # @option options [Boolean] :checked
     def initialize(parent, value, options = {}, &block)
       options = {
         checked: false,
-        border_color_checked: DEFAULT_BORDER_COLOR_CHECKED.dup,
-        border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED.dup
+        border_color_checked: DEFAULT_BORDER_COLOR_CHECKED,
+        border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED
       }.merge! options
 
       @checked = options[:checked]
@@ -91,11 +100,11 @@ module Fidgit
 
       super(parent, options)
 
-      @border_color_checked = options[:border_color_checked] || @border_color
-      @border_color_unchecked = options[:border_color_unchecked] || @border_color
+      @border_color_checked = (options[:border_color_checked] || @border_color).dup
+      @border_color_unchecked = (options[:border_color_unchecked] || @border_color).dup
       add_to_group
 
-      @border_color = checked? ? @border_color_checked : @border_color_unchecked
+      @border_color = (checked? ? @border_color_checked : @border_color_unchecked).dup
     end
 
     def clicked_left_mouse_button(sender, x, y)
@@ -110,7 +119,7 @@ module Fidgit
       @group.button_checked self
 
       @checked = true
-      @border_color = @border_color_checked
+      @border_color = @border_color_checked.dup
       publish :checked
 
       nil
@@ -135,7 +144,7 @@ module Fidgit
     # Only ever called from Group!
     def uncheck
       @checked = false
-      @border_color = @border_color_unchecked
+      @border_color = @border_color_unchecked.dup
       publish :unchecked
 
       nil

@@ -9,11 +9,13 @@ module Fidgit
       DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(255, 0, 0)
       DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
 
-      protected
+      # @param (see Element#initialize)
+      #
+      # @option (see Element#initialize)
       def initialize(parent, options = {}, &block)
         options = {
-          background_color: DEFAULT_BACKGROUND_COLOR.dup,
-          border_color: DEFAULT_BORDER_COLOR.dup,
+          background_color: DEFAULT_BACKGROUND_COLOR,
+          border_color: DEFAULT_BORDER_COLOR,
         }.merge! options
 
         super parent, options
@@ -27,20 +29,23 @@ module Fidgit
 
     attr_reader :value, :range
 
+    # @param (see Composite#initialize)
+    #
+    # @option (see Composite#initialize)
     # @option options [Range] :range (0..1.0)
     # @option options [Range] :value (minimum of :range)
     def initialize(parent, options = {}, &block)
       options = {
         range: 0..1.0,
         height: 25,
-        background_color: DEFAULT_BACKGROUND_COLOR.dup,
-        border_color: DEFAULT_BORDER_COLOR.dup,
-        groove_color: DEFAULT_GROOVE_COLOR.dup,
-        handle_color: DEFAULT_HANDLE_COLOR.dup,
+        background_color: DEFAULT_BACKGROUND_COLOR,
+        border_color: DEFAULT_BORDER_COLOR,
+        groove_color: DEFAULT_GROOVE_COLOR,
+        handle_color: DEFAULT_HANDLE_COLOR,
       }.merge! options
 
-      @range = options[:range]
-      @groove_color = options[:groove_color]
+      @range = options[:range].dup
+      @groove_color = options[:groove_color].dup
 
       super(parent, HorizontalPacker.new(nil, padding: 0), options)
 

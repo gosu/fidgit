@@ -24,6 +24,9 @@ module Fidgit
       super(value)
     end
 
+    # @param (see Element#initialize)
+    #
+    # @option (see Element#initialize)
     def initialize(parent, options = {})
       options[:border_color] = DEBUG_BORDER_COLOR if options[:debug] or debug_mode?
 

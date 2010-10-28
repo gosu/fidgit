@@ -79,6 +79,10 @@ module Fidgit
       self.text
     end
 
+
+    # @param (see Element#initialize)
+    #
+    # @option (see Element#initialize)
     # @option options [String] :text ("")
     # @option options [Boolean] :editable (false)
     # @option options [Integer] :height Sets both min and max height at once.

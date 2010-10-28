@@ -11,6 +11,10 @@ module Fidgit
 
     attr_reader :spacing_x, :spacing_y
 
+
+    # @param (see Container#initialize)
+    #
+    # @option (see Container#initialize)
     def initialize(parent, options = {})
       options = {
       }.merge! options

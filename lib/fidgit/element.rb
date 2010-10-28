@@ -62,21 +62,21 @@ module Fidgit
 
     # @param [Element, nil] parent
     #
-    # @option [Number] :x (0)
-    # @option [Number] :y (0)
-    # @option [Number] :z (0)
-    # @option [Number] :width (0)
-    # @option [Number] :height (0)
-    # @option [String] :tip Tool-tip text ('')
-    # @option [String] :font_name ('')
-    # @option [String] :font_size (Fidgit.default_font_size)
-    # @option [String] :debug (Fidgit.debug_mode?)
-    # @option [Gosu::Color] :background_color (transparent)
-    # @option [Gosu::Color] :border_color (transparent)
-    # @option [Boolean] :enabled (true)
-    # @option [Number] :padding (4)
-    # @option [Number] :padding_x (:padding option)
-    # @option [Number] :padding_y (:padding option)
+    # @option options [Number] :x (0)
+    # @option options [Number] :y (0)
+    # @option options [Number] :z (0)
+    # @option options [Number] :width (0)
+    # @option options [Number] :height (0)
+    # @option options [String] :tip ('') Tool-tip text
+    # @option options [String] :font_name ('')
+    # @option options [String] :font_size (Fidgit.default_font_size)
+    # @option options [String] :debug (Fidgit.debug_mode?)
+    # @option options [Gosu::Color] :background_color (transparent)
+    # @option options [Gosu::Color] :border_color (transparent)
+    # @option options [Boolean] :enabled (true)
+    # @option options [Number] :padding (4)
+    # @option options [Number] :padding_x (:padding option)
+    # @option options [Number] :padding_y (:padding option)
     def initialize(parent, options = {}, &block)
       options = {
         x: 0,
@@ -94,8 +94,8 @@ module Fidgit
       }.merge! options
 
       @enabled = options[:enabled]
-      @background_color = options[:background_color]
-      @border_color = options[:border_color]
+      @background_color = options[:background_color].dup
+      @border_color = options[:border_color].dup
 
       @padding_x = options[:padding_x] || options[:padding] || DEFAULT_PADDING_X
       @padding_y = options[:padding_y] || options[:padding] || DEFAULT_PADDING_Y
@@ -103,7 +103,7 @@ module Fidgit
       @debug = options[:debug]
 
       @z = options[:z]
-      @tip = options[:tip]
+      @tip = options[:tip].dup
       @font_name = options[:font_name].dup
       @font_size = options[:font_size]
 

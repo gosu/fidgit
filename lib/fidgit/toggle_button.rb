@@ -10,6 +10,9 @@ module Fidgit
     def on?; @on; end
     def on=(value); @on = value; update_status; end
 
+    # @param (see Button#initialize)
+    #
+    # @option (see Button#initialize)
     def initialize(parent, options = {}, &block)
       options = {
         on: false
@@ -19,15 +22,15 @@ module Fidgit
 
       super(parent, options)
 
-      @text_on = options[:text_on] || text
+      @text_on = (options[:text_on] || text).dup
       @icon_on = options[:icon_on] || icon
-      @tip_on = options[:tip_on] || tip
-      @border_color_on = options[:border_color_on] || options[:border_color] || DEFAULT_BORDER_COLOR_ON
+      @tip_on = (options[:tip_on] || tip).dup
+      @border_color_on = (options[:border_color_on] || options[:border_color] || DEFAULT_BORDER_COLOR_ON).dup
 
-      @text_off = options[:text_off] || text
+      @text_off = (options[:text_off] || text).dup
       @icon_off = options[:icon_off] || icon
-      @tip_off = options[:tip_off] || tip
-      @border_color_off = options[:border_color_off] || options[:border_color] || DEFAULT_BORDER_COLOR_OFF
+      @tip_off = (options[:tip_off] || tip).dup
+      @border_color_off = (options[:border_color_off] || options[:border_color] || DEFAULT_BORDER_COLOR_OFF).dup
 
       update_status
     end
@@ -42,15 +45,15 @@ module Fidgit
     protected
     def update_status
       if @on
-        @text = @text_on
-        @icon = @icon_on
-        @tip = @tip_on
-        @border_color = @border_color_on
+        @text = @text_on.dup
+        @icon = @icon_on.dup
+        @tip = @tip_on.dup
+        @border_color = @border_color_on.dup
       else
-        @text = @text_off
-        @icon = @icon_off
-        @tip = @tip_off
-        @border_color = @border_color_off
+        @text = @text_off.dup
+        @icon = @icon_off.dup
+        @tip = @tip_off.dup
+        @border_color = @border_color_off.dup
       end
 
       recalc

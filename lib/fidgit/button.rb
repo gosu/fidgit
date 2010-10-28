@@ -11,11 +11,13 @@ module Fidgit
     HOVER_COLOR = Gosu::Color.rgb(150, 150, 150)
     DISABLED_COLOR = Gosu::Color.rgb(150, 150, 150)
 
+    # @param (see Label#initialize)
+    # @option (see Label#initialize)
     def initialize(parent, options = {}, &block)
       options = {
-        color: DEFAULT_COLOR.dup,
-        background_color: DEFAULT_BACKGROUND_COLOR.dup,
-        border_color: DEFAULT_BORDER_COLOR.dup,
+        color: DEFAULT_COLOR,
+        background_color: DEFAULT_BACKGROUND_COLOR,
+        border_color: DEFAULT_BORDER_COLOR,
       }.merge! options
 
       super(parent, options)

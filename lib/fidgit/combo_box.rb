@@ -29,11 +29,13 @@ class ComboBox < Button
     index
   end
 
+  # @param (see Button#initialize)
+  # @option (see Button#initialize)
   # @option options [] :value
   def initialize(parent, options = {}, &block)
     options = {
-      border_color: DEFAULT_BORDER_COLOR.dup,
-      background_color: DEFAULT_BACKGROUND_COLOR.dup
+      border_color: DEFAULT_BORDER_COLOR,
+      background_color: DEFAULT_BACKGROUND_COLOR
     }.merge! options
 
     @value = options[:value]

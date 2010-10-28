@@ -11,10 +11,14 @@ module Fidgit
     def y=(value); super(value); recalc; value; end
     def hit?(x, y); false; end
 
+
+    # @param (see Label#initialize)
+    #
+    # @option (see Label#initialize)
     def initialize(parent, options = {}, &block)
       options = {
-        background_color: DEFAULT_BACKGROUND_COLOR.dup,
-        border_color: DEFAULT_BORDER_COLOR.dup
+        background_color: DEFAULT_BACKGROUND_COLOR,
+        border_color: DEFAULT_BORDER_COLOR
       }.merge! options
 
       super(parent, options)

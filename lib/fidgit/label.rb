@@ -16,19 +16,22 @@ module Fidgit
       nil
     end
 
+    # @param (see Element#initialize)
+    #
+    # @option (see Element#initialize)
     # @option options [Gui::Icon, Gosu::Image, nil] :icon (nil)
     # @option options [String] :text ('')
     def initialize(parent, options = {}, &block)
       options = {
         text: '',
-        color: DEFAULT_COLOR.dup,
-        background_color: DEFAULT_BACKGROUND_COLOR.dup,
-        border_color: DEFAULT_BORDER_COLOR.dup
+        color: DEFAULT_COLOR,
+        background_color: DEFAULT_BACKGROUND_COLOR,
+        border_color: DEFAULT_BORDER_COLOR
       }.merge! options
 
-      @text = options[:text]
+      @text = options[:text].dup
       @icon = options[:icon]
-      @color = options[:color]
+      @color = options[:color].dup
 
       super(parent, options)
     end

@@ -10,7 +10,7 @@ module Fidgit
 
     OUTLINE_COLOR = Gosu::Color.rgb(0, 0, 0)
 
-    DEFAULT_SIZE = 20 * DEFAULT_PADDING_Y
+    DEFAULT_SIZE = 20
 
     attr_accessor :color
 
@@ -20,13 +20,15 @@ module Fidgit
 
     alias_method :value, :color
 
+    # @param (see RadioButton#initialize)
+    # @option (see RadioButton#initialize)
     def initialize(parent, options = {}, &block)
       options = {
         width: DEFAULT_SIZE,
         height: DEFAULT_SIZE,
-        color: DEFAULT_COLOR.dup,
-        border_color_checked: DEFAULT_BORDER_COLOR_CHECKED.dup,
-        border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED.dup,
+        color: DEFAULT_COLOR,
+        border_color_checked: DEFAULT_BORDER_COLOR_CHECKED,
+        border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED,
       }.merge! options
 
       super(parent, nil, options)

@@ -21,15 +21,17 @@ module Fidgit
       publish :changed, @color.dup
     end
 
+    # @param (see Composite#initialize)
+    # @option (see Composite#initialize)
     def initialize(parent, options = {}, &block)
       options = {
         padding: 0,
         spacing: 0,
-        channel_names: DEFAULT_CHANNEL_NAMES.dup,
-        color: DEFAULT_COLOR.dup,
+        channel_names: DEFAULT_CHANNEL_NAMES,
+        color: DEFAULT_COLOR,
       }.merge! options
 
-      @color = options[:color]
+      @color = options[:color].dup
 
       super(parent, VerticalPacker.new(nil, spacing: 0), options)
 
