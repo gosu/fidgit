@@ -12,7 +12,7 @@ module Fidgit
   #   bean.subscribe :jump do
   #     puts "Whee!"
   #   end
-
+  #
   #   bean.subscribe :jump do |object, direction, distance|
   #     puts "#{object.class.name} jumped #{distance} metres #{direction}"
   #   end

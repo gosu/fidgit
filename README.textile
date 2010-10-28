@@ -1,6 +1,6 @@
 h1. Fidgit
 
-Fidgit is a GUI Framework built on Gosu and Chingu.
+Fidgit is a GUI framework built on Gosu and Chingu.
 
 h2. Description
 
@@ -8,21 +8,25 @@ The API is slightly based on FXRuby (being the GUI framework I know most intimat
 It was originally developed as a part of the Sidney game, but as it got more complex, it was
 obvious it would be useful to separate.
 
-WARNING: THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT AND THE API IS LIABLE TO CONTINUOUS CHANGE!
+_WARNING: THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT AND THE API IS LIABLE TO CONTINUOUS CHANGE!_
+
+Read the Yard documentation at "rubydoc.info":http://rubydoc.info/github/Spooner/fidgit/master
 
 h2. Requirements
 
 * Gosu gem.
 * Chingu gem.
-* Ruby 1.9.2 (sorry, I'm lazy!).h2. Alternative frameworks* Rubygoo** Use this if you need compatibility with RubyGame (it works with RubyGame or Gosu).** The API is a little more cumbersome than Fidgit.* GGLib (Gosu Gui Library)**  h3. Why choose Fidgit?* Fidgit is completely compatible with the Chingu extension library (particularly since Fidgit::GuiState is a Chingu::GameState).* Fidgit contains considerably more advanced widgits than the alternatives.
+* Ruby 1.9.2 (sorry, I'm lazy!).
 
 h2. Alternative GUI frameworks
 
 * RubyGoo
+
 ** Additionally supports Rubygame (as well as Gosu).
 ** Relatively cumbersome API.
 ** Only simple widgets are implemented.
 
 * GGLib (Gosu GUI Library)
+
 ** Offers graphical theme settings.
 ** Only simple widgets are implemented.
