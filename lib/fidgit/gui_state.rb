@@ -39,7 +39,6 @@ module Fidgit
         @container = Container.new(container)
       end
 
-      @mouse_x, @mouse_y = 0, 0
       @focus = nil
 
       unless defined? @@draw_pixel
@@ -51,13 +50,11 @@ module Fidgit
         @@cursor = Cursor.new
       end
 
+      @mouse_over = nil # Element the mouse is hovering over.
+      @@mouse_moved_at = Gosu::milliseconds
+
       super()
       add_inputs *DEFAULT_INPUTS
-    end
-
-    def setup
-      @mouse_over = nil # Element the mouse is hovering over.
-      @mouse_moved_at = Gosu::milliseconds
     end
 
     # Internationalisation helper.
@@ -66,13 +63,11 @@ module Fidgit
     def update
       cursor.update
 
-      x, y = cursor.x, cursor.y
-
-      new_mouse_over = @outer_container.hit_element(x, y)
+      new_mouse_over = @outer_container.hit_element(cursor.x, cursor.y)
 
       if new_mouse_over
         new_mouse_over.publish :enter if new_mouse_over != @mouse_over
-        new_mouse_over.publish :hover, x, y
+        new_mouse_over.publish :hover, cursor.x, cursor.y
       end
 
       @mouse_over.publish :leave if @mouse_over and new_mouse_over != @mouse_over
@@ -80,8 +75,8 @@ module Fidgit
       @mouse_over = new_mouse_over
 
       # Check if the mouse has moved, and no menu is shown, so we can show a tooltip.
-      if [x, y] == [@mouse_x, @mouse_y] and (not @menu)
-        if @mouse_over and (Gosu::milliseconds - @mouse_moved_at) > tool_tip_delay
+      if [cursor.x, cursor.y] == [@last_cursor_x, @last_cursor_y] and (not @menu)
+        if @mouse_over and (Gosu::milliseconds - @@mouse_moved_at) > tool_tip_delay
           if text = @mouse_over.tip and not text.empty?
             @tool_tip ||= ToolTip.new(nil)
             @tool_tip.text = text
@@ -94,12 +89,12 @@ module Fidgit
         end
       else
         clear_tip
-        @mouse_moved_at = Gosu::milliseconds
+        @@mouse_moved_at = Gosu::milliseconds
       end
 
-      @mouse_x, @mouse_y = x, y
-
       @outer_container.update
+
+      @last_cursor_x, @last_cursor_y = cursor.x, cursor.y
 
       super
     end
@@ -147,7 +142,7 @@ module Fidgit
       end
 
       if @mouse_over
-        @mouse_over.publish :left_mouse_button, @mouse_x, @mouse_y
+        @mouse_over.publish :left_mouse_button, cursor.x, cursor.y
         @mouse_down_on = @mouse_over
       else
         @mouse_down_on = nil
@@ -161,8 +156,8 @@ module Fidgit
       hide_menu if @menu and @mouse_over != @menu
 
       if @mouse_over
-        @mouse_over.publish :released_left_mouse_button, @mouse_x, @mouse_y
-        @mouse_over.publish :clicked_left_mouse_button, @mouse_x, @mouse_y if @mouse_over == @mouse_down_on
+        @mouse_over.publish :released_left_mouse_button, cursor.x, cursor.y
+        @mouse_over.publish :clicked_left_mouse_button, cursor.x, cursor.y if @mouse_over == @mouse_down_on
       end
 
       nil
@@ -192,7 +187,7 @@ module Fidgit
     def clear_tip
       @outer_container.remove @tool_tip if @tool_tip
       @tool_tip = nil
-      @mouse_moved_at = Gosu::milliseconds
+      @@mouse_moved_at = Gosu::milliseconds
 
       nil
     end

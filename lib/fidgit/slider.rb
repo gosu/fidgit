@@ -60,7 +60,8 @@ module Fidgit
     end
 
     def tip
-      "#{super}: #{@value}"
+      tip = super
+      tip.empty? ? @value.to_s : "#{tip}: #{@value}"
     end
 
     def draw_background
@@ -85,6 +86,12 @@ module Fidgit
       else
         nil
       end
+    end
+
+    protected
+    # Prevent standard packing layout change.
+    def layout
+      nil
     end
   end
 end
