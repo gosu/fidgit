@@ -7,10 +7,13 @@ include Gosu
 require 'fidgit/icon'
 
 def check_icon_is_square(dimension)
-  [[10, 10], [5, 12], [6, 5]].each do |size|
-    context "with an image of size #{size}" do
-      subject { described_class.new(Image.create(*size)).send dimension }
-      it { should equal size.max }
+  {square: [10, 10], tall: [5, 12], wide: [6, 5]}.each_pair do |type, dimensions|
+    context "with a #{type} image" do
+      it "should be square and just large enough to contain the image" do
+        subject = described_class.new(Image.create(*dimensions))
+        subject.width.should equal dimensions.max
+        subject.height.should equal dimensions.max
+      end
     end
   end
 end
