@@ -19,6 +19,8 @@ module Fidgit
       end
 
       publish :changed, @color.dup
+
+      value
     end
 
     # @param (see Composite#initialize)
@@ -41,16 +43,11 @@ module Fidgit
         Slider.new(inner_container, value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do |slider|
           slider.subscribe :changed do |sender, value|
             @color.send "#{channel}=", value
+            publish :changed, @color.dup
           end
 
           @sliders[channel] = slider
         end
-      end
-
-      unless defined? @@color_picker_transparent
-        row = [[80, 80, 80, 255], [120, 120, 120, 255]]
-        blob = [row, row.reverse]
-        @@color_picker_transparent = Image.from_blob(blob.flatten.pack('C*'), 2, 2, caching: true)
       end
     end
 
@@ -67,8 +64,6 @@ module Fidgit
       super
 
       sliders_height = @sliders[:red].height * @sliders.size
-
-      @@color_picker_transparent.draw x, y + sliders_height, z, width / 2, INDICATOR_HEIGHT / 2
 
       draw_rect x, y + sliders_height, width, INDICATOR_HEIGHT, z, @color
 
