@@ -9,20 +9,26 @@ module Fidgit
   #   end
   #
   #   bean = JumpingBean.new
+  #   bean.subscribe :jump do
+  #     puts "Whee!"
+  #   end
+
   #   bean.subscribe :jump do |object, direction, distance|
-  #     puts "#{object} jumped #{distance} metres #{direction}"
+  #     puts "#{object.class.name} jumped #{distance} metres #{direction}"
   #   end
   #
   #   bean.publish :jump, :up, 4
+  #   # Whee!
+  #   # JumpingBean jumped 4 metres up
   #
   module Event
     # @overload subscribe(event, method)
     #   Add an event handler for an event, using a method.
-    #   @return nil
+    #   @return [nil]
     #
     # @overload subscribe(event, &block)
     #   Add an event handler for an event, using a block.
-    #   @return nil
+    #   @return [nil]
     def subscribe(event, method = nil, &block)
       raise ArgumentError, "Expected method or block for event handler" unless !block.nil? ^ !method.nil?
       @_event_handlers = Hash.new() { |hash, key| hash[key] = [] } unless @_event_handlers
