@@ -9,4 +9,8 @@ class Window < Chingu::Window
 
     push_game_state ExampleState
   end
+
+  def needs_cursor?
+    false
+  end
 end

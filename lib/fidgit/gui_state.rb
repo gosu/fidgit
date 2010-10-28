@@ -15,6 +15,8 @@ module Fidgit
     attr_reader :container
     attr_reader :focus
 
+    def cursor; @@cursor; end
+
     # Will implement these later.
     DEFAULT_INPUTS.each do |handler|
       define_method handler do
@@ -40,7 +42,14 @@ module Fidgit
       @mouse_x, @mouse_y = 0, 0
       @focus = nil
 
-      @@draw_pixel ||= Gosu::Image.new($window, PIXEL_IMAGE, true) # Must be tileable or it will blur.
+      unless defined? @@draw_pixel
+        media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'media'))
+        Gosu::Image.autoload_dirs << File.join(media_dir, 'images')
+        Gosu::Sample.autoload_dirs << File.join(media_dir, 'sounds')
+
+        @@draw_pixel = Gosu::Image.new($window, PIXEL_IMAGE, true) # Must be tileable or it will blur.
+        @@cursor = Cursor.new
+      end
 
       super()
       add_inputs *DEFAULT_INPUTS
@@ -55,7 +64,9 @@ module Fidgit
     def t(*args); I18n.t(*args); end
 
     def update
-      x, y = $window.mouse_x, $window.mouse_y
+      cursor.update
+
+      x, y = cursor.x, cursor.y
 
       new_mouse_over = @outer_container.hit_element(x, y)
 
@@ -75,8 +86,8 @@ module Fidgit
             @tool_tip ||= ToolTip.new(nil)
             @tool_tip.text = text
             @outer_container.add @tool_tip
-            @tool_tip.x = $window.cursor.x
-            @tool_tip.y = $window.cursor.y + $window.cursor.height # Place the tip beneath the cursor.
+            @tool_tip.x = cursor.x
+            @tool_tip.y = cursor.y + cursor.height # Place the tip beneath the cursor.
           else
             clear_tip
           end
@@ -94,6 +105,7 @@ module Fidgit
     end
 
     def draw
+      cursor.draw
       @outer_container.draw
 
       nil

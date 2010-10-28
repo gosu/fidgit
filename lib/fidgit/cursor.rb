@@ -7,7 +7,7 @@ module Fidgit
 
     def initialize(options = {})
       options = {
-        image: Image[ARROW],
+        image: Gosu::Image[ARROW],
         center: 0,
         zorder: Float::INFINITY
       }.merge!(options)
@@ -32,7 +32,7 @@ module Fidgit
 
     def draw
       # Prevent system and game mouse from being shown at the same time.
-      super if inside_window? and not $window.needs_cursor?
+      super if inside_window? and $window.current_game_state.is_a? GuiState and not $window.needs_cursor?
     end
   end
 end
