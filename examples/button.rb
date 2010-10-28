@@ -1,4 +1,4 @@
-require_relative 'window'
+require_relative 'example/window'
 
 class ExampleState < GuiState
   def setup

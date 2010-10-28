@@ -1,4 +1,4 @@
-require_relative '../lib/fidgit'
+require_relative '../../lib/fidgit'
 include Fidgit
 
 class Window < Chingu::Window
