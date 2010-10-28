@@ -12,13 +12,9 @@ module Fidgit
 
     DEFAULT_SIZE = 20
 
-    attr_accessor :color
-
     # Manages a group of ColorWells.
     class Group < RadioButton::Group
     end
-
-    alias_method :value, :color
 
     # @param (see RadioButton#initialize)
     # @option (see RadioButton#initialize)
@@ -31,7 +27,10 @@ module Fidgit
         border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED,
       }.merge! options
 
+
       super(parent, nil, options)
+
+      @value = (options[:color] || options[:value]).dup
     end
 
     protected
@@ -45,7 +44,7 @@ module Fidgit
 
     protected
     def draw_foreground
-      draw_rect x + 3, y + 3, width - 6, height - 6, z, @color
+      draw_rect x + 3, y + 3, width - 6, height - 6, z, @value
 
       nil
     end
