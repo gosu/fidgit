@@ -10,7 +10,6 @@ module Fidgit
       DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
       attr_reader :value, :shortcut
 
-      public
       # @param [any] value Value if the user picks this item
       # @option options [Boolean] :enabled (true)
       # @option options [String] :shortcut ('')
@@ -27,14 +26,6 @@ module Fidgit
         super(parent, options)
       end
 
-      protected
-      def layout
-        super
-        rect.width += font.text_width("  #{@shortcut}") unless @shortcut.empty?
-        nil
-      end
-
-      public
       def draw_foreground
         super
         unless @shortcut.empty?
@@ -43,12 +34,18 @@ module Fidgit
 
         nil
       end
+
+      protected
+      def layout
+        super
+        rect.width += font.text_width("  #{@shortcut}") unless @shortcut.empty?
+        nil
+      end
     end
 
     class Separator < Item
       DEFAULT_LINE_HEIGHT = 1
 
-      public
       def initialize(parent, options)
         options = {
           enabled: false,
@@ -74,7 +71,6 @@ module Fidgit
     def size; inner_container.size; end
     def [](index); inner_container[index]; end
 
-    public
     def initialize(options = {}, &block)
       options = {
         background_color: DEFAULT_BACKGROUND_COLOR.dup,
@@ -84,26 +80,16 @@ module Fidgit
       super(nil, VerticalPacker.new(nil, spacing: 0, padding: 0), options)
     end
 
-    public
     def find(value)
       inner_container.find {|c| c.value == value }
     end
 
-    def layout
-      super
-      max_width = inner_container.each.to_a.map {|c| c.width }.max || 0
-      inner_container.each {|c| c.rect.width = max_width }
-      nil
-    end
-
-    public
     def add_separator(options = {})
       options[:z] = z
 
       Separator.new(inner_container, options)
     end
 
-    public
     def add_item(value, options = {})
       options[:z] = z
       item = Item.new(inner_container, value, options)
@@ -114,12 +100,19 @@ module Fidgit
       item
     end
 
-    public
     def item_selected(sender, x, y)
       publish(:selected, sender.value)
 
       $window.game_state_manager.current_game_state.hide_menu
 
+      nil
+    end
+
+    protected
+    def layout
+      super
+      max_width = inner_container.each.to_a.map {|c| c.width }.max || 0
+      inner_container.each {|c| c.rect.width = max_width }
       nil
     end
   end

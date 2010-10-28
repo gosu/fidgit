@@ -20,7 +20,6 @@ module Fidgit
 
     alias_method :value, :color
 
-    protected
     def initialize(parent, options = {}, &block)
       options = {
         width: DEFAULT_SIZE,

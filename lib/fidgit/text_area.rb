@@ -22,20 +22,17 @@ module Fidgit
     # @return [Boolean]
     attr_writer :editable
 
-    public
     # Is the area editable?
     def editable?
       @editable
     end
 
-    public
     # Text within the element.
     # @return [String]
     def text
       @text_input.text
     end
 
-    public
     # Returns the range of the selection.
     #
     # @return [Range]
@@ -46,7 +43,6 @@ module Fidgit
       (from...to)
     end
 
-    public
     # Returns the text within the selection.
     #
     # @return [String]
@@ -54,7 +50,6 @@ module Fidgit
       text[selection_range]
     end
 
-    public
     # Position of the caret.
     #
     # @return [Integer] Number in range 0..text.length
@@ -62,7 +57,6 @@ module Fidgit
       @text_input.caret_pos
     end
 
-    public
     # Position of the caret.
     #
     # @param [Integer] pos Position of caret in the text.
@@ -74,7 +68,6 @@ module Fidgit
       position
     end
 
-    public
     # Sets caret to the end of the text.
     #
     # @param [String] text
@@ -86,7 +79,6 @@ module Fidgit
       self.text
     end
 
-    protected
     # @option options [String] :text ("")
     # @option options [Boolean] :editable (false)
     # @option options [Integer] :height Sets both min and max height at once.
@@ -129,7 +121,6 @@ module Fidgit
       rect.height = [(padding_y * 2) + font_size, @min_height].max
     end
 
-    public
     # @return [nil]
     def clicked_left_mouse_button(sender, x, y)
       publish :focus unless focused?
@@ -147,11 +138,9 @@ module Fidgit
       nil
     end
 
-    public
     # Does the element have the focus?
     def focused?; @focused; end
 
-    public
     # @return [nil]
     def focus(sender)
       @focused = true
@@ -161,7 +150,6 @@ module Fidgit
       nil
     end
 
-    public
     # @return [nil]
     def blur(sender)
       if focused?
@@ -172,6 +160,47 @@ module Fidgit
       @focused = false
 
       nil
+    end
+
+    def draw_background
+      recalc if focused? # Workaround for Windows draw/update bug.
+      super
+    end
+
+    # Draw the text area.
+    #
+    # @return [nil]
+    def draw_foreground
+      # Always roll back changes made by the user unless the text is editable.
+      if not editable? and text != @old_text
+        @text_input.text = @old_text
+        @text_input.selection_start = @old_selection_start
+        self.caret_position = @old_caret_position
+      else
+        @old_caret_position = caret_position
+        @old_selection_start = @text_input.selection_start
+      end
+
+      caret_x, caret_y = @text_positions[caret_position]
+
+      # Draw the selection.
+      selection_range.each do |i|
+        char_x, char_y = @text_positions[i]
+        left, top = x + padding_x + char_x, y + padding_y + char_y
+        draw_rect left, top, font.text_width(text[i]), font_size,
+                       z, SELECTION_COLOR
+      end
+
+      # Draw text.
+      @lines.each_with_index do |line, index|
+        font.draw(line, x + padding_x, y + padding_y + y_at_line(index), z)
+      end
+
+      # Draw the caret.
+      if focused? and ((milliseconds / CARET_PERIOD) % 2 == 0)
+        left, top = x + padding_x + caret_x, y + padding_y + caret_y
+        $window.draw_line left, top, CARET_COLOR, left, top + font_size, CARET_COLOR, z
+      end
     end
 
     # y position of the
@@ -191,9 +220,9 @@ module Fidgit
       end
 
       line_width
-     end
+    end
 
-    public
+    protected
     # @return [nil]
     def layout
       # Don't need to re-layout if the text hasn't changed.
@@ -299,49 +328,6 @@ module Fidgit
       end
 
       nil
-    end
-
-    protected
-    def draw_background
-      recalc if focused? # Workaround for Windows draw/update bug.
-      super
-    end
-
-    protected
-    # Draw the text area.
-    #
-    # @return [nil]
-    def draw_foreground
-      # Always roll back changes made by the user unless the text is editable.
-      if not editable? and text != @old_text
-        @text_input.text = @old_text
-        @text_input.selection_start = @old_selection_start
-        self.caret_position = @old_caret_position
-      else
-        @old_caret_position = caret_position
-        @old_selection_start = @text_input.selection_start
-      end
-
-      caret_x, caret_y = @text_positions[caret_position]
-
-      # Draw the selection.
-      selection_range.each do |i|
-        char_x, char_y = @text_positions[i]
-        left, top = x + padding_x + char_x, y + padding_y + char_y
-        draw_rect left, top, font.text_width(text[i]), font_size,
-                       z, SELECTION_COLOR
-      end
-
-      # Draw text.
-      @lines.each_with_index do |line, index|
-        font.draw(line, x + padding_x, y + padding_y + y_at_line(index), z)
-      end
-
-      # Draw the caret.
-      if focused? and ((milliseconds / CARET_PERIOD) % 2 == 0)
-        left, top = x + padding_x + caret_x, y + padding_y + caret_y
-        $window.draw_line left, top, CARET_COLOR, left, top + font_size, CARET_COLOR, z
-      end
     end
   end
 end

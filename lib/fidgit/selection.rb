@@ -4,7 +4,6 @@ module Fidgit
   class Selection
     MIN_DRAG_DISTANCE = 2
 
-    public
     def size; @items.size; end
     def empty?; @items.empty?; end
     def [](index); @items[index]; end
@@ -18,14 +17,12 @@ module Fidgit
     # Actually moved during a dragging operation?
     def moved?; @moved; end
 
-    public
     def initialize
       @items = []
       @moved = false
       @dragging = false
     end
 
-    public
     def add(object)
       object.selected = true
       @items.push(object)
@@ -33,7 +30,6 @@ module Fidgit
       self
     end
 
-    public
     def remove(object)
       @items.delete(object)
       object.selected = false
@@ -42,7 +38,6 @@ module Fidgit
       self
     end
 
-    public
     def clear
       end_drag if dragging?
       @items.each { |o| o.selected = false; o.dragging = false }
@@ -51,7 +46,6 @@ module Fidgit
       self
     end
 
-    public
     def begin_drag(x, y)
       @initial_x, @initial_y = x, y
       @last_x, @last_y = x, y
@@ -61,7 +55,6 @@ module Fidgit
       self
     end
 
-    public
     def end_drag
       @items.each do |object|
         object.x, object.y = object.x.round, object.y.round
@@ -74,7 +67,6 @@ module Fidgit
     end
 
     # Move all dragged object back to original positions.
-    public
     def reset_drag
       if moved?
         @items.each do |o|
@@ -88,7 +80,6 @@ module Fidgit
       self
     end
 
-    public
     def update_drag(x, y)
       x, y = x.round, y.round
 

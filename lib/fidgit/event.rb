@@ -23,7 +23,6 @@ module Fidgit
     # @overload subscribe(event, &block)
     #   Add an event handler for an event, using a block.
     #   @return nil
-    public
     def subscribe(event, method = nil, &block)
       raise ArgumentError, "Expected method or block for event handler" unless !block.nil? ^ !method.nil?
       @_event_handlers = Hash.new() { |hash, key| hash[key] = [] } unless @_event_handlers
@@ -40,9 +39,7 @@ module Fidgit
     #
     # @param [Symbol] event Name of the event to publish.
     # @param [Array] args Arguments to pass to the event handlers.
-    # @yieldparams [:handled, any] The handler should return :handled if it has used the event.
-    # @return [:handled, nil] :handled if any handler handled the event or nil if none did.
-    public
+    # @return [Symbol, nil] :handled if any handler handled the event or nil if none did.
     def publish(event, *args)
       if respond_to? event
         return :handled if send(event, self, *args) == :handled

@@ -14,19 +14,16 @@ module Fidgit
     def index(value); @children.index value; end
     def [](index); @children[index]; end
 
-    public
     def x=(value)
       each {|c| c.x += value - x }
       super(value)
     end
 
-    public
     def y=(value)
       each {|c| c.y += value - y }
       super(value)
     end
 
-    protected
     def initialize(parent, options = {})
       options[:border_color] = DEBUG_BORDER_COLOR if options[:debug] or debug_mode?
 
@@ -35,7 +32,6 @@ module Fidgit
       super(parent, options)
     end
 
-    public
     def add(element)
       element.send :parent=, self
       @children.push element
@@ -44,7 +40,6 @@ module Fidgit
       nil
     end
 
-    public
     def remove(element)
       @children.delete element
       element.send :parent=, nil
@@ -53,7 +48,6 @@ module Fidgit
       nil
     end
 
-    public
     def clear
       @children.each {|child| child.parent = nil }
       @children.clear
@@ -63,16 +57,6 @@ module Fidgit
       nil
     end
 
-    protected
-    def draw_foreground
-      each { |c| c.draw }
-
-      font.draw self.class.name, x, y, z if debug_mode?
-
-      nil
-    end
-
-    public
     def update
       each { |c| c.update }
 
@@ -81,7 +65,6 @@ module Fidgit
 
     # Returns the element within this container that was hit,
     # @return [Element, nil] The element hit, otherwise nil.
-    public
     def hit_element(x, y)
       @children.reverse_each do |child|
         case child
@@ -93,6 +76,15 @@ module Fidgit
           return child if child.hit?(x, y)
         end
       end
+
+      nil
+    end
+
+    protected
+    def draw_foreground
+      each { |c| c.draw }
+
+      font.draw self.class.name, x, y, z if debug_mode?
 
       nil
     end

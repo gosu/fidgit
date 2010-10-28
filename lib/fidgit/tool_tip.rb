@@ -11,7 +11,6 @@ module Fidgit
     def y=(value); super(value); recalc; value; end
     def hit?(x, y); false; end
 
-    protected
     def initialize(parent, options = {}, &block)
       options = {
         background_color: DEFAULT_BACKGROUND_COLOR.dup,

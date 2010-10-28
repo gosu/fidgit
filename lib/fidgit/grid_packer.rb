@@ -6,13 +6,11 @@ module Fidgit
   # A vertically aligned element packing container.
 
   class GridPacker < Packer
-    public
     # @return [Integer]
     def num_rows; (size / @num_columns.to_f).ceil; end
     # @return [Integer]
     def num_columns; @num_columns; end
 
-    public
     # @note Currently only supports +num_columns+ mode (not +num_rows+).
     # @option options [Integer] :num_columns (1) Maximum number of columns to use (incompatible with :num_rows)
     # @option options [Integer] :num_rows Maximum number of rows to use (incompatible with :num_columns)

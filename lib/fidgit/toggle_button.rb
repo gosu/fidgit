@@ -10,7 +10,6 @@ module Fidgit
     def on?; @on; end
     def on=(value); @on = value; update_status; end
 
-    protected
     def initialize(parent, options = {}, &block)
       options = {
         on: false
@@ -33,6 +32,13 @@ module Fidgit
       update_status
     end
 
+    def clicked_left_mouse_button(sender, x, y)
+      @on = (not @on)
+      update_status
+
+      super
+    end
+
     protected
     def update_status
       if @on
@@ -50,14 +56,6 @@ module Fidgit
       recalc
 
       nil
-    end
-
-    public
-    def clicked_left_mouse_button(sender, x, y)
-      @on = (not @on)
-      update_status
-
-      super
     end
   end
 end

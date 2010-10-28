@@ -44,7 +44,6 @@ module Gosu
     # Convert to an RGBA array, as used by TexPlay.
     #
     # @return [Array<Float>] TexPlay color array [r, g, b, a] in range 0.0..1.0
-    public
     def to_tex_play
       [red / 255.0, green / 255.0, blue / 255.0,  alpha / 255.0]
     end

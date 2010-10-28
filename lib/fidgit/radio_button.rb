@@ -10,7 +10,6 @@ module Fidgit
 
       def value; @selected ? @selected.value : nil; end
 
-      protected
       # @example
       #   RadioButton::Group.new(packer) do |group|
       #     HorizontalPacker.new(group) do |packer|
@@ -33,7 +32,6 @@ module Fidgit
         @buttons = []
       end
 
-      public
       def add_button(button)
         @buttons.push button
         button_checked button if button.checked?
@@ -42,7 +40,6 @@ module Fidgit
       end
 
       # @param [RadioButton] button
-      public
       def button_checked(button)
         @selected.send :uncheck if @selected
 
@@ -53,7 +50,6 @@ module Fidgit
         nil
       end
 
-      public
       # @example
       #   RadioButton::Group.new(packer) do |group|
       #     HorizontalPacker.new(group) do |packer|
@@ -83,7 +79,6 @@ module Fidgit
 
     def checked?; @checked; end
 
-    protected
     def initialize(parent, value, options = {}, &block)
       options = {
         checked: false,
@@ -103,6 +98,24 @@ module Fidgit
       @border_color = checked? ? @border_color_checked : @border_color_unchecked
     end
 
+    def clicked_left_mouse_button(sender, x, y)
+      super
+      check
+      nil
+    end
+
+    def check
+      return if checked?
+
+      @group.button_checked self
+
+      @checked = true
+      @border_color = @border_color_checked
+      publish :checked
+
+      nil
+    end
+
     protected
     def add_to_group
       container = parent
@@ -115,26 +128,6 @@ module Fidgit
 
       @group = container
       @group.add_button self
-      nil
-    end
-
-    public
-    def clicked_left_mouse_button(sender, x, y)
-      super
-      check
-      nil
-    end
-
-    public
-    def check
-      return if checked?
-
-      @group.button_checked self
-
-      @checked = true
-      @border_color = @border_color_checked
-      publish :checked
-
       nil
     end
 

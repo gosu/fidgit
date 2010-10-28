@@ -10,7 +10,6 @@ module Fidgit
 
     INDICATOR_HEIGHT = 20
 
-    public
     def color; @color.dup; end
 
     def color=(value)
@@ -22,7 +21,6 @@ module Fidgit
       publish :changed, @color.dup
     end
 
-    protected
     def initialize(parent, options = {}, &block)
       options = {
         padding: 0,

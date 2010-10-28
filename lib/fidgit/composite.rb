@@ -7,22 +7,19 @@ module Fidgit
   class Composite < Element
     DEBUG_BORDER_COLOR = Gosu::Color.rgba(0, 255, 0, 100) # Color to draw an outline in when debugging layout.
 
-    protected
     attr_reader :inner_container
+    protected :inner_container
 
-    public
     def x=(value)
       @inner_container.x += value - x
       super(value)
     end
 
-    public
     def y=(value)
       @inner_container.y += value - y
       super(value)
     end
 
-    protected
     def initialize(parent, inner_container, options = {})
       options[:border_color] = DEBUG_BORDER_COLOR if options[:debug] or debug_mode?
 
@@ -30,6 +27,19 @@ module Fidgit
       @inner_container.parent = self
 
       super(parent, options)
+    end
+
+    # Returns the element within this composite that was hit.
+    #
+    # @return [Element, nil] The element hit, otherwise nil.
+    def hit_element(x, y)
+      @inner_container.hit_element(x, y)
+    end
+
+    def update
+      @inner_container.update
+
+      nil
     end
 
     protected
@@ -45,20 +55,6 @@ module Fidgit
       @inner_container.draw
 
       font.draw self.class.name, x, y, z if debug_mode?
-
-      nil
-    end
-
-    # Returns the element within this composite that was hit.
-    # @return [Element, nil] The element hit, otherwise nil.
-    public
-    def hit_element(x, y)
-      @inner_container.hit_element(x, y)
-    end
-
-    public
-    def update
-      @inner_container.update
 
       nil
     end

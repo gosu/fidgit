@@ -11,7 +11,6 @@ module Fidgit
 
     attr_reader :spacing_x, :spacing_y
 
-    protected
     def initialize(parent, options = {})
       options = {
       }.merge! options

@@ -29,7 +29,6 @@ module Fidgit
 
     # @option options [Range] :range (0..1.0)
     # @option options [Range] :value (minimum of :range)
-    protected
     def initialize(parent, options = {}, &block)
       options = {
         range: 0..1.0,
@@ -51,12 +50,6 @@ module Fidgit
       self.value = options[:value] ? options[:value] : @range.min
     end
 
-    protected
-    def layout
-      nil
-    end
-
-    public
     def value=(value)
       raise ArgumentError, "value (#{value}} must be within range #{@range}" unless @range.include? value
       @value = value
@@ -66,19 +59,16 @@ module Fidgit
       @value
     end
 
-    public
     def tip
       "#{super}: #{@value}"
     end
 
-    public
     def draw_background
       super
       draw_rect x + padding_x, y + padding_y, width - padding_x * 2, height - padding_y * 4, z, @groove_color
       nil
     end
 
-    public
     def left_mouse_button(sender, x, y)
       value = (((x - self.x - padding_x) / (width - padding_x * 2)) * (@range.max - @range.min) + @range.min).to_i
       self.value = [[value, @range.max].min, @range.min].max
@@ -87,7 +77,6 @@ module Fidgit
       nil
     end
 
-    public
     def hit_element(x, y)
       if @handle.hit?(x, y)
         self # TODO: should pass this to the handle, so it can be dragged.

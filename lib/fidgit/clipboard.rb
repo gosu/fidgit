@@ -5,26 +5,19 @@ module Fidgit
     # Items held in the clipboard.
     attr_reader :items
 
-    #
-    protected
+    def empty?; @items.empty?; end
+
     def initialize
       @items = []
     end
 
     # Copy items into the clipboard.
     #
-    # === Parameters
-    # +items+:: Items to copy [Array]
-    public
+    # @param [Array] items Items to copy
     def copy(items)
       @items = items.to_a.dup
 
       nil
-    end
-
-    public
-    def empty?
-      @items.empty?
     end
   end
 end

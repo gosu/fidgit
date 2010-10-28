@@ -17,7 +17,6 @@ module Fidgit
     def size; @packer.size; end
     def clear; @packer.clear; end
 
-    protected
     def initialize(parent, options = {})
       options = {
         background_color: DEFAULT_BACKGROUND_COLOR,
@@ -31,7 +30,6 @@ module Fidgit
 
     # @param [String] text
     # @option options [Gosu::Image] :icon
-    public
     def add_item(options = {})
       Item.new(@packer, options)
     end

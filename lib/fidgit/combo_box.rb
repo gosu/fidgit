@@ -8,11 +8,9 @@ class ComboBox < Button
   DEFAULT_BORDER_COLOR = Gosu::Color.new(255, 255, 255)
   DEFAULT_BACKGROUND_COLOR = Gosu::Color.new(100, 100, 100)
 
-  public
   def index; @menu.index(@value) end
   def value; @value; end
   
-  public
   def value=(value)
     if @value != value
       @value = value
@@ -23,7 +21,6 @@ class ComboBox < Button
     value
   end
 
-  public
   def index=(index)
     if index.between?(0, @menu.size - 1)
       self.value = @menu[index].value
@@ -33,7 +30,6 @@ class ComboBox < Button
   end
 
   # @option options [] :value
-  protected
   def initialize(parent, options = {}, &block)
     options = {
       border_color: DEFAULT_BORDER_COLOR.dup,
@@ -56,7 +52,6 @@ class ComboBox < Button
     rect.width = [width, font_size * 4 + padding_x * 2].max
   end
 
-  public
   def add_item(*args)
     @menu.add_item(*args)
 
@@ -68,7 +63,6 @@ class ComboBox < Button
     nil
   end
 
-  public
   def clicked_left_mouse_button(sender, x, y)
     @menu.x = self.x
     @menu.y = self.y + height + 1

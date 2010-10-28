@@ -10,14 +10,12 @@ module Fidgit
 
     attr_reader :color, :background_color, :border_color, :text, :icon
 
-    public
     def text=(value)
       @text = value
       recalc
       nil
     end
 
-    protected
     # @option options [Gui::Icon, Gosu::Image, nil] :icon (nil)
     # @option options [String] :text ('')
     def initialize(parent, options = {}, &block)
@@ -35,6 +33,20 @@ module Fidgit
       super(parent, options)
     end
 
+    def draw_foreground
+      current_x = x + padding_x
+      if @icon
+        @icon.draw(current_x, y + padding_y, z)
+        current_x += @icon.width + padding_x
+      end
+
+      unless @text.empty?
+        font.draw(@text, current_x, y + padding_y, z, 1, 1, @color)
+      end
+
+      nil
+    end
+
     protected
     def layout
       if @icon
@@ -48,21 +60,6 @@ module Fidgit
       else
         rect.width = [font.text_width(@text) + padding_x * 2, width].max
         rect.height = [font_size + padding_y * 2, height].max
-      end
-
-      nil
-    end
-
-    public
-    def draw_foreground
-      current_x = x + padding_x
-      if @icon
-        @icon.draw(current_x, y + padding_y, z)
-        current_x += @icon.width + padding_x
-      end
-
-      unless @text.empty?
-        font.draw(@text, current_x, y + padding_y, z, 1, 1, @color)
       end
 
       nil

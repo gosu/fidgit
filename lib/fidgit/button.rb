@@ -23,18 +23,30 @@ module Fidgit
       update_colors
     end
 
-    public
     def clicked_left_mouse_button(sender, x, y)
       # TODO: Play click sound?
       nil
     end
 
-    public
     def enabled=(value)
       super(value)
       update_colors
 
       value
+    end
+
+    def enter(sender)
+      @mouse_over = true
+      update_colors
+
+      nil
+    end
+
+    def leave(sender)
+      @mouse_over = false
+      update_colors
+
+      nil
     end
 
     protected
@@ -50,22 +62,6 @@ module Fidgit
       else
         DISABLED_COLOR
       end
-
-      nil
-    end
-
-    public
-    def enter(sender)
-      @mouse_over = true
-      update_colors
-
-      nil
-    end
-
-    public
-    def leave(sender)
-      @mouse_over = false
-      update_colors
 
       nil
     end

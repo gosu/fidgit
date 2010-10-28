@@ -36,14 +36,12 @@ module Fidgit
     def self.debug_mode?; @@debug_mode; end
     def self.debug_mode=(value); @@debug_mode = value; end
 
-    protected
-    def rect; @rect; end
+    def rect; @rect; end; protected :rect
     def debug_mode?; @@debug_mode; end
 
     class << self
       alias_method :original_new, :new
 
-      public
       def new(*args, &block)
         obj = original_new(*args) # Block should be ignored.
         obj.send :post_init, &block
@@ -51,7 +49,6 @@ module Fidgit
       end
     end
 
-    protected
     def initialize(parent, options = {}, &block)
       options = {
         x: 0,
@@ -84,14 +81,6 @@ module Fidgit
       self.x, self.y = options[:x], options[:y]
     end
 
-    protected
-    def post_init(&block)
-      recalc
-      @parent.send :add, self if @parent
-      yield self if block_given? # Return the result of the yield.
-    end
-
-    public
     def recalc
       old_width, old_height = width, height
       layout
@@ -100,20 +89,11 @@ module Fidgit
       nil
     end
 
-    protected
-    # Should be overridden in children to recalculate the width and height of the element and, if a container
-    # manage the positions of its children.
-    def layout
-      nil
-    end
-
-    public
     # Check if a point (screen coordinates) is over the element.
     def hit?(x, y)
       @rect.collide_point?(x, y)
     end
 
-    public
     # Redraw the element.
     def draw
       draw_background
@@ -121,18 +101,6 @@ module Fidgit
       nil
     end
 
-    public
-    def draw_background
-      draw_rect(x, y, width, height, z, @background_color) unless @background_color.transparent?
-      draw_frame(x, y, width, height, z, @border_color) unless @border_color.transparent?
-    end
-
-    protected
-    def draw_foreground
-      nil
-    end
-
-    public
     # Update the element.
     def update
       nil
@@ -144,6 +112,31 @@ module Fidgit
 
     def draw_frame(*args)
       $window.current_game_state.draw_frame(*args)
+    end
+
+    protected
+    def draw_background
+      draw_rect(x, y, width, height, z, @background_color) unless @background_color.transparent?
+      draw_frame(x, y, width, height, z, @border_color) unless @border_color.transparent?
+    end
+
+    protected
+    def draw_foreground
+      nil
+    end
+
+    protected
+    # Should be overridden in children to recalculate the width and height of the element and, if a container
+    # manage the positions of its children.
+    def layout
+      nil
+    end
+
+    protected
+    def post_init(&block)
+      recalc
+      @parent.send :add, self if @parent
+      yield self if block_given? # Return the result of the yield.
     end
   end
 end
