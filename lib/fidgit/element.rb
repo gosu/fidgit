@@ -3,12 +3,17 @@
 require_relative 'event'
 
 module Fidgit
+  @@font_name = '' # Just use the default Gosu font.
+  def self.font_name; @@font_name; end
+  def self.font_name=(name); @@font_name = name; end
+
   # An element within the GUI environment.
   # @abstract
   class Element
     include Event
 
     DEFAULT_FONT_SIZE = 15
+
     DEFAULT_PADDING_X, DEFAULT_PADDING_Y = 4, 4
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
@@ -19,7 +24,7 @@ module Fidgit
 
     @@fonts = {}
     def self.font(size = DEFAULT_FONT_SIZE)
-      @@fonts[size] ||= Gosu::Font.new($window, nil, size)
+      @@fonts[size] ||= Gosu::Font.new($window, Fidgit.font_name, size)
     end
 
     def font; self.class.font @font_size; end
