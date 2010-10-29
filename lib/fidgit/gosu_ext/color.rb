@@ -47,5 +47,10 @@ module Gosu
     def to_tex_play
       [red / 255.0, green / 255.0, blue / 255.0,  alpha / 255.0]
     end
+
+    # Show the Color as <RGBA [0, 0, 0, 0]> (default is '(ARGB:0/0/0/0)')
+    def to_s
+      "<RGBA [#{red}, #{green}, #{blue}, #{alpha}]>"
+    end
   end
 end
