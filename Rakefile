@@ -2,6 +2,7 @@ ROOT = File.expand_path(File.join(__FILE__, '..'))
 
 require_relative 'lib/fidgit/version'
 
+require 'redcloth'
 require 'yaml'
 require 'rake/clean'
 require 'rake/gempackagetask'
@@ -25,7 +26,7 @@ specification = Gem::Specification.new do |s|
     s.homepage = "http://github.com/Spooner/fidgit/"
     s.has_rdoc = false
     s.extensions = []
-    s.files =  ["Rakefile", "README.textile", "COPYING.txt"] +
+    s.files =  ["Rakefile", "README.html", "COPYING.txt"] +
       FileList["lib/**/*", "config/**/*", "examples/**/*", "media/**/*", "spec/**/*"]
 end
 
@@ -42,4 +43,8 @@ end
 desc "Create yard docs"
 task :doc do
   system "yard doc lib"
+
+  File.open("README.html", "w") do |file|
+    file.write RedCloth.new(File.read("README.textile")).to_html
+  end
 end  
