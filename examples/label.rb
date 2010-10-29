@@ -1,4 +1,4 @@
-require_relative 'example/window'
+require_relative 'helpers/example_window'
 
 class ExampleState < GuiState
   def setup
@@ -6,4 +6,4 @@ class ExampleState < GuiState
   end
 end
 
-Window.new.show
+ExampleWindow.new.show

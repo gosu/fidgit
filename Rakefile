@@ -26,7 +26,7 @@ specification = Gem::Specification.new do |s|
     s.has_rdoc = false
     s.extensions = []
     s.files =  ["Rakefile", "README.textile"] +
-      FileList["examples/**/*", "media/**/*", "spec/**/*"] 
+      FileList["lib/**/*", "config/**/*", "examples/**/*", "media/**/*", "spec/**/*"]
 end
 
 Rake::GemPackageTask.new(specification) do |package|

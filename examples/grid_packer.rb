@@ -1,4 +1,4 @@
-require_relative 'example/window'
+require_relative 'helpers/example_window'
 
 class ExampleState < GuiState
   BORDER_COLOR = Gosu::Color.rgb(255, 0, 0)
@@ -14,4 +14,4 @@ class ExampleState < GuiState
   end
 end
 
-Window.new.show
+ExampleWindow.new.show
