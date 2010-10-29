@@ -9,6 +9,8 @@ class ExampleState < GuiState
         slider.subscribe :changed do |sender, value|
           label.text = "Slider handle is at #{value}%"
         end
+
+        label.text = "Slider handle is at #{slider.value}%"
       end
     end
   end

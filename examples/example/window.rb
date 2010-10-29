@@ -7,7 +7,7 @@ class Window < Chingu::Window
   def initialize
     super(640, 480, false)
 
-    self.caption = "Example: #{File.basename($0).chomp(".rb").tr('_', ' ')}"
+    self.caption = "Example: #{File.basename($0).chomp(".rb").tr('_', ' ')} #{ENV['FIDGIT_EXAMPLES_TEXT']}"
 
     push_game_state ExampleState
   end
