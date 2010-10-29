@@ -2,7 +2,7 @@
 
 require 'yaml'
 
-gems = YAML.load(File.read(File.join(File.dirname(__FILE__), 'gem_dependencies.yml')))
+gems = YAML.load(File.read(File.join(File.dirname(__FILE__), 'fidgit', 'gem_dependencies.yml')))
 
 gems.each_pair do |gem, version|
   require gem

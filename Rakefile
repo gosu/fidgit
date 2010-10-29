@@ -7,8 +7,8 @@ require 'yaml'
 require 'rake/clean'
 require 'rake/gempackagetask'
 
-CLEAN.include("log/**/*", "doc/**/*")
-CLOBBER.include("log/**/*", "doc/**/*")
+CLEAN.include("log/**/*")
+CLOBBER.include(*CLEAN, "doc/**/*", "pkg/**/*")
 
 specification = Gem::Specification.new do |s|
     s.name = "fidgit"
@@ -19,13 +19,14 @@ specification = Gem::Specification.new do |s|
     s.email = 'bil.bagpuss@gmail.com'
     s.description = s.summary
     s.require_path = 'lib'
-	YAML::load(File.read(File.join(ROOT, 'lib/gem_dependencies.yml'))).each_pair do |gem, version|
+	YAML::load(File.read(File.join(ROOT, 'lib/fidgit/gem_dependencies.yml'))).each_pair do |gem, version|
 		s.add_dependency(gem, version)
 	end
     s.platform = Gem::Platform::RUBY
     s.homepage = "http://github.com/Spooner/fidgit/"
-    s.has_rdoc = false
+    s.has_rdoc = true
     s.extensions = []
+    s.required_ruby_version = "~> 1.9.2"
     s.files =  ["Rakefile", "README.html", "COPYING.txt"] +
       FileList["lib/**/*", "config/**/*", "examples/**/*", "media/**/*", "spec/**/*"]
 end
@@ -41,10 +42,13 @@ task :rspec do
 end
 
 desc "Create yard docs"
-task :doc do
+task :doc => :readme do
   system "yard doc lib"
+end  
 
+desc "Convert readme to HTML"
+task :readme do
   File.open("README.html", "w") do |file|
     file.write RedCloth.new(File.read("README.textile")).to_html
   end
-end  
+end
