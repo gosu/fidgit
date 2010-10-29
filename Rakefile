@@ -22,10 +22,10 @@ specification = Gem::Specification.new do |s|
 		s.add_dependency(gem, version)
 	end
     s.platform = Gem::Platform::RUBY
-    s.homepage = "http://http://github.com/Spooner/fidgit/"
+    s.homepage = "http://github.com/Spooner/fidgit/"
     s.has_rdoc = false
     s.extensions = []
-    s.files =  ["Rakefile", "README.textile"] +
+    s.files =  ["Rakefile", "README.textile", "COPYING.txt"] +
       FileList["lib/**/*", "config/**/*", "examples/**/*", "media/**/*", "spec/**/*"]
 end
 
