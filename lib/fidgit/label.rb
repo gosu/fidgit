@@ -16,6 +16,12 @@ module Fidgit
       nil
     end
 
+    def icon=(value)
+      @icon = value
+      recalc
+      nil
+    end
+
     # @param (see Element#initialize)
     #
     # @option (see Element#initialize)
