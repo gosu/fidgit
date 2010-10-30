@@ -43,17 +43,6 @@ module Fidgit
         nil
       end
 
-      # @param [RadioButton] button
-      def button_checked(button)
-        @selected.send :uncheck if @selected
-
-        @selected = button
-
-        publish :changed, @selected.value
-
-        nil
-      end
-
       # @example
       #   RadioButton::Group.new(packer) do |group|
       #     HorizontalPacker.new(group) do |packer|
@@ -66,13 +55,15 @@ module Fidgit
       #   # later
       #   group.value = 1
       def value=(value)
-        button = @buttons.find { |b| b.value = value }
+        if value != self.value
+          button = @buttons.find { |b| b.value == value }
+          @selected.uncheck if @selected and @selected.checked?
+          @selected = button
+          @selected.check if @selected and not @selected.checked?
+          publish :changed, self.value
+        end
 
-        raise "Group does not contain a RadioButton with this value (#{value})" unless button
-
-        button_checked(button) unless button.checked?
-
-        button
+        value
       end
     end
 
@@ -113,14 +104,28 @@ module Fidgit
       nil
     end
 
+    # Check the button and update its group. This may uncheck another button in the group if one is selected.
     def check
       return if checked?
 
-      @group.button_checked self
-
       @checked = true
+      @group.value = value
       @border_color = @border_color_checked.dup
+      publish :changed, @checked
       publish :checked
+
+      nil
+    end
+
+    # Uncheck the button and update its group.
+    def uncheck
+      return unless checked?
+
+      @checked = false
+      @group.value = value
+      @border_color = @border_color_unchecked.dup
+      publish :changed, @checked
+      publish :unchecked
 
       nil
     end
@@ -128,8 +133,7 @@ module Fidgit
     protected
     def add_to_group
       container = parent
-      while container
-        break if container.is_a? Group
+      while container and not container.is_a? Group
         container = container.parent
       end
 
@@ -137,16 +141,6 @@ module Fidgit
 
       @group = container
       @group.add_button self
-      nil
-    end
-
-    protected
-    # Only ever called from Group!
-    def uncheck
-      @checked = false
-      @border_color = @border_color_unchecked.dup
-      publish :unchecked
-
       nil
     end
   end
