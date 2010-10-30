@@ -17,6 +17,7 @@ module Fidgit
     # @option (see Label#initialize)
     def initialize(parent, options = {}, &block)
       options = {
+        z: Float::INFINITY,
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR
       }.merge! options
