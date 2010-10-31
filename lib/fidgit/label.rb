@@ -67,8 +67,13 @@ module Fidgit
           rect.height = [[@icon.height, font_size].max + padding_y * 2, height].max
         end
       else
-        rect.width = [font.text_width(@text) + padding_x * 2, width].max
-        rect.height = [font_size + padding_y * 2, height].max
+        if @text.empty?
+          rect.width = [padding_x * 2, width].max
+          rect.height = [padding_y * 2, height].max
+        else
+          rect.width = [font.text_width(@text) + padding_x * 2, width].max
+          rect.height = [font_size + padding_y * 2, height].max
+        end
       end
 
       nil
