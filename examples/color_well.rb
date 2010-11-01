@@ -2,18 +2,18 @@ require_relative 'helpers/example_window'
 
 class ExampleState < GuiState
   def setup
-    VerticalPacker.new(container) do |packer|
-      label = Label.new(packer, text: "No color selected.")
+    pack :vertical do
+      my_label = label text: "No color selected."
 
-      ColorWell::Group.new(packer) do |group|
-        GridPacker.new(group, num_columns: 15, padding: 0, spacing: 4) do |packer|
+      group do
+        pack :grid, num_columns: 15, padding: 0, spacing: 4 do
           150.times do
-            ColorWell.new(packer, color: Gosu::Color.rgb(rand(255), rand(255), rand(255)))
+            color_well color: Gosu::Color.rgb(rand(255), rand(255), rand(255))
           end
         end
 
-        group.subscribe :changed do |sender, color|
-          label.text = color.to_s
+        subscribe :changed do |sender, color|
+          my_label.text = color.to_s
         end
       end
     end

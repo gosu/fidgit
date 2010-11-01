@@ -51,6 +51,71 @@ module Fidgit
       nil
     end
 
+    # Create a button within the container.
+    def button(options = {}, &block)
+      Button.new(self, options).exec_in_context &block
+    end
+
+    # Create a color picker within the container.
+    def color_picker(options = {}, &block)
+      ColorPicker.new(self, options).exec_in_context &block
+    end
+
+    # Create a color well within the container.
+    def color_well(options = {}, &block)
+      ColorWell.new(self, options).exec_in_context &block
+    end
+
+    def combo_box(options = {}, &block)
+      ComboBox.new(self, options).exec_in_context &block
+    end
+
+    def group(options = {}, &block)
+      RadioButton::Group.new(self, options).exec_in_context &block
+    end
+
+    # Create a label within the container.
+    def label(options = {}, &block)
+      Label.new(self, options).exec_in_context &block
+    end
+
+    def list(options = {}, &block)
+      List.new(self, options).exec_in_context &block
+    end
+
+    def pack(alignment, options = {}, &block)
+      packer = case alignment
+        when :horizontal
+          HorizontalPacker.new(self, options)
+        when :vertical
+          VerticalPacker.new(self, options)
+        when :grid
+          GridPacker.new(self, options)
+        else
+          # Do something?
+      end
+
+      add packer
+
+      packer.exec_in_context &block
+    end
+
+    def radio_button(value, options = {}, &block)
+      RadioButton.new(self, value, options).exec_in_context &block
+    end
+
+    def slider(options = {}, &block)
+      Slider.new(self, options).exec_in_context &block
+    end
+
+    def text_area(options = {}, &block)
+      TextArea.new(self, options).exec_in_context &block
+    end
+
+    def toggle_button(options = {}, &block)
+      ToggleButton.new(self, options).exec_in_context &block
+    end
+
     def clear
       @children.each {|child| child.parent = nil }
       @children.clear

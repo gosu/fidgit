@@ -2,15 +2,15 @@ require_relative 'helpers/example_window'
 
 class ExampleState < GuiState
   def setup
-    VerticalPacker.new(container) do |packer|
-      label = Label.new(packer)
+    pack :vertical do
+      my_label = label
 
-      ColorPicker.new(packer, width: 100) do |picker|
-        picker.subscribe :changed do |sender, color|
-          label.text = color.to_s
+      color_picker width: 100 do
+        subscribe :changed do |sender, color|
+          my_label.text = color.to_s
         end
 
-        label.text = picker.color.to_s
+        my_label.text = color.to_s
       end
     end
   end

@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require_relative 'event'
+require_relative 'redirector'
 
 # The Fidgit GUI framework for Gosu.
 module Fidgit
@@ -33,7 +34,7 @@ module Fidgit
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
 
-    attr_reader :z, :tip, :font_size, :padding_x, :padding_y
+    attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector
 
     attr_accessor :parent
 
@@ -109,6 +110,8 @@ module Fidgit
 
       @rect = Chingu::Rect.new(0, 0, options[:width], options[:height])
       self.x, self.y = options[:x], options[:y]
+
+      @redirector = Redirector.create(self)
     end
 
     def recalc
@@ -172,6 +175,17 @@ module Fidgit
       recalc
       @parent.send :add, self if @parent
       yield self if block_given? # Return the result of the yield.
+    end
+
+    protected
+    # Executes a block, if any, in the context of a target object.
+    def exec_in_context(&block)
+      if block_given?
+        context = eval('self', block.binding)
+        context.mix_eval(redirector, &block)
+      end
+
+      self
     end
   end
 end

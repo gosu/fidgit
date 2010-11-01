@@ -6,9 +6,9 @@ class ExampleState < GuiState
   NUM_CELLS = 48
 
   def setup
-    GridPacker.new(container, num_columns: NUM_COLUMNS) do |packer|
+    pack :grid, num_columns: NUM_COLUMNS do
       NUM_CELLS.times do |i|
-        Label.new(packer, text: "Cell #{i}", font_size: rand(10) + 20, border_color: BORDER_COLOR)
+        label text: "Cell #{i}", font_size: rand(10) + 20, border_color: BORDER_COLOR
       end
     end
   end

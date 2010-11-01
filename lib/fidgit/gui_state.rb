@@ -39,6 +39,8 @@ module Fidgit
         @container = Container.new(container)
       end
 
+      extend @container.redirector
+
       @focus = nil
 
       unless defined? @@draw_pixel
