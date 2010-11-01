@@ -3,7 +3,7 @@ require_relative 'helpers/example_window'
 class ExampleState < GuiState
   def setup
     pack :vertical do
-      my_label = label text: "No button selected"
+      my_label = label "No button selected"
 
       button text: "Deselect" do
         subscribe :clicked_left_mouse_button do |sender, x, y|

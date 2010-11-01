@@ -8,7 +8,7 @@ class ExampleState < GuiState
   def setup
     pack :grid, num_columns: NUM_COLUMNS do
       NUM_CELLS.times do |i|
-        label text: "Cell #{i}", font_size: rand(10) + 20, border_color: BORDER_COLOR
+        label "Cell #{i}", font_size: rand(10) + 20, border_color: BORDER_COLOR
       end
     end
   end

@@ -18,9 +18,10 @@ module Fidgit
         color: DEFAULT_COLOR,
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR,
+        text: '',
       }.merge! options
 
-      super(parent, options)
+      super(parent, options[:text], options)
 
       update_colors
     end

@@ -4,10 +4,10 @@ require_relative 'helpers/example_window'
 class ExampleState < GuiState
   def setup
     pack :vertical, background_color: Gosu::Color.rgb(255, 0, 0) do
-      label text: "Hello!", tip: 'A label with text'
-      label text: "Hello!", icon: Gosu::Image["head_icon.png"], tip: 'A label with text & icon'
-      label icon: Gosu::Image["head_icon.png"], tip: 'A label with just icon'
-      label background_color: Gosu::Color.rgb(0, 255, 0), tip: 'No text or icon'
+      label "Hello!", tip: 'A label with text'
+      label "Hello!", icon: Gosu::Image["head_icon.png"], tip: 'A label with text & icon'
+      label '', icon: Gosu::Image["head_icon.png"], tip: 'A label with just icon'
+      label '', background_color: Gosu::Color.rgb(0, 255, 0), tip: 'No text or icon'
     end
   end
 end

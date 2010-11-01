@@ -3,7 +3,7 @@ require_relative 'helpers/example_window'
 class ExampleState < GuiState
   def setup
     pack :vertical do
-      my_label = label text: "No color selected."
+      my_label = label "No color selected."
 
       group do
         pack :grid, num_columns: 15, padding: 0, spacing: 4 do

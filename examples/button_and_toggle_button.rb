@@ -4,7 +4,7 @@ require_relative 'helpers/example_window'
 class ExampleState < GuiState
   def setup
     pack :vertical do
-      my_label = label text: "Label", tip: "I'm a label"
+      my_label = label "Label", tip: "I'm a label"
 
       button text: "Button", tip: "I'm a button; press me!" do
         subscribe :clicked_left_mouse_button do |sender, x, y|

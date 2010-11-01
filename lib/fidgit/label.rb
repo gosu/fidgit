@@ -23,19 +23,18 @@ module Fidgit
     end
 
     # @param (see Element#initialize)
+    # @param [String] text The string to display in the label.
     #
     # @option (see Element#initialize)
-    # @option options [Gui::Icon, Gosu::Image, nil] :icon (nil)
-    # @option options [String] :text ('')
-    def initialize(parent, options = {}, &block)
+    # @option options [Fidgit::Thumbnail, Gosu::Image, nil] :icon (nil)
+    def initialize(parent, text, options = {}, &block)
       options = {
-        text: '',
         color: DEFAULT_COLOR,
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR
       }.merge! options
 
-      @text = options[:text].dup
+      @text = text.dup
       @icon = options[:icon]
       @color = options[:color].dup
 

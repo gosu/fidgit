@@ -75,8 +75,8 @@ module Fidgit
     end
 
     # Create a label within the container.
-    def label(options = {}, &block)
-      Label.new(self, options).exec_in_context &block
+    def label(text, options = {}, &block)
+      Label.new(self, text, options).exec_in_context &block
     end
 
     def list(options = {}, &block)

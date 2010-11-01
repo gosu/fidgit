@@ -3,7 +3,7 @@ require_relative 'helpers/example_window'
 class ExampleState < GuiState
   def setup
     pack :vertical do
-      my_label = label
+      my_label = label 'No color picked'
 
       color_picker width: 100 do
         subscribe :changed do |sender, color|
