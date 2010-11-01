@@ -179,7 +179,7 @@ module Fidgit
 
     protected
     # Executes a block, if any, in the context of a target object.
-    def exec_in_context(&block)
+    def instance_methods_eval(&block)
       if block_given?
         context = eval('self', block.binding)
         context.mix_eval(redirector, &block)

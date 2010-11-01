@@ -53,34 +53,34 @@ module Fidgit
 
     # Create a button within the container.
     def button(options = {}, &block)
-      Button.new(self, options).exec_in_context &block
+      Button.new(self, options).instance_methods_eval &block
     end
 
     # Create a color picker within the container.
     def color_picker(options = {}, &block)
-      ColorPicker.new(self, options).exec_in_context &block
+      ColorPicker.new(self, options).instance_methods_eval &block
     end
 
     # Create a color well within the container.
     def color_well(options = {}, &block)
-      ColorWell.new(self, options).exec_in_context &block
+      ColorWell.new(self, options).instance_methods_eval &block
     end
 
     def combo_box(options = {}, &block)
-      ComboBox.new(self, options).exec_in_context &block
+      ComboBox.new(self, options).instance_methods_eval &block
     end
 
     def group(options = {}, &block)
-      RadioButton::Group.new(self, options).exec_in_context &block
+      RadioButton::Group.new(self, options).instance_methods_eval &block
     end
 
     # Create a label within the container.
     def label(text, options = {}, &block)
-      Label.new(self, text, options).exec_in_context &block
+      Label.new(self, text, options).instance_methods_eval &block
     end
 
     def list(options = {}, &block)
-      List.new(self, options).exec_in_context &block
+      List.new(self, options).instance_methods_eval &block
     end
 
     def pack(alignment, options = {}, &block)
@@ -97,23 +97,23 @@ module Fidgit
 
       add packer
 
-      packer.exec_in_context &block
+      packer.instance_methods_eval &block
     end
 
     def radio_button(value, options = {}, &block)
-      RadioButton.new(self, value, options).exec_in_context &block
+      RadioButton.new(self, value, options).instance_methods_eval &block
     end
 
     def slider(options = {}, &block)
-      Slider.new(self, options).exec_in_context &block
+      Slider.new(self, options).instance_methods_eval &block
     end
 
     def text_area(options = {}, &block)
-      TextArea.new(self, options).exec_in_context &block
+      TextArea.new(self, options).instance_methods_eval &block
     end
 
     def toggle_button(options = {}, &block)
-      ToggleButton.new(self, options).exec_in_context &block
+      ToggleButton.new(self, options).instance_methods_eval &block
     end
 
     def clear
