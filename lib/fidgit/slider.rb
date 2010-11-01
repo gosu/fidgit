@@ -47,12 +47,14 @@ module Fidgit
       @range = options[:range].dup
       @groove_color = options[:groove_color].dup
 
-      super(parent, HorizontalPacker.new(nil, padding: 0), options)
+      super(parent, options)
 
-      @handle = Handle.new(inner_container, width: (height / 2 - padding_x), height: height - padding_y * 2,
+      HorizontalPacker.new(self, padding: 0) do |packer|
+        @handle = Handle.new(packer, width: (height / 2 - padding_x), height: height - padding_y * 2,
                            background_color: options[:handle_color])
+      end
 
-      self.value = options[:value] ? options[:value] : @range.min
+      self.value = options.has_key?(:value) ? options[:value] : @range.min
     end
 
     def value=(value)
@@ -67,12 +69,6 @@ module Fidgit
     def tip
       tip = super
       tip.empty? ? @value.to_s : "#{tip}: #{@value}"
-    end
-
-    def draw_background
-      super
-      draw_rect x + padding_x, y + padding_y, width - padding_x * 2, height - padding_y * 4, z, @groove_color
-      nil
     end
 
     def left_mouse_button(sender, x, y)
@@ -96,6 +92,14 @@ module Fidgit
     protected
     # Prevent standard packing layout change.
     def layout
+      nil
+    end
+
+    protected
+    def draw_background
+      super
+      # Draw a groove for the handle to move along.
+      draw_rect x + padding_x, y + padding_y, width - padding_x * 2, height - padding_y * 4, z, @groove_color
       nil
     end
   end

@@ -54,7 +54,7 @@ class ComboBox < Button
     rect.width = [width, font_size * 4 + padding_x * 2].max
   end
 
-  def add_item(*args)
+  def item(*args)
     @menu.add_item(*args)
 
     # Force text to be updated.

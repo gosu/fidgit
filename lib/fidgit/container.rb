@@ -92,7 +92,7 @@ module Fidgit
         when :grid
           GridPacker.new(self, options)
         else
-          # Do something?
+          raise ArgumentError, "alignment must be one of :horizontal, :vertical or :grid"
       end
 
       add packer

@@ -14,8 +14,8 @@ module Fidgit
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(200, 200, 200)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgb(255, 255, 255)
 
-    def size; @packer.size; end
-    def clear; @packer.clear; end
+    def size; @items.size; end
+    def clear; @items.clear; end
 
     def initialize(parent, options = {})
       options = {
@@ -23,15 +23,21 @@ module Fidgit
         border_color: DEFAULT_BORDER_COLOR,
       }.merge! options
 
-      super parent, Item::Group.new(nil), options
+      super parent, options
 
-      @packer = VerticalPacker.new(inner_container, spacing: 0)
+      Item::Group.new(self) do |group|
+        group.subscribe :changed do |sender, value|
+          publish :changed, value
+        end
+
+        @items = group.pack :vertical, spacing: 0
+      end
     end
 
     # @param [String] text
     # @option options [Gosu::Image] :icon
-    def add_item(options = {})
-      Item.new(@packer, options)
+    def item(options = {})
+      Item.new(@items, options)
     end
   end
 end

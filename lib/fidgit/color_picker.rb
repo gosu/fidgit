@@ -35,39 +35,24 @@ module Fidgit
 
       @color = options[:color].dup
 
-      super(parent, VerticalPacker.new(nil, spacing: 0), options)
+      super(parent, options)
 
-      @sliders = {}
       slider_width = width
-      CHANNELS.each_with_index do |channel, i|
-        Slider.new(inner_container, value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do |slider|
-          slider.subscribe :changed do |sender, value|
-            @color.send "#{channel}=", value
-            publish :changed, @color.dup
+
+      VerticalPacker.new(self, spacing: 0) do |packer|
+        @sliders = {}
+        CHANNELS.each_with_index do |channel, i|
+          @sliders[channel] = packer.slider(value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do
+            subscribe :changed do |sender, value|
+              @color.send "#{channel}=", value
+              @indicator.background_color = @color
+              publish :changed, @color.dup
+            end
           end
-
-          @sliders[channel] = slider
         end
+
+        @indicator = packer.label '', background_color: @color, width: width, height: height + INDICATOR_HEIGHT
       end
-    end
-
-    protected
-    def layout
-      super
-      rect.height += INDICATOR_HEIGHT
-
-      nil
-    end
-
-    protected
-    def draw_foreground
-      super
-
-      sliders_height = @sliders[:red].height * @sliders.size
-
-      draw_rect x, y + sliders_height, width, INDICATOR_HEIGHT, z, @color
-
-      nil
     end
   end
 end

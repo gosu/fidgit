@@ -73,9 +73,9 @@ module Fidgit
 
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(50, 50, 50)
 
-    def index(value); inner_container.index find(value); end
-    def size; inner_container.size; end
-    def [](index); inner_container[index]; end
+    def index(value); @items.index find(value); end
+    def size; @items.size; end
+    def [](index); @items[index]; end
 
     # @option (see Composite#initialize)
     def initialize(options = {}, &block)
@@ -84,22 +84,24 @@ module Fidgit
         z: Float::INFINITY,
       }.merge! options
 
-      super(nil, VerticalPacker.new(nil, spacing: 0, padding: 0), options)
+      super(nil, options)
+
+      @items = VerticalPacker.new(self, spacing: 0, padding: 0)
     end
 
     def find(value)
-      inner_container.find {|c| c.value == value }
+      @items.find {|c| c.value == value }
     end
 
     def add_separator(options = {})
       options[:z] = z
 
-      Separator.new(inner_container, options)
+      Separator.new(@items, options)
     end
 
     def add_item(value, options = {})
       options[:z] = z
-      item = Item.new(inner_container, value, options)
+      item = Item.new(@items, value, options)
 
       item.subscribe :left_mouse_button, method(:item_selected)
       item.subscribe :right_mouse_button, method(:item_selected)
@@ -118,8 +120,11 @@ module Fidgit
     protected
     def layout
       super
-      max_width = inner_container.each.to_a.map {|c| c.width }.max || 0
-      inner_container.each {|c| c.rect.width = max_width }
+      if @items
+        max_width = @items.each.to_a.map {|c| c.width }.max || 0
+        @items.each {|c| c.rect.width = max_width }
+      end
+
       nil
     end
   end
