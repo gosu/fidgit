@@ -1,6 +1,6 @@
 require_relative 'helpers/helper'
 
-require 'fidgit/history'
+require 'history'
 
 module Fidgit
   class History

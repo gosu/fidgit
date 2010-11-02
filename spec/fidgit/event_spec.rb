@@ -1,6 +1,6 @@
 require_relative 'helpers/helper'
 
-require 'fidgit/event'
+require 'event'
 
 module Fidgit
   describe Event do
