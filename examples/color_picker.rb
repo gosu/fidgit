@@ -5,7 +5,7 @@ class ExampleState < GuiState
     pack :vertical do
       my_label = label 'No color picked'
 
-      color_picker width: 100 do
+      color_picker(width: 100) do
         subscribe :changed do |sender, color|
           my_label.text = color.to_s
         end
