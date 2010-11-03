@@ -34,18 +34,12 @@ module Fidgit
       500 # TODO: configure this.
     end
 
-    def initialize
-      @outer_container = Container.new(nil) do
-        @container = pack :vertical, padding: 0
-      end
+    def pack(*args, &block); @container.pack *args, &block; end
+    def clear(*args, &block); @container.clear *args, &block; end
 
-      # Ensure that we redirect methods to the container, such as "label".
-      meta_class = class << self; self; end
-      (@container.public_methods - public_methods).each do |method|
-        meta_class.send :define_method, method do |*args, &block|
-          @container.send method, *args, &block
-        end
-      end
+    def initialize
+      # The container is where the user puts their content.
+      @container = VerticalPacker.new(nil, padding: 0)
 
       @focus = nil
 
@@ -70,8 +64,13 @@ module Fidgit
 
     def update
       cursor.update
+      @tool_tip.update if @tool_tip
+      @menu.update if @menu
+      @container.update
 
-      new_mouse_over = @outer_container.hit_element(cursor.x, cursor.y)
+      # Check menu first, then other elements.
+      new_mouse_over = @menu.hit_element(cursor.x, cursor.y) if @menu
+      new_mouse_over = @container.hit_element(cursor.x, cursor.y) unless new_mouse_over
 
       if new_mouse_over
         new_mouse_over.publish :enter if new_mouse_over != @mouse_over
@@ -83,16 +82,16 @@ module Fidgit
       @mouse_over = new_mouse_over
 
       # Check if the mouse has moved, and no menu is shown, so we can show a tooltip.
-      if [cursor.x, cursor.y] == [@last_cursor_x, @last_cursor_y] and (not @menu)
+      if [cursor.x, cursor.y] == @last_cursor_pos and (not @menu)
         if @mouse_over and (Gosu::milliseconds - @@mouse_moved_at) > tool_tip_delay
           if text = @mouse_over.tip and not text.empty?
             @tool_tip ||= ToolTip.new(nil)
             @tool_tip.text = text
-            @outer_container.add @tool_tip
             @tool_tip.x = cursor.x
             @tool_tip.y = cursor.y + cursor.height # Place the tip beneath the cursor.
           else
             clear_tip
+            @@mouse_moved_at = Gosu::milliseconds
           end
         end
       else
@@ -100,16 +99,16 @@ module Fidgit
         @@mouse_moved_at = Gosu::milliseconds
       end
 
-      @outer_container.update
-
-      @last_cursor_x, @last_cursor_y = cursor.x, cursor.y
+      @last_cursor_pos = [cursor.x, cursor.y]
 
       super
     end
 
     def draw
+      @container.draw
+      @menu.draw if @menu
+      @tool_tip.draw if @tool_tip
       cursor.draw
-      @outer_container.draw
 
       nil
     end
@@ -127,14 +126,12 @@ module Fidgit
     def show_menu(menu)
       hide_menu if @menu
       @menu = menu
-      @outer_container.add @menu
 
       nil
     end
 
     # @return nil
     def hide_menu
-      @outer_container.remove @menu if @menu
       @menu = nil
 
       nil
@@ -193,9 +190,8 @@ module Fidgit
     # Hide the tool-tip, if any.
     protected
     def clear_tip
-      @outer_container.remove @tool_tip if @tool_tip
-      @tool_tip = nil
       @@mouse_moved_at = Gosu::milliseconds
+      @tool_tip = nil
 
       nil
     end

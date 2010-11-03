@@ -20,7 +20,7 @@ module Fidgit
         update_interval: DEFAULT_UPDATE_INTERVAL,
       }.merge! options
 
-      super(options[:width], options[:height], options[:full_screen])
+      super(options[:width], options[:height], options[:full_screen], options[:update_interval])
 
       self.caption = options[:caption] if options.has_key? :caption
       push_game_state options[:state] if options.has_key? :state

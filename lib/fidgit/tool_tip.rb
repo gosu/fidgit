@@ -19,19 +19,20 @@ module Fidgit
       options = {
         z: Float::INFINITY,
         background_color: DEFAULT_BACKGROUND_COLOR,
-        border_color: DEFAULT_BORDER_COLOR
+        border_color: DEFAULT_BORDER_COLOR,
+        text: '',
       }.merge! options
 
-      super(parent, options)
+      super(parent, options[:text], options)
     end
 
     protected
     def layout
       super
 
-      # Ensure the tip can't go over the edge of the screen.
-      rect.x = [x, $window.width - width - padding_x].min
-      rect.y = [y, $window.height - height - padding_y].min
+      # Ensure the tip can't go over the edge of the screen. If it can't be avoided, align with left edge of screen.
+      rect.x = [[x, $window.width - width - padding_x].min, 0].max
+      rect.y = [[y, $window.height - height - padding_y].min, 0].max
 
       nil
     end
