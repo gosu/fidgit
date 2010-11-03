@@ -1,30 +1,98 @@
 h1. Fidgit
 
-Fidgit is a GUI framework built on Gosu and Chingu.
+Fidgit is a GUI framework built on "Gosu":http://libgosu.org/ and "Chingu":http://ippa.se/chingu
+
 
 h2. Description
 
-The API is slightly based on FXRuby (being the GUI framework I know most intimately).
-It was originally developed as a part of the Sidney game, but as it got more complex, it was
-obvious it would be useful to separate.
+The API is inspired by "Shoes":http://shoesrb.com/, but since Shoes is very simplistic, the functionality is based around "FXRuby":http://www.fxruby.org/.
+Fidgit was originally developed as a part of the Sidney game, but as it got more complex, it was obvious it would be useful to separate.
 
-_WARNING: THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT AND THE API IS LIABLE TO CONTINUOUS CHANGE!_
+_WARNING: THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT AND THE API IS LIABLE TO CONTINUOUS CHANGE AND IT IS QUITE UNSTABLE!_
 
 Read the Yard documentation at "rubydoc.info":http://rubydoc.info/github/Spooner/fidgit/master
 
+
 h2. Requirements
 
-* Gosu gem.
-* Chingu gem.
+* Gosu and Chingu gems ("gem install gosu chingu").
 * Ruby 1.9.2 (sorry, I'm lazy!).
+
+
+h2. Example
+
+<pre><code="ruby">require 'fidgit'
+
+class MyGame < Chingu::Window
+  def initialize
+    super(640, 480, false)
+  end
+
+  def setup
+    push_game_state MyGuiState # To use Fidgit, a Fidgit::GuiState must be active.
+  end
+end
+
+class MyGuiState < Fidgit::GuiState
+  def initialize
+    super
+
+    pack :vertical do # Create a vertically packed section.
+      my_label = label "Hello world!", background_color: Gosu::Color.rgb(0, 100, 0)
+
+      button text: "Goodbye" do
+        subscribe :clicked_left_mouse_button do # Handle mouse-click events.
+          my_label.text = "Goodbye cruel world!"
+        end
+      end
+    end
+  end
+end
+
+MyGame.new.show
+</code></pre>
+
+
+h2. API
+
+As well as a cursor and tool-tips that are managed by the GuiState for you, there are several elements you can use inside your GuiState:
+
+h3. Arrangement managers
+
+* pack([:vertical|:horizontal|:grid], ...) - Packer that packs its component elements. This is the only type of element that can be put directly inside a GuiState.
+
+h3. Non-interactive elements
+
+* label(text, ...) - Label with text and, optionally, an icon.
+
+h3. Interactive elements
+
+* button(...) - Button with text and/or icon.
+* toggle_button(...) - Button that can be toggled on/off.
+* combo_box(...) - Button that has a drop-down menu attached (use 'item(text, ...) to add items).
+* list(...) - A vertical list of items to select from (use 'item(text, ...) to add items).
+* slider(...) - Horizontal slider with handle.
+* color_picker(...) - Red, green and blue sliders and colour indicator.
+* text_area(...) - An multi-line element, containing editable text.
+
+h3. Radio-controls
+
+* group(...) - Manages any radio-buttons put inside it (A packer should be placed inside the group, to manage how they are arranged):
+** radio_button(value, ...) - Button that is part of a 'group'; only one of which will be selected.
+** color_well(color, ...) - A radio-button used to pick a colour.
+
 
 h2. Alternative GUI frameworks
 
-* RubyGoo
-** Additionally supports Rubygame (as well as Gosu).
+There are two GUI other tool-kits that work with Gosu:
+
+* "RubyGoo":http://code.google.com/p/rubygoo/
+** Additionally supports "Rubygame":http://rubygame.org/ (as well as Gosu).
 ** Relatively cumbersome API.
 ** Only simple widgets are implemented.
 
 * GGLib (Gosu GUI Library)
-** Offers graphical theme settings.
+** Pretty graphical themes.
 ** Only simple widgets are implemented.
+
+Remember that if you primarily want a GUI for your GUI application, not just a GUI in your Gosu game, consider using a dedicated GUI tool-kit, such as "Shoes":http://shoesrb.com/, "FXRuby":http://www.fxruby.org/ or "wxRuby":http://wxruby.rubyforge.org/
