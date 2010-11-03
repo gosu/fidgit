@@ -58,11 +58,6 @@ describe RedirectorMethods do
         should_not_receive(:frog)
         ->{ subject.instance_methods_eval { frog } }.should raise_error NameError
       end
-
-      it "should not access methods on the calling context, even if they do not exist on the subject" do
-        should_not_receive(:frog)
-        ->{ subject.instance_methods_eval { frog } }.should raise_error NameError
-      end
     end
   end
 end

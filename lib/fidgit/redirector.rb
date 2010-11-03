@@ -22,30 +22,25 @@ module Fidgit
     protected
     def push_redirection_target(target)
       meta_class = class << self; self; end
-      base_methods = Object.new.public_methods
+      base_methods = Object.public_instance_methods
 
       methods_to_hide = meta_class.public_instance_methods - base_methods
       methods_to_add = target.public_methods - base_methods
 
       methods_overridden = []
-      methods_to_hide.each do |method|
-        # Make a copy of the original method.
-        meta_class.send :alias_method, "redirected_#{method}", method
-
-        # Try to remove the method, but if that fails, it means the method is defined elsewhere,
-        # so we don't need the copy we just made.
-        begin
-          meta_class.send :remove_method, method
-          methods_overridden.push method
-        rescue Exception => ex
-          meta_class.send :remove_method, "redirected_#{method}"
+      methods_to_hide.each do |meth|
+        # Take a reference to the method we are about to override.
+        reference = method meth
+        if reference.owner == meta_class
+          methods_overridden.push [meth, reference]
+          meta_class.send :remove_method, meth
         end
       end
 
       # Add a method, to redirect calls to the target.
-      methods_to_add.each do |method|
-        meta_class.send :define_method, method do |*args, &block|
-          target.send method, *args, &block
+      methods_to_add.each do |meth|
+        meta_class.send :define_method, meth do |*args, &block|
+          target.send meth, *args, &block
         end
       end
 
@@ -61,14 +56,13 @@ module Fidgit
       target, methods_to_unoverride, methods_to_remove = redirection_stack.pop
 
       # Remove the redirection methods
-      methods_to_remove.reverse_each do |method|
-        meta_class.send :remove_method, method
+      methods_to_remove.reverse_each do |meth|
+        meta_class.send :remove_method, meth
       end
 
       # Replace with the previous versions of the methods.
-      methods_to_unoverride.reverse_each do |method|
-        meta_class.send :alias_method, method, "redirected_#{method}"
-        meta_class.send :remove_method, "redirected_#{method}"
+      methods_to_unoverride.reverse_each do |meth, reference|
+        meta_class.send :define_method, meth, reference
       end
 
       target
