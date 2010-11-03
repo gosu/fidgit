@@ -62,34 +62,28 @@ As well as a cursor and tool-tips that are managed by the GuiState for you, ther
 
 h3. Arrangement managers
 
-* pack([:vertical|:horizontal|:grid], ...) - Packer that packs its component elements. This is the only type of element that can be put directly inside a GuiState.
+* _pack([:vertical|:horizontal|:grid], ...)_ - Packer that packs its component elements. This is the only type of element that can be put directly inside a GuiState.
 
-h3. Non-interactive elements
+h3. General elements
 
-* label(text, ...) - Label with text and, optionally, an icon.
-
-h3. Interactive elements
-
-* button(...) - Button with text and/or icon.
-* toggle_button(...) - Button that can be toggled on/off.
-* combo_box(...) - Button that has a drop-down menu attached (use 'item(value, ...) to add items).
-* list(...) - A vertical list of items to select from (use 'item(value, ...) to add items).
-* slider(...) - Horizontal slider with handle.
-* color_picker(...) - Red, green and blue sliders and colour indicator.
-* text_area(...) - An multi-line element, containing editable text.
-
-h3. Radio-controls
-
-* group(...) - Manages any radio-buttons put inside it (A packer should be placed inside the group, to manage how they are arranged):
-** radio_button(value, ...) - Button that is part of a 'group'; only one of which will be selected.
-** color_well(color, ...) - A radio-button used to pick a colour.
+* _button(...)_ - Button with text and/or icon.
+* _color_picker(...)_ - Red, green and blue sliders and colour indicator.
+* _combo_box(...)_ - Button that has a drop-down menu attached (use _item(value, ...)_ to add items).
+* _label(text, ...)_ - Label with text and, optionally, an icon.
+* _list(...)_ - A vertical list of items to select from (use _item(value, ...)_ to add items).
+* _group(...)_ - Manages any radio-buttons put inside it (A packer should be placed inside the group, to manage how they are arranged):
+** _radio_button(value, ...)_ - Button that is part of a 'group'; only one of which will be selected.
+** _color_well(color, ...)_ - A radio-button used to pick a colour.
+* _slider(...)_ - Horizontal slider with handle.
+* _text_area(...)_ - An multi-line element, containing editable text.
+* _toggle_button(...)_ - Button that can be toggled on/off.
 
 
 h2. Alternative GUI frameworks
 
 There are two GUI other tool-kits that work with Gosu:
 
-* "RubyGoo":http://code.google.com/p/rubygoo/
+* "Rubygoo":http://code.google.com/p/rubygoo/
 ** Additionally supports "Rubygame":http://rubygame.org/ (as well as Gosu).
 ** Relatively cumbersome API.
 ** Only simple widgets are implemented.
