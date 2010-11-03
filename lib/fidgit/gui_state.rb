@@ -35,11 +35,17 @@ module Fidgit
     end
 
     def initialize
-      @outer_container = Container.new(nil) do |container|
-        @container = Container.new(container)
+      @outer_container = Container.new(nil) do
+        @container = pack :vertical, padding: 0
       end
 
-      extend @container.redirector
+      # Ensure that we redirect methods to the container, such as "label".
+      meta_class = class << self; self; end
+      (@container.public_methods - public_methods).each do |method|
+        meta_class.send :define_method, method do |*args, &block|
+          @container.send method, *args, &block
+        end
+      end
 
       @focus = nil
 

@@ -5,9 +5,7 @@ require_relative 'container'
 module Fidgit
   class List < Composite
     # @private
-    class Item < Button
-      class Group < RadioButton::Group
-      end
+    class Item < RadioButton
       # TODO: Need to inherit from RadioButton, but it doesn't display anything.
     end
 
@@ -25,19 +23,19 @@ module Fidgit
 
       super parent, options
 
-      Item::Group.new(self) do |group|
-        group.subscribe :changed do |sender, value|
+      group do
+        subscribe :changed do |sender, value|
           publish :changed, value
         end
 
-        @items = group.pack :vertical, spacing: 0
+        @items = pack :vertical, spacing: 0
       end
     end
 
     # @param [String] text
     # @option options [Gosu::Image] :icon
-    def item(options = {})
-      Item.new(@items, options)
+    def item(value, options = {})
+      Item.new(@items, value, options)
     end
   end
 end

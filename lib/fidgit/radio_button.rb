@@ -11,11 +11,11 @@ module Fidgit
       def value; @selected ? @selected.value : nil; end
 
       # @example
-      #   RadioButton::Group.new(packer) do |group|
-      #     HorizontalPacker.new(group) do |packer|
-      #       RadioButton.new(packer, 1, text: '1' checked: true)
-      #       RadioButton.new(packer, 2, text: '2')
-      #       group.subscribe :changed do |sender, value|
+      #   group do
+      #     pack :horizontal do
+      #       radio_button 1, text: '1' checked: true
+      #       radio_button 2, text: '2'
+      #       subscribe :changed do |sender, value|
       #         puts value
       #       end
       #     end

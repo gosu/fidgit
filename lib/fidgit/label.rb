@@ -8,7 +8,8 @@ module Fidgit
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_COLOR = Gosu::Color.rgb(255, 255, 255)
 
-    attr_reader :color, :background_color, :border_color, :text, :icon
+    attr_accessor :color, :background_color, :border_color
+    attr_reader :text, :icon
 
     def text=(value)
       @text = value

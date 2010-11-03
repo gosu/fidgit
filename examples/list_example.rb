@@ -7,8 +7,8 @@ class ExampleState < GuiState
       my_label = label "No clicky"
 
       list do
-        item text: "chunky bacon", value: :CHUNKYBACON
-        item text: "lentils", value: :LENTILS
+        item :CHUNKYBACON, text: "chunky bacon"
+        item :LENTILS, text: "lentils"
 
         subscribe :changed do |sender, value|
           my_label.text = "I like #{value} more than anything in the world!"

@@ -12,10 +12,6 @@ module Fidgit
 
     DEFAULT_SIZE = 20
 
-    # Manages a group of ColorWells.
-    class Group < RadioButton::Group
-    end
-
     # @param (see RadioButton#initialize)
     # @option (see RadioButton#initialize)
     def initialize(parent, options = {}, &block)

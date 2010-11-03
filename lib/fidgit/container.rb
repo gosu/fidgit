@@ -53,67 +53,65 @@ module Fidgit
 
     # Create a button within the container.
     def button(options = {}, &block)
-      Button.new(self, options).instance_methods_eval &block
+      Button.new(self, options, &block)
     end
 
     # Create a color picker within the container.
     def color_picker(options = {}, &block)
-      ColorPicker.new(self, options).instance_methods_eval &block
+      ColorPicker.new(self, options, &block)
     end
 
     # Create a color well within the container.
     def color_well(options = {}, &block)
-      ColorWell.new(self, options).instance_methods_eval &block
+      ColorWell.new(self, options, &block)
     end
 
     def combo_box(options = {}, &block)
-      ComboBox.new(self, options).instance_methods_eval &block
+      ComboBox.new(self, options, &block)
     end
 
     def group(options = {}, &block)
-      RadioButton::Group.new(self, options).instance_methods_eval &block
+      RadioButton::Group.new(self, options, &block)
     end
 
     # Create a label within the container.
     def label(text, options = {}, &block)
-      Label.new(self, text, options).instance_methods_eval &block
+      Label.new(self, text, options, &block)
     end
 
     def list(options = {}, &block)
-      List.new(self, options).instance_methods_eval &block
+      List.new(self, options, &block)
     end
 
-    def pack(alignment, options = {}, &block)
-      packer = case alignment
+    def pack(arrangement, options = {}, &block)
+      klass = case arrangement
         when :horizontal
-          HorizontalPacker.new(self, options)
+          HorizontalPacker
         when :vertical
-          VerticalPacker.new(self, options)
+          VerticalPacker
         when :grid
-          GridPacker.new(self, options)
+          GridPacker
         else
-          raise ArgumentError, "alignment must be one of :horizontal, :vertical or :grid"
+          raise ArgumentError, "packing arrangement must be one of :horizontal, :vertical or :grid"
       end
 
-      add packer
-
-      packer.instance_methods_eval &block
+      klass.new(self, options, &block)
     end
 
     def radio_button(value, options = {}, &block)
-      RadioButton.new(self, value, options).instance_methods_eval &block
+      RadioButton.new(self, value, options, &block)
     end
 
     def slider(options = {}, &block)
-      Slider.new(self, options).instance_methods_eval &block
+      Slider.new(self, options, &block)
     end
 
     def text_area(options = {}, &block)
-      TextArea.new(self, options).instance_methods_eval &block
+      TextArea.new(self, options, &block)
     end
 
     def toggle_button(options = {}, &block)
-      ToggleButton.new(self, options).instance_methods_eval &block
+      ToggleButton.new(self, options, &block)
     end
 
     def clear

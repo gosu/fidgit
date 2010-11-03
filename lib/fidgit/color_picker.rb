@@ -38,11 +38,10 @@ module Fidgit
       super(parent, options)
 
       slider_width = width
-
-      VerticalPacker.new(self, spacing: 0) do |packer|
+      pack :vertical, spacing: 0 do
         @sliders = {}
         CHANNELS.each_with_index do |channel, i|
-          @sliders[channel] = packer.slider(value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do
+          @sliders[channel] = slider(value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do
             subscribe :changed do |sender, value|
               @color.send "#{channel}=", value
               @indicator.background_color = @color
@@ -51,7 +50,7 @@ module Fidgit
           end
         end
 
-        @indicator = packer.label '', background_color: @color, width: width, height: height + INDICATOR_HEIGHT
+        @indicator = label '', background_color: @color, width: width, height: height + INDICATOR_HEIGHT
       end
     end
   end

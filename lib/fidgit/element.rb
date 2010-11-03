@@ -78,6 +78,8 @@ module Fidgit
     # @option options [Number] :padding (4)
     # @option options [Number] :padding_x (:padding option)
     # @option options [Number] :padding_y (:padding option)
+    #
+    # @yield instance_methods_eval with respect to self.
     def initialize(parent, options = {}, &block)
       options = {
         x: 0,
@@ -110,8 +112,6 @@ module Fidgit
 
       @rect = Chingu::Rect.new(0, 0, options[:width], options[:height])
       self.x, self.y = options[:x], options[:y]
-
-      @redirector = Redirector.create(self)
     end
 
     def recalc
@@ -174,18 +174,7 @@ module Fidgit
     def post_init(&block)
       recalc
       @parent.send :add, self if @parent
-      yield self if block_given? # Return the result of the yield.
-    end
-
-    protected
-    # Executes a block, if any, in the context of a target object.
-    def instance_methods_eval(&block)
-      if block_given?
-        context = eval('self', block.binding)
-        context.mix_eval(redirector, &block)
-      end
-
-      self
+      instance_methods_eval &block if block_given?
     end
   end
 end

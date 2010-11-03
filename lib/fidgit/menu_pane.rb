@@ -86,7 +86,7 @@ module Fidgit
 
       super(nil, options)
 
-      @items = VerticalPacker.new(self, spacing: 0, padding: 0)
+      @items = pack :vertical, spacing: 0, padding: 0
     end
 
     def find(value)

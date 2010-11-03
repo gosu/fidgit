@@ -49,10 +49,9 @@ module Fidgit
 
       super(parent, options)
 
-      HorizontalPacker.new(self, padding: 0) do |packer|
-        @handle = Handle.new(packer, width: (height / 2 - padding_x), height: height - padding_y * 2,
+      packer = pack :horizontal, padding: 0
+      @handle = Handle.new(packer, width: (height / 2 - padding_x), height: height - padding_y * 2,
                            background_color: options[:handle_color])
-      end
 
       self.value = options.has_key?(:value) ? options[:value] : @range.min
     end
