@@ -11,7 +11,7 @@ module Fidgit
       context.send :push_redirection_target, self
 
       begin
-        yield
+        yield context
       ensure
         context.send :pop_redirection_target
       end

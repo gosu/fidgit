@@ -13,6 +13,11 @@ describe RedirectorMethods do
          ->{ subject.instance_methods_eval }.should raise_error
       end
 
+     it "should yield the target" do
+        subject.instance_methods_eval { |target| @frog = target }
+        @frog.should equal subject
+      end
+
       it "should allow ivars to be read from the calling context" do
         @frog = 5
         fish = 0
