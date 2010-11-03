@@ -12,6 +12,9 @@ _WARNING: THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT AND THE API IS LIABLE TO CO
 
 Read the Yard documentation at "rubydoc.info":http://rubydoc.info/github/Spooner/fidgit/master
 
+h2. License
+
+GPL v3 (see COPYING.txt)
 
 h2. Requirements
 
@@ -91,7 +94,7 @@ There are two GUI other tool-kits that work with Gosu:
 ** Relatively cumbersome API.
 ** Only simple widgets are implemented.
 
-* GGLib (Gosu GUI Library)
+* "GGLib":http://code.google.com/p/gglib/ (Gosu GUI Library)
 ** Pretty graphical themes.
 ** Only simple widgets are implemented.
 

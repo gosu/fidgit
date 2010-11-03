@@ -14,16 +14,7 @@ module Fidgit
   self.fonts = Hash.new { |fonts, name| fonts[name] = Hash.new { |sizes, size| sizes[size] = Gosu::Font.new($window, name, size) } }
   self.debug_mode = false
 
-  def default_font_name; Fidgit.default_font_name; end
-  def default_font_name=(name); Fidgit.default_font_name = name; end
-
-  def default_font_size; Fidgit.default_font_size; end
-  def default_font_size=(size); Fidgit.default_font_size = size; end
-
-  def default_font; Fidgit.fonts[default_font_name][default_font_size]; end
-
-  def debug_mode?; Fidgit.debug_mode; end
-  def debug_mode=(value); Fidgit.debug_mode = value; end
+  def self.debug_mode?; debug_mode; end
 
   # An element within the GUI environment.
   # @abstract
@@ -46,6 +37,7 @@ module Fidgit
     def height; rect.height; end
     def enabled?; @enabled; end
     def enabled=(value); @enabled = value; end
+    def debug_mode?; @debug_mode; end
 
     def font; Fidgit.fonts[@font_name][@font_size]; end
 
@@ -88,9 +80,9 @@ module Fidgit
         width: 0,
         height: 0,
         tip: '',
-        font_name: default_font_name,
-        font_size: default_font_size,
-        debug: debug_mode?,
+        font_name: Fidgit.default_font_name,
+        font_size: Fidgit.default_font_size,
+        debug: Fidgit.debug_mode?,
         background_color: DEFAULT_BACKGROUND_COLOR.dup,
         border_color: DEFAULT_BORDER_COLOR.dup,
         enabled: true,
