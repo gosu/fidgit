@@ -55,7 +55,7 @@ class ComboBox < Button
   end
 
   def item(*args)
-    @menu.add_item(*args)
+    @menu.item(*args)
 
     # Force text to be updated.
     if item = @menu.find(@value)

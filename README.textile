@@ -72,8 +72,8 @@ h3. Interactive elements
 
 * button(...) - Button with text and/or icon.
 * toggle_button(...) - Button that can be toggled on/off.
-* combo_box(...) - Button that has a drop-down menu attached (use 'item(text, ...) to add items).
-* list(...) - A vertical list of items to select from (use 'item(text, ...) to add items).
+* combo_box(...) - Button that has a drop-down menu attached (use 'item(value, ...) to add items).
+* list(...) - A vertical list of items to select from (use 'item(value, ...) to add items).
 * slider(...) - Horizontal slider with handle.
 * color_picker(...) - Red, green and blue sliders and colour indicator.
 * text_area(...) - An multi-line element, containing editable text.

@@ -93,13 +93,13 @@ module Fidgit
       @items.find {|c| c.value == value }
     end
 
-    def add_separator(options = {})
+    def separator(options = {})
       options[:z] = z
 
       Separator.new(@items, options)
     end
 
-    def add_item(value, options = {})
+    def item(value, options = {})
       options[:z] = z
       item = Item.new(@items, value, options)
 
