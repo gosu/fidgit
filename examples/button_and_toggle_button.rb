@@ -7,15 +7,11 @@ class ExampleState < GuiState
       my_label = label "Label", tip: "I'm a label"
 
       button text: "Button", tip: "I'm a button; press me!" do
-        subscribe :clicked_left_mouse_button do |sender, x, y|
-          my_label.text = "Pressed the button!"
-        end
+        my_label.text = "Pressed the button!"
       end
 
-      toggle_button text: "ToggleButton", tip: "I'm a button that toggles" do
-        subscribe :clicked_left_mouse_button do |sender, x, y|
-          my_label.text = "Turned the toggle button #{sender.on? ? "on" : "off"}!"
-        end
+      toggle_button text: "ToggleButton", tip: "I'm a button that toggles" do |sender, x, y|
+        my_label.text = "Turned the toggle button #{sender.on? ? "on" : "off"}!"
       end
     end
   end

@@ -68,5 +68,11 @@ module Fidgit
 
       nil
     end
+
+    protected
+    # A block added to any button subscribes to LMB click.
+    def post_init_block(&block)
+      subscribe :clicked_left_mouse_button, &block
+    end
   end
 end

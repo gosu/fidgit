@@ -6,15 +6,11 @@ class ExampleState < GuiState
       my_label = label "No button selected"
 
       button text: "Deselect" do
-        subscribe :clicked_left_mouse_button do |sender, x, y|
-          @group.value = nil
-        end
+        @group.value = nil
       end
 
       button text: "Select #7" do
-        subscribe :clicked_left_mouse_button do |sender, x, y|
-          @group.value = 7
-        end
+        @group.value = 7
       end
 
       @group = group padding_y: 10 do

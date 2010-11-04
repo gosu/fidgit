@@ -72,5 +72,11 @@ class ComboBox < Button
 
     nil
   end
+
+  protected
+  # Any combo-box passed a block will allow you access to its methods.
+  def post_init_block(&block)
+    instance_methods_eval &block
+  end
 end
 end

@@ -47,7 +47,8 @@ module Fidgit
 
       def new(*args, &block)
         obj = original_new(*args) # Block should be ignored.
-        obj.send :post_init, &block
+        obj.send :post_init
+        obj.send :post_init_block, &block if block_given?
         obj
       end
     end
@@ -162,10 +163,15 @@ module Fidgit
     end
 
     protected
-    def post_init(&block)
+    def post_init
       recalc
       @parent.send :add, self if @parent
-      instance_methods_eval &block if block_given?
+    end
+
+    protected
+    # By default, elements do not accept block arguments.
+    def post_init_block(&block)
+      raise ArgumentError, "does not accept a block"
     end
   end
 end

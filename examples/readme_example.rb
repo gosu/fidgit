@@ -21,9 +21,7 @@ class MyGuiState < Fidgit::GuiState
       my_label = label "Hello world!", background_color: Gosu::Color.rgb(0, 100, 0)
       
       button text: "Goodbye" do
-        subscribe :clicked_left_mouse_button do # Handle mouse-click events.
-          my_label.text = "Goodbye cruel world!"
-        end        
+        my_label.text = "Goodbye cruel world!"
       end
     end
   end

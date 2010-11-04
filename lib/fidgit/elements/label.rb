@@ -28,7 +28,7 @@ module Fidgit
     #
     # @option (see Element#initialize)
     # @option options [Fidgit::Thumbnail, Gosu::Image, nil] :icon (nil)
-    def initialize(parent, text, options = {}, &block)
+    def initialize(parent, text, options = {})
       options = {
         color: DEFAULT_COLOR,
         background_color: DEFAULT_BACKGROUND_COLOR,

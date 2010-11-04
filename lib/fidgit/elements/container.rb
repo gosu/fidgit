@@ -75,8 +75,8 @@ module Fidgit
     end
 
     # Create a label within the container.
-    def label(text, options = {}, &block)
-      Label.new(self, text, options, &block)
+    def label(text, options = {})
+      Label.new(self, text, options)
     end
 
     def list(options = {}, &block)
@@ -153,6 +153,12 @@ module Fidgit
       font.draw self.class.name, x, y, z if debug_mode?
 
       nil
+    end
+
+    protected
+    # Any container passed a block will allow you access to its methods.
+    def post_init_block(&block)
+      instance_methods_eval &block
     end
   end
 end
