@@ -1,7 +1,6 @@
 # encoding: utf-8
 
-require_relative 'event'
-require_relative 'redirector'
+require_relative '../event'
 
 # The Fidgit GUI framework for Gosu.
 module Fidgit
