@@ -6,7 +6,6 @@ class ExampleState < GuiState
       my_label = label 'No color picked'
 
       color_picker(width: 100) do |sender, color|
-        p sender, color
         my_label.text = color.to_s
       end
     end
