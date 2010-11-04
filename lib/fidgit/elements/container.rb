@@ -71,7 +71,7 @@ module Fidgit
     end
 
     def group(options = {}, &block)
-      RadioButton::Group.new(self, options, &block)
+      Group.new(self, options, &block)
     end
 
     # Create a label within the container.
