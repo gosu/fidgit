@@ -41,17 +41,21 @@ module Fidgit
       pack :vertical, spacing: 0 do
         @sliders = {}
         CHANNELS.each_with_index do |channel, i|
-          @sliders[channel] = slider(value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do
-            subscribe :changed do |sender, value|
-              @color.send "#{channel}=", value
-              @indicator.background_color = @color
-              publish :changed, @color.dup
-            end
+          @sliders[channel] = slider(value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do |sender, value|
+            @color.send "#{channel}=", value
+            @indicator.background_color = @color
+            publish :changed, @color.dup
           end
         end
 
         @indicator = label '', background_color: @color, width: width, height: height + INDICATOR_HEIGHT
       end
+    end
+
+    protected
+    # Use block as an event handler.
+    def post_init_block(&block)
+      subscribe :changed, &block
     end
   end
 end

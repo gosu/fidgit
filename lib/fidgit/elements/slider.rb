@@ -101,5 +101,11 @@ module Fidgit
       draw_rect x + padding_x, y + padding_y, width - padding_x * 2, height - padding_y * 4, z, @groove_color
       nil
     end
+
+    protected
+    # Use block as an event handler.
+    def post_init_block(&block)
+      subscribe :changed, &block
+    end
   end
 end

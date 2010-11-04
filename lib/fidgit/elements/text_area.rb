@@ -333,5 +333,11 @@ module Fidgit
 
       nil
     end
+
+    protected
+    # Use block as an event handler.
+    def post_init_block(&block)
+      subscribe :changed, &block
+    end
   end
 end
