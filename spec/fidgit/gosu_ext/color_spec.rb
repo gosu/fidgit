@@ -50,6 +50,16 @@ describe Color do
     end
   end
 
+  describe "#==" do
+    it "should return true for colours that are identical" do
+      (Color.rgb(1, 2, 3) == Color.rgb(1, 2, 3)).should be_true
+    end
+
+    it "should return false for colours that are not the same" do
+      (Color.rgb(1, 2, 3) == Color.rgb(4, 2, 3)).should be_false
+    end
+  end
+
   describe "#transparent?" do
     it "should be true if alpha is 0" do
       Color.rgba(1, 1, 1, 0).should be_transparent

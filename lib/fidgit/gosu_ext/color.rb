@@ -52,5 +52,13 @@ module Gosu
     def to_s
       "<RGBA [#{red}, #{green}, #{blue}, #{alpha}]>"
     end
+
+    def ==(other)
+      if other.is_a? Color
+        red == other.red and green == other.green and blue == other.blue and alpha == other.alpha
+      else
+        false
+      end
+    end
   end
 end
