@@ -54,15 +54,15 @@ class ComboBox < Button
     rect.width = [width, font_size * 4 + padding_x * 2].max
   end
 
-  def item(*args)
-    @menu.item(*args)
+  def item(value, options = {}, &block)
+    item = @menu.item(value, options, &block)
 
-    # Force text to be updated.
-    if item = @menu.find(@value)
+    # Force text to be updated if the item added has the same value.
+    if item.value == @value
       @text = item.text
     end
 
-    nil
+    item
   end
 
   def clicked_left_mouse_button(sender, x, y)

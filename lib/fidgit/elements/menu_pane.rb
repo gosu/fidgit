@@ -99,9 +99,9 @@ module Fidgit
       Separator.new(@items, options)
     end
 
-    def item(value, options = {})
+    def item(value, options = {}, &block)
       options[:z] = z
-      item = Item.new(@items, value, options)
+      item = Item.new(@items, value, options, &block)
 
       item.subscribe :left_mouse_button, method(:item_selected)
       item.subscribe :right_mouse_button, method(:item_selected)

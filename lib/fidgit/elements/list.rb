@@ -6,7 +6,6 @@ module Fidgit
   class List < Composite
     # @private
     class Item < RadioButton
-      # TODO: Need to inherit from RadioButton, but it doesn't display anything.
     end
 
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(200, 200, 200)
@@ -34,8 +33,8 @@ module Fidgit
 
     # @param [String] text
     # @option options [Gosu::Image] :icon
-    def item(value, options = {})
-      Item.new(@items, value, options)
+    def item(value, options = {}, &block)
+      Item.new(@items, value, options, &block)
     end
   end
 end

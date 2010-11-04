@@ -44,9 +44,7 @@ class MyGuiState < Fidgit::GuiState
       my_label = label "Hello world!", background_color: Gosu::Color.rgb(0, 100, 0)
 
       button text: "Goodbye" do
-        subscribe :clicked_left_mouse_button do # Handle mouse-click events.
-          my_label.text = "Goodbye cruel world!"
-        end
+        my_label.text = "Goodbye cruel world!"
       end
     end
   end
@@ -58,25 +56,43 @@ MyGame.new.show
 
 h2. API
 
-As well as a cursor and tool-tips that are managed by the GuiState for you, there are several elements you can use inside your GuiState:
+As well as a cursor and tool-tips that are managed by the GuiState for you, there are several elements you can use inside your GuiState.
+
+Elements are best added by using simple methods (listed below). Most of these method accept a block, some offering access to public methods of the element and others being default event handlers.
+
+The GuiState itself only accepts #pack, but any packer or group accepts any other element method.
 
 h3. Arrangement managers
 
-* _pack([:vertical|:horizontal|:grid], ...)_ - Packer that packs its component elements. This is the only type of element that can be put directly inside a GuiState.
+Fidgit uses automatic packers to manage layout.
 
-h3. General elements
+* _pack([:vertical|:horizontal|:grid], ...)_ - Packer that packs its component elements (Block has access to public methods).
+* _group(...)_ - Manages any groupable elements put inside it, such as radio-buttons (Block has access to public methods). Best to subscribe to :changed event handler.
 
-* _button(...)_ - Button with text and/or icon.
-* _color_picker(...)_ - Red, green and blue sliders and colour indicator.
-* _combo_box(...)_ - Button that has a drop-down menu attached (use _item(value, ...)_ to add items).
-* _label(text, ...)_ - Label with text and, optionally, an icon.
-* _list(...)_ - A vertical list of items to select from (use _item(value, ...)_ to add items).
-* _group(...)_ - Manages any radio-buttons put inside it (A packer should be placed inside the group, to manage how they are arranged):
-** _radio_button(value, ...)_ - Button that is part of a 'group'; only one of which will be selected.
-** _color_well(color, ...)_ - A radio-button used to pick a colour.
-* _slider(...)_ - Horizontal slider with handle.
-* _text_area(...)_ - An multi-line element, containing editable text.
-* _toggle_button(...)_ - Button that can be toggled on/off.
+h3. Elements
+
+* _button(...)_ - Button with text and/or icon (Block handles :clicked_left_mouse_button event).
+* _color_picker(...)_ - Red, green and blue sliders and colour indicator (Block handles :changed event).
+* _label(text, ...)_ - Label with text and, optionally, an icon (No block accepted).
+* _slider(...)_ - Horizontal slider with handle (Block handles :changed event handler).
+* _text_area(...)_ - An multi-line element, containing editable text (Block handles :changed event).
+* _toggle_button(...)_ - Button that can be toggled on/off (Block handles :clicked_left_mouse_button event).
+
+h4. Groupable elements
+
+These should be placed within a group (directly or indirectly) and only one of them will be selected. The group manages which one is selected.
+
+* _color_well(color, ...)_ - A radio-button used to pick a colour (Block handles :clicked_left_mouse_button event).
+* _radio_button(value, ...)_ - Button that is part of a group (Block handles :clicked_left_mouse_button event).
+
+h3. Compound elements
+
+These elements contain items, which can easily be added from within a block passed to them. One can subscribe to the :changed event, which is usually easier than managing each item separately.
+
+* _combo_box(...)_ - Button that has a drop-down menu attached (Block has access to public methods).
+** _item(value, ...)_ - Add an item to a combo box (Block handles :clicked_left_mouse_button event).
+* _list(...)_ - A vertical list of items to select from (Block has access to public methods).
+** _item(value, ...)_ - Add an item to a combo box (Block handles :clicked_left_mouse_button event).
 
 
 h2. Alternative GUI frameworks
