@@ -4,7 +4,6 @@ require_relative 'container'
 
 module Fidgit
   class List < Composite
-    # @private
     class Item < RadioButton
     end
 
@@ -35,6 +34,17 @@ module Fidgit
     # @option options [Gosu::Image] :icon
     def item(value, options = {}, &block)
       Item.new(@items, value, options, &block)
+    end
+
+    protected
+    def layout
+      super
+      if @items
+        max_width = @items.each.to_a.map {|c| c.width }.max || 0
+        @items.each {|c| c.rect.width = max_width }
+      end
+
+      nil
     end
   end
 end
