@@ -117,6 +117,10 @@ module Fidgit
       nil
     end
 
+    def show
+      $window.game_state_manager.current_game_state.show_menu self
+    end
+
     protected
     def layout
       super
