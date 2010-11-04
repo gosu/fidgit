@@ -17,14 +17,6 @@ module Fidgit
 
     def cursor; @@cursor; end
 
-    # Will implement these later.
-    DEFAULT_INPUTS.each do |handler|
-      define_method handler do
-        nil
-      end
-      private handler
-    end
-
     def focus=(focus)
       @focus.publish :blur if @focus and focus
       @focus = focus
@@ -56,7 +48,10 @@ module Fidgit
       @@mouse_moved_at = Gosu::milliseconds
 
       super()
-      add_inputs *DEFAULT_INPUTS
+
+      DEFAULT_INPUTS.each do |input|
+        on_input input, "redirect_#{input}"
+      end
     end
 
     # Internationalisation helper.
@@ -137,7 +132,7 @@ module Fidgit
       nil
     end
 
-    def left_mouse_button
+    def redirect_left_mouse_button
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu unless @menu and @menu == @mouse_over
 
@@ -148,23 +143,73 @@ module Fidgit
 
       if @mouse_over
         @mouse_over.publish :left_mouse_button, cursor.x, cursor.y
-        @mouse_down_on = @mouse_over
+        @left_mouse_down_on = @mouse_over
       else
-        @mouse_down_on = nil
+        @left_mouse_down_on = nil
       end
 
       nil
     end
 
-    def released_left_mouse_button
+    def redirect_released_left_mouse_button
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu if @menu and @mouse_over != @menu
 
       if @mouse_over
         @mouse_over.publish :released_left_mouse_button, cursor.x, cursor.y
-        @mouse_over.publish :clicked_left_mouse_button, cursor.x, cursor.y if @mouse_over == @mouse_down_on
+        @mouse_over.publish :clicked_left_mouse_button, cursor.x, cursor.y if @mouse_over == @left_mouse_down_on
       end
 
+      nil
+    end
+
+    def redirect_right_mouse_button
+      # Ensure that if the user clicks away from a menu, it is automatically closed.
+      hide_menu unless @menu and @menu == @mouse_over
+
+      if @focus and @mouse_over != @focus
+        @focus.publish :blur
+        @focus = nil
+      end
+
+      if @mouse_over
+        @mouse_over.publish :right_mouse_button, cursor.x, cursor.y
+        @right_mouse_down_on = @mouse_over
+      else
+        @right_mouse_down_on = nil
+      end
+
+      nil
+    end
+
+    def redirect_released_right_mouse_button
+      # Ensure that if the user clicks away from a menu, it is automatically closed.
+      hide_menu if @menu and @mouse_over != @menu
+
+      if @mouse_over
+        @mouse_over.publish :released_right_mouse_button, cursor.x, cursor.y
+        @mouse_over.publish :clicked_right_mouse_button, cursor.x, cursor.y if @mouse_over == @right_mouse_down_on
+      end
+
+      nil
+    end
+
+    def redirect_holding_left_mouse_button
+      @mouse_over.publish :holding_left_mouse_button, cursor.x, cursor.y if @mouse_over
+      nil
+    end
+
+    def redirect_holding_right_mouse_button
+      @mouse_over.publish :holding_right_mouse_button, cursor.x, cursor.y if @mouse_over
+    end
+
+    def redirect_mouse_wheel_up
+      @mouse_over.publish :mouse_wheel_up, cursor.x, cursor.y if @mouse_over
+      nil
+    end
+
+    def redirect_mouse_wheel_down
+      @mouse_over.publish :mouse_wheel_down, cursor.x, cursor.y if @mouse_over
       nil
     end
 
