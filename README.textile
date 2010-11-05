@@ -24,7 +24,7 @@ h2. Requirements
 
 h2. Example
 
-<pre><code="ruby">require 'fidgit'
+<pre>require 'fidgit'
 
 class MyGame < Chingu::Window
   def initialize
@@ -51,7 +51,7 @@ class MyGuiState < Fidgit::GuiState
 end
 
 MyGame.new.show
-</code></pre>
+</pre>
 
 
 h2. API
