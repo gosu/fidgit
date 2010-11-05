@@ -2,28 +2,32 @@ require_relative 'dialog_state'
 
 
 module Fidgit
-  # A dialog that
+  # A simple dialog that manages a message with a set of buttons beneath it.
   class MessageDialog < DialogState
-    VALID_TYPES = [:ok, :ok_cancel, :yes_no_cancel]
+    VALID_TYPES = [:ok, :ok_cancel, :yes_no, :yes_no_cancel, :quit_cancel, :quit_save_cancel]
 
     attr_reader :type
 
     # @param [String] message
     #
-    # @option options [Symbol] :type (:ok) One from :ok, :ok_cancel, :yes_no_cancel
+    # @option options [Symbol] :type (:ok) One from :ok, :ok_cancel, :yes_no, :yes_no_cancel, :quit_cancel or :quit_save_cancel
     # @option options [String] :ok_text ("OK")
     # @option options [String] :yes_text ("Yes")
     # @option options [String] :no_text ("No")
     # @option options [String] :cancel_text ("Cancel")
+    # @option options [String] :save_text ("Save")
+    # @option options [String] :quit_text ("Quit")
     #
     # @yield when the dialog is closed.
-    # @yieldparam [Symbol] result :ok, :yes, :no or :cancel, depending on the button pressed.
+    # @yieldparam [Symbol] result :ok, :yes, :no, :quit, :save or :cancel, depending on the button pressed.
     def initialize(message, options = {}, &block)
       options = {
         type: :ok,
         ok_text: "OK",
         yes_text: "Yes",
         no_text: "No",
+        quit_text: "Quit",
+        save_text: "Save",
         cancel_text: "Cancel",
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR,
@@ -39,29 +43,10 @@ module Fidgit
         text_area(text: message, enabled: false, width: options[:width] - padding_x * 2)
 
         pack :horizontal do
-          if [:ok, :ok_cancel].include? @type
-            button text: options[:ok_text] do
+          @type.to_s.split('_').each do |type|
+            button(text: options[:"#{type}_text"]) do
               hide
-              block.call :ok if block
-            end
-          end
-
-          if [:yes_no_cancel].include? @type
-            button text: options[:yes_text] do
-              hide
-              block.call :yes if block
-            end
-
-            button text: options[:no_text] do
-              hide
-              block.call :no if block
-            end
-          end
-
-          if [:yes_no_cancel, :ok_cancel].include? @type
-            button text: options[:cancel_text] do
-              hide
-              block.call :cancel if block
+              block.call type.to_sym if block
             end
           end
         end

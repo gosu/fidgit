@@ -19,7 +19,8 @@ module Fidgit
     end
 
     def hide
-      $window.game_state_manager.pop_game_state setup: false
+      $window.game_state_manager.pop_game_state(setup: false)
+      nil
     end
   end
 end
