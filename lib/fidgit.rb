@@ -20,6 +20,7 @@ require_relative 'fidgit/selection'
 require_relative 'fidgit/thumbnail'
 
 require_relative 'fidgit/states/gui_state'
+require_relative 'fidgit/states/message_dialog'
 
 require_relative 'fidgit/elements/button'
 require_relative 'fidgit/elements/color_picker'

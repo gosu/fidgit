@@ -3,7 +3,7 @@
 module Fidgit
   class GuiState < Chingu::GameState
     # A 1x1 white pixel used for drawing.
-    PIXEL_IMAGE = File.join(File.dirname(__FILE__), '..', '..', 'media', 'images', 'pixel.png')
+    PIXEL_IMAGE = 'pixel.png'
 
     DEFAULT_INPUTS = [
       :left_mouse_button, :right_mouse_button,
@@ -36,11 +36,11 @@ module Fidgit
       @focus = nil
 
       unless defined? @@draw_pixel
-        media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'media'))
+        media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'media'))
         Gosu::Image.autoload_dirs << File.join(media_dir, 'images')
         Gosu::Sample.autoload_dirs << File.join(media_dir, 'sounds')
 
-        @@draw_pixel = Gosu::Image.new($window, PIXEL_IMAGE, true) # Must be tileable or it will blur.
+        @@draw_pixel = Gosu::Image.new($window, File.join(media_dir, 'images', PIXEL_IMAGE), true) # Must be tileable or it will blur.
         @@cursor = Cursor.new
       end
 
