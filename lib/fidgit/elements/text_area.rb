@@ -22,7 +22,9 @@ module Fidgit
     # @return [Boolean]
     attr_writer :editable
 
-    handles :checked
+    handles :changed
+    handles :focus
+    handles :blur
 
     # Is the area editable?
     def editable?
@@ -108,7 +110,7 @@ module Fidgit
 
       @lines = [''] # List of lines of wrapped text.
       @text_positions = [[0, 0, 0]] # [x, y, width] of each character.
-      @text_input = TextInput.new
+      @text_input = Gosu::TextInput.new
       @old_text = ''
       @old_caret_position = 0
       @old_selection_start = 0
@@ -203,7 +205,7 @@ module Fidgit
       end
 
       # Draw the caret.
-      if focused? and ((milliseconds / CARET_PERIOD) % 2 == 0)
+      if focused? and ((Gosu::milliseconds / CARET_PERIOD) % 2 == 0)
         left, top = x + padding_x + caret_x, y + padding_y + caret_y
         $window.draw_line left, top, CARET_COLOR, left, top + font_size, CARET_COLOR, z
       end
