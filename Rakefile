@@ -1,9 +1,13 @@
 ROOT = File.expand_path(File.join(__FILE__, '..'))
 
+README_HTML = "README.html"
+README_TEXTILE = "README.textile"
+
 require_relative 'lib/fidgit/version'
 
 require 'redcloth'
 require 'yaml'
+require 'yard'
 require 'rake/clean'
 require 'rake/gempackagetask'
 
@@ -36,19 +40,36 @@ Rake::GemPackageTask.new(specification) do |package|
   package.need_tar = false
 end
 
+# Documentation
+
+
+# I REALLY have no idea what I'm doing here!
+class EventHandlesHandler < YARD::Handlers::Ruby::Base
+  handles method_call(:handles)
+
+  def process
+    klass = statement.parent.parent.jump(:const)[0]
+    name = statement.method_name(true)
+    params = statement.parameters(false).dup
+    puts "Processing Event method: #{klass}.#{name} :#{params[0].jump(:ident)[0]}"
+  end
+end
+
+
+YARD::Rake::YardocTask.new
+task :yard => README_HTML
+
+desc "Convert readme to HTML"
+file README_HTML => :readme
+task :readme => README_TEXTILE do
+  puts "Converting readme to HTML"
+  File.open(README_HTML, "w") do |file|
+    file.write RedCloth.new(File.read(README_TEXTILE)).to_html
+  end
+end
+
+# Specs
 desc "Run rspec 2.0"
 task :rspec do
   system "rspec spec"
-end
-
-desc "Create yard docs"
-task :doc => :readme do
-  system "yard doc lib"
-end  
-
-desc "Convert readme to HTML"
-task :readme do
-  File.open("README.html", "w") do |file|
-    file.write RedCloth.new(File.read("README.textile")).to_html
-  end
 end
