@@ -22,6 +22,8 @@ module Fidgit
     # @return [Boolean]
     attr_writer :editable
 
+    handles :checked
+
     # Is the area editable?
     def editable?
       @editable

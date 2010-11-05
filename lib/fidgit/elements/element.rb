@@ -20,6 +20,25 @@ module Fidgit
   class Element
     include Event
 
+    handles :left_mouse_button
+    handles :pressed_left_mouse_button
+    handles :holding_left_mouse_button
+    handles :released_left_mouse_button
+    handles :clicked_left_mouse_button
+    
+    handles :right_mouse_button
+    handles :pressed_right_mouse_button
+    handles :holding_right_mouse_button
+    handles :released_right_mouse_button
+    handles :clicked_right_mouse_button
+    
+    handles :mouse_wheel_up
+    handles :mouse_wheel_down
+
+    handles :enter
+    handles :hover
+    handles :leave
+
     DEFAULT_PADDING_X, DEFAULT_PADDING_Y = 4, 4
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)

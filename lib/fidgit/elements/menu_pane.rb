@@ -71,6 +71,8 @@ module Fidgit
       end
     end
 
+    handles :selected
+
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(50, 50, 50)
 
     def index(value); @items.index find(value); end

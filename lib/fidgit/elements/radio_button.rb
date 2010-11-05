@@ -9,6 +9,10 @@ module Fidgit
 
     attr_reader :group, :value
 
+    handles :changed
+    handles :checked
+    handles :unchecked
+
     def checked?; @checked; end
 
     # @param (see Button#initialize)

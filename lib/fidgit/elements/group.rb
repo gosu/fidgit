@@ -2,6 +2,8 @@
    class Group < Packer
     attr_reader :selected
 
+    handles :changed
+
     def value; @selected ? @selected.value : nil; end
 
     # @example

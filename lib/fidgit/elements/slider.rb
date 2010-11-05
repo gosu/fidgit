@@ -22,6 +22,8 @@ module Fidgit
       end
     end
 
+    handles :changed
+
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_GROOVE_COLOR = Gosu::Color.rgb(200, 200, 200)

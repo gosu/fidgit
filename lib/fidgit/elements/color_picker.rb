@@ -10,6 +10,8 @@ module Fidgit
 
     INDICATOR_HEIGHT = 20
 
+    handles :changed
+
     def color; @color.dup; end
 
     def color=(value)
