@@ -28,7 +28,7 @@ module Fidgit
 
     # Is the area editable?
     def editable?
-      @editable
+      enabled?
     end
 
     # Text within the element.
@@ -88,14 +88,12 @@ module Fidgit
     #
     # @option (see Element#initialize)
     # @option options [String] :text ("")
-    # @option options [Boolean] :editable (false)
     # @option options [Integer] :height Sets both min and max height at once.
     # @option options [Integer] :min_height
     # @option options [Integer] :max_height (Infinite)
     # @option options [Number] :line_spacing (0)
     def initialize(parent, options = {}, &block)
       options = {
-        editable: false,
         text: '',
         max_height: Float::INFINITY,
         line_spacing: 0,
@@ -104,7 +102,6 @@ module Fidgit
         border_color_focused: DEFAULT_BORDER_COLOR_FOCUSED.dup
       }.merge! options
 
-      @editable = options[:editable]
       @line_spacing = options[:line_spacing]
       @border_color_focused = options[:border_color_focused]
 
@@ -170,11 +167,6 @@ module Fidgit
       nil
     end
 
-    def draw_background
-      recalc if focused? # Workaround for Windows draw/update bug.
-      super
-    end
-
     # Draw the text area.
     #
     # @return [nil]
@@ -185,6 +177,7 @@ module Fidgit
         @text_input.selection_start = @old_selection_start
         self.caret_position = @old_caret_position
       else
+        recalc if focused? # Workaround for Windows draw/update bug.
         @old_caret_position = caret_position
         @old_selection_start = @text_input.selection_start
       end

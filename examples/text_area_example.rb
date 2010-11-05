@@ -17,7 +17,7 @@ class ExampleState < GuiState
 
       pack :vertical do
         label 'not editable'
-        @mirror = text_area(width: 200, editable: false)
+        @mirror = text_area(width: 200, enabled: false)
       end
     end
   end
