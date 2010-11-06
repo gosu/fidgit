@@ -80,15 +80,24 @@ module Fidgit
     def [](index); @items[index]; end
 
     # @option (see Composite#initialize)
+    # @option options [Float] :x (Left side of cursor)
+    # @option options [Float] :y (Bottom of cursor)
+    # @option options [Boolean] :show (true) Whether to show immediately (show later with GuiState.show_menu menu).
     def initialize(options = {}, &block)
+      cursor = $window.current_game_state.cursor
       options = {
         background_color: DEFAULT_BACKGROUND_COLOR.dup,
+        x: cursor.x,
+        y: cursor.y + cursor.height,
         z: Float::INFINITY,
+        show: true,
       }.merge! options
 
       super(nil, options)
 
       @items = pack :vertical, spacing: 0, padding: 0
+
+      $window.current_game_state.show_menu self if options[:show]
     end
 
     def find(value)
