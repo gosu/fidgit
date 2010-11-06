@@ -86,7 +86,6 @@ module Fidgit
     def initialize(options = {}, &block)
       options = {
         background_color: DEFAULT_BACKGROUND_COLOR.dup,
-
         z: Float::INFINITY,
         show: true,
       }.merge! options
@@ -145,7 +144,17 @@ module Fidgit
     protected
     def layout
       super
+
       if @items
+        # Ensure the menu can't go over the edge of the screen. If it can't be avoided, align with left edge of screen.
+        rect.x = [[x, $window.width - width - padding_x].min, 0].max
+        rect.y = [[y, $window.height - height - padding_y].min, 0].max
+
+        # Move the actual list if the menu has moved to keep on the screen.
+        @items.x = x + padding_x
+        @items.y = y + padding_y
+
+        # Ensure that all items are of the same width.
         max_width = @items.each.to_a.map {|c| c.width }.max || 0
         @items.each {|c| c.rect.width = max_width }
       end
