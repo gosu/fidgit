@@ -54,6 +54,11 @@ module Fidgit
 
       super(parent, options)
 
+      # TODO: This should probably be done with proper dragging, but will do for now.
+      subscribe :hover do |sender, x, y|
+        left_mouse_button(sender, x, y) if $window.button_down? Gosu::MsLeft
+      end
+
       @handle = Handle.new(self, width: (height / 2 - padding_x), height: height - padding_y * 2,
                            background_color: options[:handle_color])
 
