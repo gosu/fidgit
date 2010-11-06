@@ -80,8 +80,8 @@ module Fidgit
     def [](index); @items[index]; end
 
     # @option (see Composite#initialize)
-    # @option options [Float] :x (Left side of cursor, if in a GuiState)
-    # @option options [Float] :y (Bottom of cursor, if in a GuiState)
+    # @option options [Float] :x (cursor x, if in a GuiState)
+    # @option options [Float] :y (cursor y, if in a GuiState)
     # @option options [Boolean] :show (true) Whether to show immediately (show later with #show).
     def initialize(options = {}, &block)
       options = {
@@ -95,7 +95,7 @@ module Fidgit
         cursor = $window.current_game_state.cursor
         options = {
           x: cursor.x,
-          y: cursor.y + cursor.height,
+          y: cursor.y,
         }.merge! options
       end
 
