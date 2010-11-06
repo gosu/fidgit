@@ -47,7 +47,7 @@ module Fidgit
     end
 
     class Separator < Item
-      DEFAULT_LINE_HEIGHT = 1
+      DEFAULT_LINE_HEIGHT = 2
 
       # @param (see Item#initialize)
       #

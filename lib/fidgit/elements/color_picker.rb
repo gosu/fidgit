@@ -8,7 +8,7 @@ module Fidgit
     CHANNELS = [:red, :green, :blue]
     DEFAULT_CHANNEL_NAMES = CHANNELS.map {|c| c.to_s.capitalize }
 
-    INDICATOR_HEIGHT = 20
+    INDICATOR_HEIGHT = 25
 
     handles :changed
 
@@ -40,17 +40,18 @@ module Fidgit
       super(parent, options)
 
       slider_width = width
-      pack :vertical, spacing: 0 do
+      pack :vertical do
         @sliders = {}
         CHANNELS.each_with_index do |channel, i|
-          @sliders[channel] = slider(value: @color.send(channel), range: 0..255, width: slider_width, tip: options[:channel_names][i]) do |sender, value|
+          @sliders[channel] = slider(value: @color.send(channel), range: 0..255, width: slider_width,
+                                     tip: options[:channel_names][i]) do |sender, value|
             @color.send "#{channel}=", value
             @indicator.background_color = @color
             publish :changed, @color.dup
           end
         end
 
-        @indicator = label '', background_color: @color, width: width, height: height + INDICATOR_HEIGHT
+        @indicator = label '', background_color: @color, width: slider_width, height: INDICATOR_HEIGHT
       end
     end
 

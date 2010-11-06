@@ -25,7 +25,7 @@ module Fidgit
     handles :changed
 
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
+    DEFAULT_BORDER_COLOR = Gosu::Color.rgba(100, 100, 100, 255)
     DEFAULT_GROOVE_COLOR = Gosu::Color.rgb(200, 200, 200)
     DEFAULT_HANDLE_COLOR = Gosu::Color.rgb(255, 0, 0)
 
@@ -44,15 +44,16 @@ module Fidgit
         border_color: DEFAULT_BORDER_COLOR,
         groove_color: DEFAULT_GROOVE_COLOR,
         handle_color: DEFAULT_HANDLE_COLOR,
+        groove_thickness: 5,
       }.merge! options
 
       @range = options[:range].dup
       @groove_color = options[:groove_color].dup
+      @groove_thickness = options[:groove_thickness]
 
       super(parent, options)
 
-      packer = pack :horizontal, padding: 0
-      @handle = Handle.new(packer, width: (height / 2 - padding_x), height: height - padding_y * 2,
+      @handle = Handle.new(self, width: (height / 2 - padding_x), height: height - padding_y * 2,
                            background_color: options[:handle_color])
 
       self.value = options.has_key?(:value) ? options[:value] : @range.min
@@ -61,7 +62,7 @@ module Fidgit
     def value=(value)
       raise ArgumentError, "value (#{value}} must be within range #{@range}" unless @range.include? value
       @value = value
-      @handle.x = x + padding_x + ((width - padding_x * 2) * ((value - @range.min) / (@range.max - @range.min).to_f) - @handle.width / 2).round
+      @handle.x = x + padding_x + ((width - @handle.width) * (value - @range.min) / (@range.max - @range.min).to_f).round
       publish :changed, value
 
       @value
@@ -73,7 +74,7 @@ module Fidgit
     end
 
     def left_mouse_button(sender, x, y)
-      value = (((x - self.x - padding_x) / (width - padding_x * 2)) * (@range.max - @range.min) + @range.min).to_i
+      value = (((x - self.x - (@handle.width / 2)) / (width - @handle.width)) * (@range.max - @range.min) + @range.min).to_i
       self.value = [[value, @range.max].min, @range.min].max
       @mouse_down = true
 
@@ -100,7 +101,7 @@ module Fidgit
     def draw_background
       super
       # Draw a groove for the handle to move along.
-      draw_rect x + padding_x, y + padding_y, width - padding_x * 2, height - padding_y * 4, z, @groove_color
+      draw_rect x + (@handle.width / 2), y + (height - @groove_thickness) / 2, width - @handle.width, @groove_thickness, z, @groove_color
       nil
     end
 
