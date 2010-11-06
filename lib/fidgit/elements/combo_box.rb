@@ -44,7 +44,7 @@ class ComboBox < Button
     
     @hover_index = 0
 
-    @menu = MenuPane.new do
+    @menu = MenuPane.new(show: false) do
       subscribe :selected do |widget, value|
         self.value = value
       end
