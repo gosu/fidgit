@@ -55,13 +55,23 @@ describe RedirectorMethods do
         end
       end
 
-      it "should fail if method does not exist on the subject" do
+      it "should fail if method does not exist on the subject or context" do
         ->{ subject.instance_methods_eval { frog } }.should raise_error NameError
       end
 
-      it "should fail if method does not exist on the subject, even if it exists in the calling context" do
-        should_not_receive(:frog)
-        ->{ subject.instance_methods_eval { frog } }.should raise_error NameError
+      it "should call the method on the context, if it doesn't exist on the subject" do
+        should_receive(:frog)
+        subject.instance_methods_eval { frog }
+      end
+
+      [:public, :protected, :private].each do |access|
+        it "should preserve #{access} access for methods redirected on the context" do
+          class << self; def frog; end; end
+          (class << self; self; end).send access, :frog
+          subject.should_receive :frog
+          subject.instance_methods_eval { frog }
+          (send "#{access}_methods").should include :frog
+        end
       end
     end
   end
