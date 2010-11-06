@@ -17,6 +17,7 @@ module Fidgit
     # @option options [String] :cancel_text ("Cancel")
     # @option options [String] :save_text ("Save")
     # @option options [String] :quit_text ("Quit")
+    # @option options [Boolean] :show (true) Whether to show the message immediately (otherwise need to use #show later).
     #
     # @yield when the dialog is closed.
     # @yieldparam [Symbol] result :ok, :yes, :no, :quit, :save or :cancel, depending on the button pressed.
@@ -29,6 +30,7 @@ module Fidgit
         quit_text: "Quit",
         save_text: "Save",
         cancel_text: "Cancel",
+        show: true,
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR,
         width: $window.width / 2
@@ -51,6 +53,8 @@ module Fidgit
           end
         end
       end
+
+      show if options[:show]
     end
   end
 end

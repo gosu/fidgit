@@ -26,6 +26,7 @@ module Fidgit
       500 # TODO: configure this.
     end
 
+    def message(text, options = {}, &block); MessageDialog.new(text, options, &block); end
     def pack(*args, &block); @container.pack *args, &block; end
     def clear(*args, &block); @container.clear *args, &block; end
 
