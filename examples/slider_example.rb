@@ -3,12 +3,23 @@ require_relative 'helpers/example_window'
 class ExampleState < GuiState
   def setup
     pack :vertical do
-      initial_value = 10
+      pack :horizontal do
+        # Discrete values (0..100)
+        slider = slider(width: 100, range: 0..5, value: 3) do |sender, value|
+          @discrete_label.text = "Discrete slider is at #{value}"
+        end
 
-      my_label = label "Slider handle is at #{initial_value}%"
+        @discrete_label = label "Discrete slider is at #{slider.value}"
+      end
 
-      slider width: 100, range: 0..100, value: initial_value do |sender, value|
-        my_label.text = "Slider handle is at #{value}%"
+      pack :horizontal do
+        # Continuous values (0.0..1.0)
+
+        slider = slider(width: 100, range: 0.0..100.0, value: 77.2) do |sender, value|
+          @continuous_label.text = "Continuous slider is at #{"%.03f" % value}%"
+        end
+
+        @continuous_label = label "Continuous slider is at #{"%.03f" % slider.value}%"
       end
     end
   end

@@ -50,6 +50,7 @@ module Fidgit
       @range = options[:range].dup
       @groove_color = options[:groove_color].dup
       @groove_thickness = options[:groove_thickness]
+      @continuous = @range.min.is_a?(Float) or @range.max.is_a?(Float)
 
       super(parent, options)
 
@@ -60,10 +61,10 @@ module Fidgit
     end
 
     def value=(value)
-      raise ArgumentError, "value (#{value}} must be within range #{@range}" unless @range.include? value
-      @value = value
-      @handle.x = x + padding_x + ((width - @handle.width) * (value - @range.min) / (@range.max - @range.min).to_f).round
-      publish :changed, value
+      @value = @continuous ? value.to_f : value.round
+      @value = [[@value, @range.min].max, @range.max].min
+      @handle.x = x + padding_x + ((width - @handle.width) * (@value - @range.min) / (@range.max - @range.min).to_f)
+      publish :changed, @value
 
       @value
     end
@@ -74,8 +75,7 @@ module Fidgit
     end
 
     def left_mouse_button(sender, x, y)
-      value = (((x - self.x - (@handle.width / 2)) / (width - @handle.width)) * (@range.max - @range.min) + @range.min).to_i
-      self.value = [[value, @range.max].min, @range.min].max
+      self.value = ((x - self.x - (@handle.width / 2)) / (width - @handle.width)) * (@range.max - @range.min) + @range.min
       @mouse_down = true
 
       nil
