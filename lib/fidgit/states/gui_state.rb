@@ -33,7 +33,7 @@ module Fidgit
 
     def initialize
       # The container is where the user puts their content.
-      @container = VerticalPacker.new(nil, padding: 0)
+      @container = VerticalPacker.new(nil, padding: 0, width: $window.width, height: $window.height)
 
       @focus = nil
 

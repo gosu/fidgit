@@ -43,16 +43,27 @@ module Fidgit
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
 
-    attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector
+    VALID_ALIGN_H = [:left, :center, :right, :fill]
+    DEFAULT_ALIGN_H = :left
+    VALID_ALIGN_V = [:top, :center, :bottom, :fill]
+    DEFAULT_ALIGN_V = :top
+
+    attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector, :align_h, :align_v
 
     attr_accessor :parent
 
     def x; rect.x; end
     def x=(value); rect.x = value; end
+
     def y; rect.y; end
     def y=(value); rect.y = value; end
+
     def width; rect.width; end
+    def width=(value); rect.width = [[value, @width_range.max].min, @width_range.min].max; end
+
     def height; rect.height; end
+    def height=(value); rect.height = [[value, @height_range.max].min, @height_range.min].max; end
+
     def enabled?; @enabled; end
     def enabled=(value); @enabled = value; end
     def debug_mode?; @debug_mode; end
@@ -77,27 +88,39 @@ module Fidgit
     # @option options [Number] :x (0)
     # @option options [Number] :y (0)
     # @option options [Number] :z (0)
-    # @option options [Number] :width (0)
-    # @option options [Number] :height (0)
+    #
+    # @option options [Number] :width (auto)
+    # @option options [Number] :min_width (value of :width option)
+    # @option options [Number] :max_width (value of :width option)
+    #
+    # @option options [Number] :height (auto)
+    # @option options [Number] :min_height (value of :height option)
+    # @option options [Number] :max_height (value of :height option)
+    #
     # @option options [String] :tip ('') Tool-tip text
     # @option options [String] :font_name ('')
     # @option options [String] :font_size (Fidgit.default_font_size)
     # @option options [String] :debug (Fidgit.debug_mode?)
+    #
     # @option options [Gosu::Color] :background_color (transparent)
     # @option options [Gosu::Color] :border_color (transparent)
+    #
     # @option options [Boolean] :enabled (true)
+    #
     # @option options [Number] :padding (4)
     # @option options [Number] :padding_x (:padding option)
     # @option options [Number] :padding_y (:padding option)
     #
+    # @option options [Symbol] :align Align both horizontally and vertically. One of :center or :fill.
+    # @option options [Symbol] :align_h (value or :align else :left) One of :left, :center, :right :fill
+    # @option options [Symbol] :align_v (value of :align else :top) One of :top, :center, :bottom, :fill
+
     # @yield instance_methods_eval with respect to self.
     def initialize(parent, options = {}, &block)
       options = {
         x: 0,
         y: 0,
         z: 0,
-        width: 0,
-        height: 0,
         tip: '',
         font_name: Fidgit.default_font_name,
         font_size: Fidgit.default_font_size,
@@ -108,6 +131,22 @@ module Fidgit
       }.merge! options
 
       @enabled = options[:enabled]
+
+      @align_h = options[:align_h] || options[:align] || DEFAULT_ALIGN_H
+      raise ArgumentError, "Invalid align_h: #{@align_h}" unless VALID_ALIGN_H.include? @align_h
+
+      min_width = (options[:min_width] || options[:width] || 0)
+      max_width = (options[:max_width] || options[:width] || Float::INFINITY)
+      @width_range = min_width..max_width                                         
+
+      @align_v = options[:align_v] || options[:align] || DEFAULT_ALIGN_V
+      raise ArgumentError, "Invalid align_v: #{@align_v}" unless VALID_ALIGN_V.include? @align_v
+
+      min_height = (options[:min_height] || options[:height] || 0)
+      max_height = (options[:max_height] || options[:height] || Float::INFINITY)
+      @height_range = min_height..max_height
+      
+
       @background_color = options[:background_color].dup
       @border_color = options[:border_color].dup
 
@@ -121,7 +160,7 @@ module Fidgit
       @font_name = options[:font_name].dup
       @font_size = options[:font_size]
 
-      @rect = Chingu::Rect.new(0, 0, options[:width], options[:height])
+      @rect = Chingu::Rect.new(0, 0, options[:width] || 0, options[:height] || 0)
       self.x, self.y = options[:x], options[:y]
     end
 

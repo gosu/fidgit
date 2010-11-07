@@ -40,6 +40,12 @@ module Fidgit
     end
 
     protected
+    def layout
+      rearrange
+      repack
+    end
+
+    protected
     # Rearrange the cells based on changes to the number of rows/columns or adding/removing elements.
     def rearrange
       # Calculate the number of the dynamic dimension.
@@ -67,13 +73,12 @@ module Fidgit
     end
 
     protected
-    def layout
-      rearrange
+    # Repack all the elements into their positions.
+    def repack
+      @widths = Array.new(@num_columns, 0)
+      @heights = Array.new(@num_rows, 0)
 
-      @widths = Array.new(@num_columns)
-      @heights = Array.new(@num_rows)
-
-      # Calculate the maximum size of each cell.
+      # Calculate the maximum widths of each column and the maximum height of each row.
       @rows.each_with_index do |row, row_num|
         row.each_with_index do |element, column_num|
           @widths[column_num] = [element.width, @widths[column_num] || 0].max || 0
@@ -81,26 +86,52 @@ module Fidgit
         end
       end
 
-      # Actually place all the elements into the grid positions.
-      total_height = padding_y
+      # Actually place all the elements into the grid positions, modified by valign and align.
+      current_y = y + padding_y
       @rows.each_with_index do |row, row_num|
-        total_width = padding_x
+        current_x = x + padding_x
 
         row.each_with_index do |element, column_num|
-          element.x = x + total_width
-          total_width += @widths[column_num]
-          total_width += spacing_x unless column_num == @num_columns - 1
+          element.x = current_x
 
-          element.y = y + total_height
+          case element.align_h # Take horizontal alignment into consideration.
+            when :fill
+              if element.width < @widths[column_num]
+                element.width = @widths[column_num]
+                element.send :repack if element.is_a? GridPacker
+              end
+            when :center
+              element.x += (@widths[column_num] - element.width) / 2
+            when :right
+              element.x += @widths[column_num] - element.width
+          end
+
+          current_x += @widths[column_num]
+          current_x += spacing_x unless column_num == @num_columns - 1
+
+          element.y = current_y
+
+          case element.align_v # Take horizontal alignment into consideration.
+            when :fill
+              if element.height < @heights[row_num]
+                element.height = @heights[row_num]
+                element.send :repack if element.is_a? GridPacker
+              end
+            when :center
+              element.y += (@heights[row_num] - element.height) / 2
+            when :bottom
+              element.y += @heights[row_num] - element.height
+            else
+          end
         end
 
-        rect.width = total_width + padding_x if row_num == 0
+        self.width = current_x - x + padding_x if row_num == 0
 
-        total_height += @heights[row_num] unless row.empty?
-        total_height += spacing_y unless row_num == num_rows - 1
+        current_y += @heights[row_num] unless row.empty?
+        current_y += spacing_y unless row_num == num_rows - 1
       end
 
-      rect.height = total_height + padding_y
+      self.height = current_y - y + padding_y
 
       nil
     end
