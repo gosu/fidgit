@@ -226,9 +226,9 @@ module Fidgit
     end
 
     def draw_frame(x, y, width, height, z, color, mode = :default)
-      draw_rect(x, y, 1, height, z, color, mode) # left
+      draw_rect(x, y + 1, 1, height - 2, z, color, mode) # left
       draw_rect(x, y, width, 1, z, color, mode) # top
-      draw_rect(x + width - 1, y, 1, height, z, color, mode) # right
+      draw_rect(x + width - 1, y + 1, 1, height - 1, z, color, mode) # right
       draw_rect(x, y + height - 1, width, 1, z, color, mode) # bottom
 
       nil
