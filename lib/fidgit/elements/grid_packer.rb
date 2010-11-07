@@ -106,19 +106,36 @@ module Fidgit
     end
 
     protected
+    # @yield The rectangle of each cell within the grid.
+    # @yieldparam [Number] x
+    # @yieldparam [Number] y
+    # @yieldparam [Number] width
+    # @yieldparam [Number] height
+    def each_cell_rect
+      x = self.x + padding_x
+
+      @widths.each_with_index do |width, column_num|
+        y = self.y + padding_y
+
+        @heights.each_with_index do |height, row_num|
+          yield x, y, width, height if @rows[row_num][column_num]
+          y += height + spacing_y
+        end
+
+        x += width + spacing_x
+      end
+
+      nil
+    end
+
+    protected
     def draw_background
       super
 
       # Draw the cell backgrounds.
       unless @cell_background_color.transparent?
-        current_x = x + padding_x
-          @widths.each_with_index do |width, column_num|
-          current_y = y + padding_y
-          @heights.each_with_index do |height, row_num|
-            draw_rect current_x, current_y, width, height, z, @cell_background_color if @rows[row_num][column_num]
-            current_y += height + spacing_y
-          end
-          current_x += width + spacing_x
+        each_cell_rect do |x, y, width, height|
+          draw_rect x, y, width, height, z, @cell_background_color
         end
       end
 
@@ -131,14 +148,8 @@ module Fidgit
 
       # Draw the cell borders.
       unless @cell_border_color.transparent?
-        current_x = x + padding_x
-        @widths.each_with_index do |width, column_num|
-          current_y = y + padding_y
-          @heights.each_with_index do |height, row_num|
-            draw_frame current_x, current_y, width, height, z, @cell_border_color if @rows[row_num][column_num]
-            current_y += height + spacing_y
-          end
-          current_x += width + spacing_x
+        each_cell_rect do |x, y, width, height|
+          draw_frame x, y, width, height, z, @cell_border_color
         end
       end
 
