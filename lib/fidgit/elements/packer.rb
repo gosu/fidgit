@@ -11,7 +11,6 @@ module Fidgit
 
     attr_reader :spacing_x, :spacing_y
 
-
     # @param (see Container#initialize)
     #
     # @option (see Container#initialize)
@@ -25,9 +24,9 @@ module Fidgit
       super(parent, options)
     end
 
+    protected
     # Recalculate the size of the container.
     # Should be overridden by any descendant that manages the positions of its children.
-    protected
     def layout
       # This assumes that the container overlaps all the children.
 
