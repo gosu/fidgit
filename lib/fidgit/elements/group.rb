@@ -9,13 +9,13 @@
     # @example
     #   group do
     #     pack :horizontal do
-    #       radio_button 1, text: '1' checked: true
+    #       radio_button 1, text: '1', checked: true
     #       radio_button 2, text: '2'
     #       subscribe :changed do |sender, value|
     #         puts value
     #       end
     #     end
-    #    end
+    #   end
     #
     # @param (see Packer#initialize)
     #
@@ -40,16 +40,15 @@
     end
 
     # @example
-    #   RadioButton::Group.new(packer) do |group|
-    #     HorizontalPacker.new(group) do |packer|
-    #       RadioButton.new(packer, 1, text: '1')
-    #       RadioButton.new(packer, 2, text: '2')
-    #       group.value = 2
+    #   @my_group = group do
+    #     pack :horizontal do
+    #       radio_button(1, text: '1', checked: true)
+    #       radio_button(2, text: '2')
     #     end
     #    end
     #
     #   # later
-    #   group.value = 1
+    #   @my_group.value = 2
     def value=(value)
       if value != self.value
         button = @buttons.find { |b| b.value == value }
