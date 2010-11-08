@@ -34,8 +34,13 @@
 
     def add_button(button)
       @buttons.push button
-      button_checked button if button.checked?
+      self.value = button.value if button.checked?
+      nil
+    end
 
+    def remove_button(button)
+      self.value = nil if button == @selected
+      @buttons.delete button
       nil
     end
 

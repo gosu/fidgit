@@ -6,7 +6,7 @@ class ExampleState < GuiState
   def setup
     container.background_color = Gosu::Color.rgb(50, 50, 50)
     pack :vertical  do
-      base_directory = File.expand_path(File.dirname(__FILE__))
+      base_directory = File.expand_path(File.join(__FILE__, '..', '..'))
       directory = File.join(base_directory, 'media', 'images')
 
       my_label = label "No file loaded"

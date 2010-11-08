@@ -62,12 +62,14 @@ module Fidgit
 
         @files_list = list(width: options[:width]) do
           subscribe :changed do |sender, file_path|
-            file_name = File.basename file_path
-            if File.directory? file_path
-              @directory_label.text = File.join(@directory_label.text, file_name)
-              update_files_list
-            else
-              @file_name_text.text = file_name
+            if file_path
+              file_name = File.basename file_path
+              if File.directory? file_path
+                @directory_label.text = File.join(@directory_label.text, file_name)
+                update_files_list
+              else
+                @file_name_text.text = file_name
+              end
             end
           end
         end

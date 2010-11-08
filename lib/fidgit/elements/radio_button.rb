@@ -72,6 +72,14 @@ module Fidgit
     end
 
     protected
+    def parent=(parent)
+      @group.remove_button self if @parent
+      super(parent)
+      add_to_group if parent
+      parent
+    end
+
+    protected
     def add_to_group
       container = parent
       while container and not container.is_a? Group

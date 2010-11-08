@@ -48,9 +48,9 @@ module Fidgit
     VALID_ALIGN_V = [:top, :center, :bottom, :fill]
     DEFAULT_ALIGN_V = :top
 
-    attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector, :align_h, :align_v
+    attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector, :align_h, :align_v, :parent
 
-    attr_accessor :parent, :background_color
+    attr_accessor :background_color
 
     def x; rect.x; end
     def x=(value); rect.x = value; end
@@ -158,7 +158,7 @@ module Fidgit
 
       @padding_x = options[:padding_x] || options[:padding] || DEFAULT_PADDING_X
       @padding_y = options[:padding_y] || options[:padding] || DEFAULT_PADDING_Y
-      @parent = parent
+      self.parent = parent
       @debug = options[:debug]
 
       @z = options[:z]
@@ -202,6 +202,9 @@ module Fidgit
     def draw_frame(*args)
       $window.current_game_state.draw_frame(*args)
     end
+
+    protected
+    def parent=(parent); @parent = parent; end
 
     protected
     def draw_background

@@ -115,7 +115,7 @@ module Fidgit
     end
 
     def clear
-      @children.each {|child| child.parent = nil }
+      @children.each {|child| child.send :parent=, nil }
       @children.clear
 
       recalc
