@@ -109,7 +109,6 @@ module Fidgit
         else
           @nav_buttons.label dir, border_color: Button::DEFAULT_BORDER_COLOR
         end
-
       end
 
       update_files_list

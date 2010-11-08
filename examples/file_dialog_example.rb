@@ -12,7 +12,7 @@ class ExampleState < GuiState
 
       my_label = label "No file loaded"
       button(text: "Load...(limited path access)") do
-        FileDialog.new(:open, base_directory: restricted_base_directory, directory: directory, pattern: "*.png") do |result, file|
+        file_dialog(:open, base_directory: restricted_base_directory, directory: directory, pattern: "*.png") do |result, file|
           case result
             when :open
               my_label.text = "Loaded #{file}"
@@ -23,7 +23,7 @@ class ExampleState < GuiState
       end
 
       button(text: "Save...(unrestricted path access)") do
-        FileDialog.new(:save, base_directory: full_base_directory, directory: directory, pattern: "*.png") do |result, file|
+        file_dialog(:save, base_directory: full_base_directory, directory: directory, pattern: "*.png") do |result, file|
           case result
             when :save
               my_label.text = "Saved #{file}"
@@ -33,6 +33,15 @@ class ExampleState < GuiState
         end
       end
 
+      # A file browser freely placed, rather than inside a dialog.
+      file_browser(:open, base_directory: restricted_base_directory, directory: directory, pattern: "*.png") do |result, file|
+        case result
+          when :open
+            my_label.text = "Loaded #{file}"
+          when :cancel
+            my_label.text = "Loading cancelled"
+        end
+      end
     end
   end
 end

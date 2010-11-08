@@ -70,6 +70,10 @@ module Fidgit
       ComboBox.new(self, options, &block)
     end
 
+    def file_browser(type, options = {}, &block)
+      FileBrowser.new(self, type, options, &block)
+    end
+
     def group(options = {}, &block)
       Group.new(self, options, &block)
     end

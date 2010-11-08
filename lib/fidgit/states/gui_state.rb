@@ -26,6 +26,9 @@ module Fidgit
       500 # TODO: configure this.
     end
 
+    def file_dialog(type, options = {}, &block)
+      FileDialog.new(type, options, &block)
+    end
     def menu(options = {}, &block); MenuPane.new(options, &block); end
     def message(text, options = {}, &block); MessageDialog.new(text, options, &block); end
     def pack(*args, &block); @container.pack *args, &block; end
