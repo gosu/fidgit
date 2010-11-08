@@ -21,11 +21,13 @@ require_relative 'fidgit/thumbnail'
 
 require_relative 'fidgit/states/gui_state'
 require_relative 'fidgit/states/message_dialog'
+require_relative 'fidgit/states/file_dialog'
 
 require_relative 'fidgit/elements/button'
 require_relative 'fidgit/elements/color_picker'
 require_relative 'fidgit/elements/color_well'
 require_relative 'fidgit/elements/combo_box'
+require_relative 'fidgit/elements/file_browser'
 require_relative 'fidgit/elements/grid_packer'
 require_relative 'fidgit/elements/group'
 require_relative 'fidgit/elements/horizontal_packer'
