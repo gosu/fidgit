@@ -18,10 +18,10 @@ class ExampleState < GuiState
   OUTER_BACKGROUND = Gosu::Color.rgb(0, 0, 100)
 
   def setup
-    pack :vertical, align_h: :center, align_v: :center, background_color: OUTER_BACKGROUND do
+    pack :vertical, align: :center, background_color: OUTER_BACKGROUND do
       label "h => align_h, v => align_v", align_h: :center
 
-      pack :grid, num_columns: 4, cell_background_color: CELL_BACKGROUND, background_color: ROW_BACKGROUND, align_h: :fill do
+      pack :grid, num_columns: 4, align: :center, cell_background_color: CELL_BACKGROUND, background_color: ROW_BACKGROUND, align_h: :fill do
         label "xxx"
         label "h fill", align_h: :fill
         label "h right", align_h: :right

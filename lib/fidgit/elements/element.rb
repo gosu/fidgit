@@ -60,9 +60,14 @@ module Fidgit
 
     def width; rect.width; end
     def width=(value); rect.width = [[value, @width_range.max].min, @width_range.min].max; end
+    def min_width; @width_range.min; end
+    def max_width; @width_range.max; end
 
     def height; rect.height; end
     def height=(value); rect.height = [[value, @height_range.max].min, @height_range.min].max; end
+    def min_height; @height_range.min; end
+    def max_height; @height_range.max; end
+
 
     def enabled?; @enabled; end
     def enabled=(value); @enabled = value; end
@@ -132,6 +137,7 @@ module Fidgit
 
       @enabled = options[:enabled]
 
+      # Alignment and min/max dimensions.
       @align_h = options[:align_h] || options[:align] || DEFAULT_ALIGN_H
       raise ArgumentError, "Invalid align_h: #{@align_h}" unless VALID_ALIGN_H.include? @align_h
 
@@ -160,8 +166,7 @@ module Fidgit
       @font_name = options[:font_name].dup
       @font_size = options[:font_size]
 
-      @rect = Chingu::Rect.new(0, 0, options[:width] || 0, options[:height] || 0)
-      self.x, self.y = options[:x], options[:y]
+      @rect = Chingu::Rect.new(options[:x], options[:y], options[:width] || 0, options[:height] || 0)
     end
 
     def recalc

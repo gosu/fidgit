@@ -86,6 +86,22 @@ module Fidgit
         end
       end
 
+      # Expand the size of the rightmost column to the minimum size required.
+      if @num_columns > 0
+        total_width = @widths.inject(0, :+) + (padding_x * 2) + ((@num_columns - 1) * spacing_x)
+        if total_width < min_width
+          @widths[@num_columns - 1] += min_width - total_width
+        end
+      end
+
+      # Expand the size of the bottommost column to the minimum size required.
+      if @num_rows > 0
+        total_height = @heights.inject(0, :+) + (padding_y * 2) + ((@num_rows - 1) * spacing_y)
+        if total_height < min_height
+          @heights[@num_rows - 1] += min_height - total_height
+        end
+      end
+
       # Actually place all the elements into the grid positions, modified by valign and align.
       current_y = y + padding_y
       @rows.each_with_index do |row, row_num|
