@@ -6,12 +6,13 @@ class ExampleState < GuiState
   def setup
     container.background_color = Gosu::Color.rgb(50, 50, 50)
     pack :vertical  do
-      base_directory = File.expand_path(File.join(__FILE__, '..', '..'))
-      directory = File.join(base_directory, 'media', 'images')
+      full_base_directory = ''
+      restricted_base_directory = File.expand_path(File.join(__FILE__, '..', '..'))
+      directory = File.join(restricted_base_directory, 'media', 'images')
 
       my_label = label "No file loaded"
-      button(text: "Load...") do
-        FileDialog.new(:open, base_directory: base_directory, directory: directory, pattern: "*.png") do |result, file|
+      button(text: "Load...(limited path access)") do
+        FileDialog.new(:open, base_directory: restricted_base_directory, directory: directory, pattern: "*.png") do |result, file|
           case result
             when :open
               my_label.text = "Loaded #{file}"
@@ -21,8 +22,8 @@ class ExampleState < GuiState
         end
       end
 
-      button(text: "Save...") do
-        FileDialog.new(:save, base_directory: base_directory, directory: directory, pattern: "*.png") do |result, file|
+      button(text: "Save...(unrestricted path access)") do
+        FileDialog.new(:save, base_directory: full_base_directory, directory: directory, pattern: "*.png") do |result, file|
           case result
             when :save
               my_label.text = "Saved #{file}"

@@ -11,7 +11,11 @@ module Fidgit
     attr_reader :pattern, :base_directory
 
     def show_extension?; @show_extension; end
-    def directory; File.join(@base_directory, @directory_label.text); end
+    def directory
+      dir = File.join(*@directories)
+      dir = File.join(@base_directory, dir) unless @base_directory.empty?
+      dir
+    end
     def file_name; @file_name_text.text; end
     def file_path; File.join(directory, file_name); end
 
@@ -39,33 +43,25 @@ module Fidgit
 
       @pattern = options[:pattern]
       @show_extension = options[:show_extension]
-      @base_directory = options[:base_directory]
+      @base_directory = options[:base_directory].chomp File::SEPARATOR
 
-      relative_directory = options[:directory].sub(/^#{@base_directory}/, '')
-      relative_directory = '/' if relative_directory == ''
+      @directories = options[:directory].sub(/^#{@base_directory}/, '').split(File::SEPARATOR)
+      if @directories.first == ''
+        @directories[0] = File::SEPARATOR
+      end
 
       super parent, options
 
       pack :vertical do
-        pack :horizontal, padding: 0 do
-          @up_button = button(text: "^") do
-            unless @directory_label.text.empty?
-              directory = File.dirname(@directory_label.text)
-              directory = '/' if directory == '.'
-              @directory_label.text = directory
-              update_files_list
-            end
-          end
-
-          @directory_label = label relative_directory
-        end
+        @nav_buttons = pack :horizontal, padding: 0, spacing: 2
 
         @files_list = list(width: options[:width]) do
           subscribe :changed do |sender, file_path|
             if file_path
               file_name = File.basename file_path
               if File.directory? file_path
-                @directory_label.text = File.join(@directory_label.text, file_name)
+                @directories.push file_name
+                create_nav_buttons
                 update_files_list
               else
                 @file_name_text.text = file_name
@@ -75,6 +71,8 @@ module Fidgit
         end
 
         @file_name_text = text_area(text: options[:file_name], max_height: font_size * 2, width: options[:width])
+
+        create_nav_buttons
 
         pack :horizontal, align: :center, padding: 0 do
           case @type
@@ -95,6 +93,26 @@ module Fidgit
 
         update_files_list
       end
+    end
+
+    protected
+    def create_nav_buttons(size = @directories.size)
+      @nav_buttons.clear
+
+      @directories = @directories[0..size]
+
+      @directories.each_with_index do |dir, i|
+        if i < @directories.size - 1
+          @nav_buttons.button(text: dir) do
+            create_nav_buttons(i)
+          end
+        else
+          @nav_buttons.label dir, border_color: Button::DEFAULT_BORDER_COLOR
+        end
+
+      end
+
+      update_files_list
     end
 
     protected
