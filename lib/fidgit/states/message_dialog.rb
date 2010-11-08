@@ -39,7 +39,7 @@ module Fidgit
       @type = options[:type]
       raise ArgumentError, ":type must be one of #{VALID_TYPES}, not #{@type}" unless VALID_TYPES.include? @type
 
-      super()
+      super(options)
 
       # Dialog is forced to the centre.
       options[:align_h] = options[:align_v] = :center

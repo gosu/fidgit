@@ -10,7 +10,7 @@ module Fidgit
         border_color: DEFAULT_BORDER_COLOR,
       }.merge! options
 
-      super()
+      super(options)
 
       pack :vertical, align: :center, background_color: options[:background_color], border_color: options[:border_color] do |packer|
         FileBrowser.new(packer, type, options) do |sender, result, file_name|

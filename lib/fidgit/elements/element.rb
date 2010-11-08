@@ -50,7 +50,7 @@ module Fidgit
 
     attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector, :align_h, :align_v
 
-    attr_accessor :parent
+    attr_accessor :parent, :background_color
 
     def x; rect.x; end
     def x=(value); rect.x = value; end
