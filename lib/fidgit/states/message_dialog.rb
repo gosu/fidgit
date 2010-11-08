@@ -41,10 +41,13 @@ module Fidgit
 
       super()
 
+      # Dialog is forced to the centre.
+      options[:align_h] = options[:align_v] = :center
+
       pack :vertical, options do
         text_area(text: message, enabled: false, width: options[:width] - padding_x * 2)
 
-        pack :horizontal do
+        pack :horizontal, align_h: :center do
           @type.to_s.split('_').each do |type|
             button(text: options[:"#{type}_text"]) do
               hide
