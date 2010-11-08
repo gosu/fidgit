@@ -116,7 +116,7 @@ module Fidgit
     # @option options [Number] :padding_x (:padding option)
     # @option options [Number] :padding_y (:padding option)
     #
-    # @option options [Symbol] :align Align both horizontally and vertically. One of :center or :fill.
+    # @option options [Symbol] :align Align both horizontally and vertically. One of :center, :fill or [<align_v>, <align_h>] such as [:top, :right].
     # @option options [Symbol] :align_h (value or :align else :left) One of :left, :center, :right :fill
     # @option options [Symbol] :align_v (value of :align else :top) One of :top, :center, :bottom, :fill
 
@@ -138,14 +138,14 @@ module Fidgit
       @enabled = options[:enabled]
 
       # Alignment and min/max dimensions.
-      @align_h = options[:align_h] || options[:align] || DEFAULT_ALIGN_H
+      @align_h = options[:align_h] || Array(options[:align]).last || DEFAULT_ALIGN_H
       raise ArgumentError, "Invalid align_h: #{@align_h}" unless VALID_ALIGN_H.include? @align_h
 
       min_width = (options[:min_width] || options[:width] || 0)
       max_width = (options[:max_width] || options[:width] || Float::INFINITY)
       @width_range = min_width..max_width                                         
 
-      @align_v = options[:align_v] || options[:align] || DEFAULT_ALIGN_V
+      @align_v = options[:align_v] || Array(options[:align]).first || DEFAULT_ALIGN_V
       raise ArgumentError, "Invalid align_v: #{@align_v}" unless VALID_ALIGN_V.include? @align_v
 
       min_height = (options[:min_height] || options[:height] || 0)

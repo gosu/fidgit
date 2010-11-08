@@ -40,7 +40,7 @@ class ExampleState < GuiState
           label "h center"
           label "h center"
         end
-        label "top right", align_h: :right, align_v: :top
+        label "top right", align: [:top, :left]
         label "bottom left", align_h: :left, align_v: :bottom
         label "h/v fill", align: :fill
 
