@@ -12,7 +12,7 @@ module Fidgit
 
       super(options)
 
-      pack :vertical, align: :center, background_color: options[:background_color], border_color: options[:border_color] do |packer|
+      pack :vertical, align: :center, padding: 0 do |packer|
         FileBrowser.new(packer, type, options) do |sender, result, file_name|
           hide
           block.call result, file_name if block
