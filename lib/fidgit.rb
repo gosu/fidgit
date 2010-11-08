@@ -9,6 +9,7 @@ gems.each_pair do |gem, version|
 end
 
 require_relative 'fidgit/gosu_ext'
+require_relative 'fidgit/standard_ext'
 
 require_relative 'fidgit/clipboard'
 require_relative 'fidgit/cursor'
