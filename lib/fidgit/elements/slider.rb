@@ -34,11 +34,11 @@ module Fidgit
     # @param (see Composite#initialize)
     #
     # @option (see Composite#initialize)
-    # @option options [Range] :range (0..1.0)
+    # @option options [Range] :range (0.0..1.0)
     # @option options [Range] :value (minimum of :range)
     def initialize(parent, options = {}, &block)
       options = {
-        range: 0..1.0,
+        range: 0.0..1.0,
         height: 25,
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR,
