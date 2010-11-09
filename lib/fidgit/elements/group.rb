@@ -1,3 +1,5 @@
+ # encoding: utf-8
+
  module Fidgit
    class Group < Packer
     attr_reader :selected
