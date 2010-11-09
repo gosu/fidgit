@@ -51,6 +51,14 @@ module Fidgit
       nil
     end
 
+    def insert(position, element)
+      @children.insert position, element
+      element.send :parent=, self
+
+      recalc
+      nil
+    end
+
     # Create a button within the container.
     def button(options = {}, &block)
       Button.new(self, options, &block)
@@ -104,6 +112,10 @@ module Fidgit
 
     def radio_button(value, options = {}, &block)
       RadioButton.new(self, value, options, &block)
+    end
+
+    def scroll_window(options = {}, &block)
+      ScrollWindow.new(self, options, &block)
     end
 
     def slider(options = {}, &block)
