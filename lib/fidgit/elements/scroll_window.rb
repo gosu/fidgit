@@ -4,49 +4,55 @@ require_relative 'composite'
 
 module Fidgit
   class ScrollWindow < Composite
+    # @abstract
     class ScrollBar < Composite
       class Handle < Element
       end
 
-      VALID_TYPES = [:horizontal, :vertical]
-
-      def initialize(parent, type, options = {})
+      def initialize(parent, options = {})
         options = {
           background_color: Gosu::Color.rgb(50, 50, 50),
           border_color: Gosu::Color.rgb(100, 100, 100),
           handle_color: Gosu::Color.rgb(150, 0, 0)
         }.merge! options
 
-        @type = type
-
         super parent, options
 
         Container.new(self, width: options[:width], height: options[:height]) do
-          @handle = case @type
-          when :horizontal
-            Handle.new(self, x: x, y: y, height: height, background_color: options[:handle_color])
-          when :vertical
-            Handle.new(self, x: x, y: y, width: width, background_color: options[:handle_color])
-          end
+          @handle = Handle.new(self, x: x, y: y, background_color: options[:handle_color])
         end
+      end
+    end
+
+    class HorizontalScrollBar < ScrollBar
+      def initialize(parent, options = {})
+        super parent, options
+
+        @handle.height = height
       end
 
       def update
         window = parent.parent
 
         # Resize and re-locate the handles based on changes to the scroll-window.
-        case @type
-        when :horizontal
-          content_width = window.content_width.to_f
-          @handle.width = (window.view_width * width) / content_width
-          @handle.x = x + (window.offset_x * width) / content_width
-        when :vertical
-          content_height = window.content_height.to_f
-          @handle.height = (window.view_height * height) / content_height
-          @handle.y = y + (window.offset_y * height) / content_height
-        end
+        content_width = window.content_width.to_f
+        @handle.width = (window.view_width * width) / content_width
+        @handle.x = x + (window.offset_x * width) / content_width
+      end
+    end
 
-        nil
+    class VerticalScrollBar < ScrollBar
+      def initialize(parent, options = {})
+        super parent, options
+
+        @handle.width = width
+      end
+
+      def update
+        window = parent.parent
+        content_height = window.content_height.to_f
+        @handle.height = (window.view_height * height) / content_height
+        @handle.y = y + (window.offset_y * height) / content_height
       end
     end
 
@@ -89,8 +95,8 @@ module Fidgit
         @spacer = label '', padding: 0, width: 0, height: 0
       end
 
-      @scroll_bar_v = ScrollBar.new(nil, :vertical, width: @scroll_bar_width, height: options[:height])
-      @scroll_bar_h = ScrollBar.new(nil, :horizontal, width: options[:width], height: @scroll_bar_width)
+      @scroll_bar_v = VerticalScrollBar.new(nil, width: @scroll_bar_width, height: options[:height])
+      @scroll_bar_h = HorizontalScrollBar.new(nil, width: options[:width], height: @scroll_bar_width)
     end
 
     def update
