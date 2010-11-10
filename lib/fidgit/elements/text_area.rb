@@ -124,10 +124,13 @@ module Fidgit
         @min_height = options[:min_height] ? [options[:min_height], min_height].max : min_height
       end
       rect.height = [(padding_y * 2) + font_size, @min_height].max
+
+      subscribe :left_mouse_button, method(:click_in_text)
+      subscribe :right_mouse_button, method(:click_in_text)
     end
 
     # @return [nil]
-    def clicked_left_mouse_button(sender, x, y)
+    def click_in_text(sender, x, y)
       publish :focus unless focused?
 
       # Move caret to position the user clicks on.
