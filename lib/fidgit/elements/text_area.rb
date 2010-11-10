@@ -34,7 +34,7 @@ module Fidgit
     # Text within the element.
     # @return [String]
     def text
-      @text_input.text
+      @text_input.text.force_encoding 'UTF-8'
     end
 
     # Returns the range of the selection.
@@ -131,11 +131,12 @@ module Fidgit
       publish :focus unless focused?
 
       # Move caret to position the user clicks on.
-      mouse_x, mouse_y = $window.mouse_x - x - padding_x, $window.mouse_y - y - padding_y
+      mouse_x, mouse_y = x - (self.x + padding_x), y - (self.y + padding_y)
       @text_positions.each.with_index do |data, index|
-        x, y, width = data
-        if mouse_x.between?(x, x + width) and mouse_y.between?(y, y + font_size)
-          self.caret_position = @text_input.selection_start = index
+
+        char_x, char_y, width = data
+        if mouse_x.between?(char_x - width, char_x) and mouse_y.between?(char_y, char_y + font_size)
+          self.caret_position = @text_input.selection_start = index - 1
           break
         end
       end
@@ -182,14 +183,12 @@ module Fidgit
         @old_selection_start = @text_input.selection_start
       end
 
-      caret_x, caret_y = @text_positions[caret_position]
-
       # Draw the selection.
-      selection_range.each do |i|
-        char_x, char_y = @text_positions[i]
+      selection_range.each do |pos|
+        char_x, char_y = @text_positions[pos]
+        char_width = @text_positions[pos + 1][2] rescue 0
         left, top = x + padding_x + char_x, y + padding_y + char_y
-        draw_rect left, top, font.text_width(text[i]), font_size,
-                       z, SELECTION_COLOR
+        draw_rect left, top, char_width, font_size, z, SELECTION_COLOR
       end
 
       # Draw text.
@@ -199,8 +198,9 @@ module Fidgit
 
       # Draw the caret.
       if focused? and ((Gosu::milliseconds / CARET_PERIOD) % 2 == 0)
+        caret_x, caret_y = @text_positions[caret_position]
         left, top = x + padding_x + caret_x, y + padding_y + caret_y
-        $window.draw_line left, top, CARET_COLOR, left, top + font_size, CARET_COLOR, z
+        draw_rect left, top, 1, font_size, z, CARET_COLOR
       end
     end
 
