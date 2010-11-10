@@ -20,7 +20,7 @@ class MyGuiState < Fidgit::GuiState
     pack :vertical do # Create a vertically packed section.
       my_label = label "Hello world!", background_color: Gosu::Color.rgb(0, 100, 0)
       
-      button text: "Goodbye" do
+      button(text: "Goodbye") do
         my_label.text = "Goodbye cruel world!"
       end
     end

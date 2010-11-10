@@ -8,7 +8,7 @@ class ExampleState < GuiState
       group do
         pack :grid, num_columns: 15, padding: 0, spacing: 4 do
           150.times do
-            color_well color: Gosu::Color.rgb(rand(255), rand(255), rand(255))
+            color_well(color: Gosu::Color.rgb(rand(255), rand(255), rand(255)))
           end
         end
 
