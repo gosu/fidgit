@@ -8,18 +8,15 @@ module Fidgit
     # @return [VerticalPacker] The content shown within this ScrollArea
     attr_reader :content
 
-    # Offset of the content within this ScrollArea.
-    attr_reader :offset_x, :offset_y
-
-    def x=(value); @rect.x = value; end
-    def y=(value); @rect.y = value; end
+    def offset_x; x - @content.x; end
+    def offset_y; y - @content.y; end
 
     def offset_x=(value)
-      @offset_x = [[@content.width - width, value].min, 0].max
+      @content.x = x - [[@content.width - width, value].min, 0].max
     end
 
     def offset_y=(value)
-      @offset_y = [[@content.height - height, value].min, 0].max
+      @content.y = y - [[@content.height - height, value].min, 0].max
     end
 
     # @option options [Number] :offset (0)
@@ -33,12 +30,13 @@ module Fidgit
       }.merge! options
 
       @owner = options[:owner]
-      @offset_x = options[:offset_x] || options[:offset]
-      @offset_y = options[:offset_y] || options[:offset]
 
       super(parent, options)
 
       @content = VerticalPacker.new(self, padding: 0)
+
+      self.offset_x = options[:offset_x] || options[:offset]
+      self.offset_y = options[:offset_y] || options[:offset]
     end
 
     def recalc
@@ -48,16 +46,10 @@ module Fidgit
       @owner.recalc if @owner
     end
 
-    def hit_object?(x, y)
-      @content.hit_object(x - @offset_x, y - @offset_y)
-    end
-
     protected
     def draw_foreground
       $window.clip_to(*rect) do
-        $window.translate(x - @offset_x, y - @offset_y) do
-          @content.draw
-        end
+        @content.draw
       end
     end
 
