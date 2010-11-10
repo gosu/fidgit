@@ -12,13 +12,18 @@ module Fidgit
 
       def initialize(parent, options = {})
         options = {
-          background_color: Gosu::Color.rgb(50, 50, 50),
-          border_color: Gosu::Color.rgb(100, 100, 100),
+          background_color: Gosu::Color.rgba(0, 0, 0, 0),
+          border_color: Gosu::Color.rgba(0, 0, 0, 0),
+          rail_width: 16,
+          rail_color: Gosu::Color.rgb(50, 50, 50),
           handle_color: Gosu::Color.rgb(150, 0, 0),
           owner: nil,
         }.merge! options
 
         @owner = options[:owner]
+        @rail_width = options[:rail_width]
+        @rail_color = options[:rail_color]
+
         super parent, options
 
         @handle_container = Container.new(self, width: options[:width], height: options[:height]) do
@@ -47,6 +52,11 @@ module Fidgit
         @handle.width = (window.view_width * width) / content_width
         @handle.x = x + (window.offset_x * width) / content_width
       end
+
+      def draw_foreground
+        draw_rect x + padding_x, y + (height - @rail_width) / 2, width, @rail_width, z, @rail_color
+        super
+      end
     end
 
     class VerticalScrollBar < ScrollBar
@@ -67,6 +77,11 @@ module Fidgit
         @handle.height = (window.view_height * height) / content_height
         @handle.y = y + (window.offset_y * height) / content_height
       end
+
+      def draw_foreground
+        draw_rect x + (width - @rail_width) / 2, y + padding_y, @rail_width, height, z, @rail_color
+        super
+      end
     end
 
     def offset_x; @view.offset_x; end
@@ -81,7 +96,7 @@ module Fidgit
 
     def initialize(parent, options = {})
       options = {
-        scroll_bar_width: 15,
+        scroll_bar_width: 16,
       }.merge! options
 
       super(parent, options)

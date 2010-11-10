@@ -28,7 +28,7 @@ class ExampleState < GuiState
       pack :horizontal, padding: 0 do
         pack :vertical do
           scroll_window(width: 300, height: 150) do
-            text_area(text: "Hello world! " * 19, width: 285)
+            text_area(text: "Hello world! " * 19, width: 284)
           end
         end
 
