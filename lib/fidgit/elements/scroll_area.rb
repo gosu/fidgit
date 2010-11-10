@@ -39,6 +39,15 @@ module Fidgit
       self.offset_y = options[:offset_y] || options[:offset]
     end
 
+    def hit_element(x, y)
+      # Only pass on mouse events if they are inside the window.
+      if hit?(x, y)
+        @content.hit_element(x, y) || self
+      else
+        nil
+      end
+    end
+
     def recalc
       super
       # Always recalc our owner if our content resizes, even though our size can't change even if the content changes

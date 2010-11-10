@@ -14,12 +14,14 @@ module Fidgit
         options = {
           background_color: Gosu::Color.rgb(50, 50, 50),
           border_color: Gosu::Color.rgb(100, 100, 100),
-          handle_color: Gosu::Color.rgb(150, 0, 0)
+          handle_color: Gosu::Color.rgb(150, 0, 0),
+          owner: nil,
         }.merge! options
 
+        @owner = options[:owner]
         super parent, options
 
-        Container.new(self, width: options[:width], height: options[:height]) do
+        @handle_container = Container.new(self, width: options[:width], height: options[:height]) do
           @handle = Handle.new(self, x: x, y: y, background_color: options[:handle_color])
         end
       end
@@ -30,6 +32,11 @@ module Fidgit
         super parent, options
 
         @handle.height = height
+
+        @handle_container.subscribe :left_mouse_button do |sender, x, y|
+          distance = @owner.view_width
+          @owner.offset_x += (x > @handle.x)? +distance : -distance
+        end
       end
 
       def update
@@ -47,6 +54,11 @@ module Fidgit
         super parent, options
 
         @handle.width = width
+
+        @handle_container.subscribe :left_mouse_button do |sender, x, y|
+          distance = @owner.view_height
+          @owner.offset_y += (y > @handle.y)? +distance : -distance
+        end
       end
 
       def update
@@ -81,8 +93,8 @@ module Fidgit
         @spacer = label '', padding: 0, width: 0, height: 0
       end
 
-      @scroll_bar_v = VerticalScrollBar.new(nil, width: @scroll_bar_width, height: options[:height])
-      @scroll_bar_h = HorizontalScrollBar.new(nil, width: options[:width], height: @scroll_bar_width)
+      @scroll_bar_v = VerticalScrollBar.new(nil, owner: self, width: @scroll_bar_width, height: options[:height])
+      @scroll_bar_h = HorizontalScrollBar.new(nil, owner: self, width: options[:width], height: @scroll_bar_width)
     end
 
     protected

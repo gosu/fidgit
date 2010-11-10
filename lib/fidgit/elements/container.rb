@@ -163,7 +163,7 @@ module Fidgit
         end
       end
 
-      nil
+      self if hit?(x, y)
     end
 
     protected
