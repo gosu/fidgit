@@ -30,12 +30,28 @@ class ExampleState < GuiState
         end
       end
 
-      scroller = scroll_window(width: 300, height: 150) do
-        text_area(text: "Hello world! " * 19, width: 300)
-      end
+      pack :horizontal, padding: 0 do
+        pack :vertical do
+          scroller = scroll_window(width: 300, height: 150) do
+            text_area(text: "Hello world! " * 19, width: 285)
+          end
 
-      slider(width: 300) do |sender, value|
-        scroller.offset_y = (scroller.content_height - scroller.view_height) * value
+          slider(width: 300) do |sender, value|
+            scroller.offset_y = (scroller.content_height - scroller.view_height) * value
+          end
+        end
+
+        pack :vertical do
+          scroller = scroll_window(width: 300, height: 150) do
+            %w[One Two Three Four Five Six].each do |name|
+              toggle_button(text: name)
+            end
+          end
+
+          slider(width: 300) do |sender, value|
+            scroller.offset_y = (scroller.content_height - scroller.view_height) * value
+          end
+        end
       end
     end
   end

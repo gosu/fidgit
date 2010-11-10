@@ -114,6 +114,10 @@ module Fidgit
       RadioButton.new(self, value, options, &block)
     end
 
+    def scroll_area(options = {}, &block)
+      ScrollArea.new(self, options, &block)
+    end
+
     def scroll_window(options = {}, &block)
       ScrollWindow.new(self, options, &block)
     end
