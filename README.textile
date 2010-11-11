@@ -78,6 +78,7 @@ Fidgit uses automatic packers to manage layout.
 
 * _pack([:vertical|:horizontal|:grid], ...)_ - Packer that packs its component elements (Block has access to public methods).
 * _group(...)_ - Manages any groupable elements put inside it, such as radio-buttons (Block has access to public methods). Best to subscribe to :changed event handler.
+* _scroll_window(...)_ - A window having content larger than what is shown, scrolled with scroll-bars (Block has access to public methods of the contents packer)
 
 h4. Elements
 
@@ -85,9 +86,8 @@ Elements can be placed inside a packer or group.
 
 * _button(...)_ - Button with text and/or icon (Block handles :clicked_left_mouse_button event).
 * _color_picker(...)_ - Red, green and blue sliders and colour indicator (Block handles :changed event).
-* _file_browser([:open, :save], ...)_ - A file browser to load or save a file (Block is passed the button pressed and the file path set)
 * _label(text, ...)_ - Label with text and, optionally, an icon (No block accepted).
-* _slider(...)_ - Horizontal slider with handle (Block handles :changed event handler).
+* _slider(...)_ - Horizontal slider with handle (Block handles :changed event).
 * _text_area(...)_ - An multi-line element, containing editable text (Block handles :changed event).
 * _toggle_button(...)_ - Button that can be toggled on/off (Block handles :changed event).
 
