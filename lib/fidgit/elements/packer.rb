@@ -14,14 +14,14 @@ module Fidgit
     # @param (see Container#initialize)
     #
     # @option (see Container#initialize)
-    def initialize(parent, options = {})
+    def initialize(options = {})
       options = {
       }.merge! options
 
       @spacing_x = options[:spacing_x] || options[:spacing] || DEFAULT_SPACING_X
       @spacing_y = options[:spacing_y] || options[:spacing] || DEFAULT_SPACING_Y
 
-      super(parent, options)
+      super(options)
     end
 
     protected

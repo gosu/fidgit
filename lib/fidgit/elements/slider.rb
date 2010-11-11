@@ -18,13 +18,13 @@ module Fidgit
       # @param (see Element#initialize)
       #
       # @option (see Element#initialize)
-      def initialize(parent, options = {}, &block)
+      def initialize(options = {}, &block)
         options = {
           background_color: DEFAULT_BACKGROUND_COLOR,
           border_color: DEFAULT_BORDER_COLOR,
         }.merge! options
 
-        super parent, options
+        super options
 
         subscribe :begin_drag do |sender, x, y|
           # Store position of the handle when it starts to drag.
@@ -55,7 +55,7 @@ module Fidgit
     # @option (see Composite#initialize)
     # @option options [Range] :range (0.0..1.0)
     # @option options [Range] :value (minimum of :range)
-    def initialize(parent, options = {}, &block)
+    def initialize(options = {}, &block)
       options = {
         range: 0.0..1.0,
         height: 25,
@@ -71,9 +71,9 @@ module Fidgit
       @groove_thickness = options[:groove_thickness]
       @continuous = @range.min.is_a?(Float) or @range.max.is_a?(Float)
 
-      super(parent, options)
+      super(options)
 
-      @handle = Handle.new(self, width: (height / 2 - padding_x), height: height - padding_y * 2,
+      @handle = Handle.new(parent: self, width: (height / 2 - padding_x), height: height - padding_y * 2,
                            background_color: options[:handle_color])
 
       self.value = options.has_key?(:value) ? options[:value] : @range.min

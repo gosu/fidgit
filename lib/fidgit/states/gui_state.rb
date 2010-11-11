@@ -56,7 +56,7 @@ module Fidgit
 
     def initialize
       # The container is where the user puts their content.
-      @container = VerticalPacker.new(nil, padding: 0, width: $window.width, height: $window.height)
+      @container = VerticalPacker.new(padding: 0, width: $window.width, height: $window.height)
 
       @focus = nil
 
@@ -112,7 +112,7 @@ module Fidgit
       if [cursor.x, cursor.y] == @last_cursor_pos and (not @menu)
         if @mouse_over and (Gosu::milliseconds - @@mouse_moved_at) > tool_tip_delay
           if text = @mouse_over.tip and not text.empty?
-            @tool_tip ||= ToolTip.new(nil)
+            @tool_tip ||= ToolTip.new
             @tool_tip.text = text
             @tool_tip.x = cursor.x
             @tool_tip.y = cursor.y + cursor.height # Place the tip beneath the cursor.

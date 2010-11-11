@@ -21,7 +21,7 @@ module Fidgit
     # @option (see Packer#initialize)
     # @option options [Integer] :num_columns Maximum number of columns to use (incompatible with :num_rows)
     # @option options [Integer] :num_rows Maximum number of rows to use (incompatible with :num_columns)
-    def initialize(parent, options = {})
+    def initialize(options = {})
       options = {
         cell_border_color: DEFAULT_CELL_BORDER_COLOR,
         cell_background_color: DEFAULT_CELL_BACKGROUND_COLOR,
@@ -36,7 +36,7 @@ module Fidgit
 
       @type = @num_rows ? :fixed_rows : :fixed_columns
 
-      super parent, options
+      super options
     end
 
     protected

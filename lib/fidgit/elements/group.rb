@@ -22,13 +22,13 @@
     # @param (see Packer#initialize)
     #
     # @option (see Packer#initialize)
-    def initialize(parent, options = {}, &block)
+    def initialize(options = {}, &block)
       options = {
         padding_x: 0,
         padding_y: 0
       }.merge! options
 
-      super(parent, options)
+      super(options)
 
       @selected = nil
       @buttons = []

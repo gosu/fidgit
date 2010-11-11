@@ -92,7 +92,7 @@ module Fidgit
     # @option options [Integer] :min_height
     # @option options [Integer] :max_height (Infinite)
     # @option options [Number] :line_spacing (0)
-    def initialize(parent, options = {}, &block)
+    def initialize(options = {}, &block)
       options = {
         text: '',
         max_height: Float::INFINITY,
@@ -114,7 +114,7 @@ module Fidgit
 
       @text_input.text = options[:text]
 
-      super(parent, options)
+      super(options)
 
       min_height = (padding_y * 2) + font_size
       if options[:height]

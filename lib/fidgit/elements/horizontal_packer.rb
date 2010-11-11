@@ -5,10 +5,10 @@ require_relative 'packer'
 module Fidgit
   # A vertically aligned element packing container.
   class HorizontalPacker < GridPacker
-    def initialize(parent, options = {})
+    def initialize(options = {})
       options[:num_rows] = 1
 
-      super parent, options
+      super options
     end
   end
 end

@@ -34,7 +34,7 @@ class ComboBox < Button
   # @param (see Button#initialize)
   # @option (see Button#initialize)
   # @option options [] :value
-  def initialize(parent, options = {}, &block)
+  def initialize(options = {}, &block)
     options = {
       border_color: DEFAULT_BORDER_COLOR,
       background_color: DEFAULT_BACKGROUND_COLOR
@@ -50,7 +50,7 @@ class ComboBox < Button
       end
     end
 
-    super(parent, options)
+    super(options)
 
     rect.height = [height, font_size + padding_y * 2].max
     rect.width = [width, font_size * 4 + padding_x * 2].max

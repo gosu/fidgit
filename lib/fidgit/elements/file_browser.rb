@@ -25,7 +25,7 @@ module Fidgit
     # @option options [String] :file_name ('') Initially selected file in the directory.
     # @option options [String] :pattern ('*.*')
     # @option options [Boolean] :show_extension (true)
-    def initialize(parent, type, options = {})
+    def initialize(type, options = {})
       options = {
         base_directory: '',
         directory: Dir.pwd,
@@ -50,7 +50,7 @@ module Fidgit
         @directories[0] = File::SEPARATOR
       end
 
-      super parent, options
+      super options
 
       pack :vertical do
         @nav_buttons = pack :horizontal, padding: 0, spacing: 2

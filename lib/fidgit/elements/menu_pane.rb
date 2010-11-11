@@ -16,7 +16,7 @@ module Fidgit
       # @param [any] value Value if the user picks this item
       # @option options [Boolean] :enabled (true)
       # @option options [String] :shortcut ('')
-      def initialize(parent, value, options = {})
+      def initialize(value, options = {})
         options = {
           enabled: true,
           border_color: DEFAULT_BORDER_COLOR,
@@ -26,7 +26,7 @@ module Fidgit
         @enabled = [true, false].include?(options[:enabled]) ? options[:enabled] : true
         @shortcut = options[:shortcut] || ''
 
-        super(parent, options)
+        super(options)
       end
 
       def draw_foreground
@@ -52,7 +52,7 @@ module Fidgit
       # @param (see Item#initialize)
       #
       # @option (see Item#initialize)
-      def initialize(parent, options = {})
+      def initialize(options = {})
         options = {
           enabled: false,
           line_height: DEFAULT_LINE_HEIGHT,
@@ -60,7 +60,7 @@ module Fidgit
 
         @line_height = options[:line_height]
 
-        super parent, options
+        super options
       end
 
       protected
@@ -99,7 +99,7 @@ module Fidgit
         }.merge! options
       end
 
-      super(nil, options)
+      super(options)
 
       @items = pack :vertical, spacing: 0, padding: 0
 
@@ -115,12 +115,12 @@ module Fidgit
     def separator(options = {})
       options[:z] = z
 
-      Separator.new(@items, options)
+      Separator.new({ parent: @items }.merge!(options))
     end
 
     def item(value, options = {}, &block)
       options[:z] = z
-      item = Item.new(@items, value, options, &block)
+      item = Item.new(value, { parent: @items }.merge!(options), &block)
 
       item.subscribe :left_mouse_button, method(:item_selected)
       item.subscribe :right_mouse_button, method(:item_selected)

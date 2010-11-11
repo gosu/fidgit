@@ -27,12 +27,12 @@ module Fidgit
     # @param (see Element#initialize)
     #
     # @option (see Element#initialize)
-    def initialize(parent, options = {})
+    def initialize(options = {})
       options[:border_color] = DEBUG_BORDER_COLOR if options[:debug] or debug_mode?
 
       @children = []
 
-      super(parent, options)
+      super(options)
     end
 
     def add(element)
@@ -61,38 +61,38 @@ module Fidgit
 
     # Create a button within the container.
     def button(options = {}, &block)
-      Button.new(self, options, &block)
+      Button.new({parent: self}.merge!(options), &block)
     end
 
     # Create a color picker within the container.
     def color_picker(options = {}, &block)
-      ColorPicker.new(self, options, &block)
+      ColorPicker.new({parent: self}.merge!(options), &block)
     end
 
     # Create a color well within the container.
     def color_well(options = {}, &block)
-      ColorWell.new(self, options, &block)
+      ColorWell.new({parent: self}.merge!(options), &block)
     end
 
     def combo_box(options = {}, &block)
-      ComboBox.new(self, options, &block)
+      ComboBox.new({parent: self}.merge!(options), &block)
     end
 
     def file_browser(type, options = {}, &block)
-      FileBrowser.new(self, type, options, &block)
+      FileBrowser.new(type, {parent: self}.merge!(options), &block)
     end
 
     def group(options = {}, &block)
-      Group.new(self, options, &block)
+      Group.new({parent: self}.merge!(options), &block)
     end
 
     # Create a label within the container.
     def label(text, options = {})
-      Label.new(self, text, options)
+      Label.new(text, {parent: self}.merge!(options))
     end
 
     def list(options = {}, &block)
-      List.new(self, options, &block)
+      List.new({parent: self}.merge!(options), &block)
     end
 
     def pack(arrangement, options = {}, &block)
@@ -107,31 +107,31 @@ module Fidgit
           raise ArgumentError, "packing arrangement must be one of :horizontal, :vertical or :grid"
       end
 
-      klass.new(self, options, &block)
+      klass.new({parent: self}.merge!(options), &block)
     end
 
     def radio_button(value, options = {}, &block)
-      RadioButton.new(self, value, options, &block)
+      RadioButton.new(value, {parent: self}.merge!(options), &block)
     end
 
     def scroll_area(options = {}, &block)
-      ScrollArea.new(self, options, &block)
+      ScrollArea.new({parent: self}.merge!(options), &block)
     end
 
     def scroll_window(options = {}, &block)
-      ScrollWindow.new(self, options, &block)
+      ScrollWindow.new({parent: self}.merge!(options), &block)
     end
 
     def slider(options = {}, &block)
-      Slider.new(self, options, &block)
+      Slider.new({parent: self}.merge!(options), &block)
     end
 
     def text_area(options = {}, &block)
-      TextArea.new(self, options, &block)
+      TextArea.new({parent: self}.merge!(options), &block)
     end
 
     def toggle_button(options = {}, &block)
-      ToggleButton.new(self, options, &block)
+      ToggleButton.new({parent: self}.merge!(options), &block)
     end
 
     def clear

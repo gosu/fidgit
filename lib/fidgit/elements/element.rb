@@ -123,7 +123,7 @@ module Fidgit
     # @option options [Symbol] :align_v (value of :align else :top) One of :top, :center, :bottom, :fill
 
     # @yield instance_methods_eval with respect to self.
-    def initialize(parent, options = {}, &block)
+    def initialize(options = {}, &block)
       options = {
         x: 0,
         y: 0,
@@ -160,7 +160,7 @@ module Fidgit
 
       @padding_x = options[:padding_x] || options[:padding] || DEFAULT_PADDING_X
       @padding_y = options[:padding_y] || options[:padding] || DEFAULT_PADDING_Y
-      self.parent = parent
+      self.parent = options[:parent]
       @debug = options[:debug]
 
       @z = options[:z]

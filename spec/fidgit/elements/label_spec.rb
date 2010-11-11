@@ -9,12 +9,12 @@ describe Label do
 
   describe "#intialize" do
     it "should not accept a block" do
-      ->{ Label.new(nil, "Hello world!") { } }.should raise_error ArgumentError
+      ->{ Label.new( "Hello world!") { } }.should raise_error ArgumentError
     end
   end
 
   context "with default parameters" do
-    subject { Label.new(nil, "Hello world!") }
+    subject { Label.new( "Hello world!") }
 
     it "should have text value set" do
       subject.text.should eq "Hello world!"

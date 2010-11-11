@@ -13,7 +13,7 @@ module Fidgit
       super(options)
 
       pack :vertical, align: :center, padding: 0 do |packer|
-        FileBrowser.new(packer, type, options) do |sender, result, file_name|
+        FileBrowser.new(type, { parent: packer }.merge!(options)) do |sender, result, file_name|
           hide
           block.call result, file_name if block
         end

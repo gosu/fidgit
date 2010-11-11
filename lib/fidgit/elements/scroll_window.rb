@@ -14,8 +14,8 @@ module Fidgit
 
         def drag?(button); button == :left; end
 
-        def initialize(parent, options = {})
-          super parent, options
+        def initialize(options = {})
+          super options
 
           subscribe :begin_drag do |sender, x, y|
             # Store position of the handle when it starts to drag.
@@ -23,7 +23,7 @@ module Fidgit
           end
 
           subscribe :update_drag do |sender, x, y|
-            parent.handle_dragged_to x - @drag_start_pos[0], y - @drag_start_pos[1]
+            parent.parent.handle_dragged_to x - @drag_start_pos[0], y - @drag_start_pos[1]
           end
 
           subscribe :end_drag do
@@ -32,7 +32,7 @@ module Fidgit
         end
       end
 
-      def initialize(parent, options = {})
+      def initialize(options = {})
         options = {
           background_color: Gosu::Color.rgba(0, 0, 0, 0),
           border_color: Gosu::Color.rgba(0, 0, 0, 0),
@@ -46,10 +46,10 @@ module Fidgit
         @rail_width = options[:rail_width]
         @rail_color = options[:rail_color]
 
-        super parent, options
+        super options
 
-        @handle_container = Container.new(self, width: options[:width], height: options[:height]) do
-          @handle = Handle.new(self, x: x, y: y, background_color: options[:handle_color])
+        @handle_container = Container.new(parent: self, width: options[:width], height: options[:height]) do
+          @handle = Handle.new(parent: self, x: x, y: y, background_color: options[:handle_color])
         end
       end
     end
@@ -57,8 +57,8 @@ module Fidgit
     class HorizontalScrollBar < ScrollBar
       attr_reader :owner
 
-      def initialize(parent, options = {})
-        super parent, options
+      def initialize(options = {})
+        super options
 
         @handle.height = height
 
@@ -88,8 +88,8 @@ module Fidgit
     end
 
     class VerticalScrollBar < ScrollBar
-      def initialize(parent, options = {})
-        super parent, options
+      def initialize(options = {})
+        super options
 
         @handle.width = width
 
@@ -126,12 +126,12 @@ module Fidgit
     def content_width; @view.content.width; end
     def content_height; @view.content.height; end
 
-    def initialize(parent, options = {})
+    def initialize(options = {})
       options = {
         scroll_bar_width: 16,
       }.merge! options
 
-      super(parent, options)
+      super(options)
 
       @scroll_bar_width = options[:scroll_bar_width]
 
@@ -140,8 +140,8 @@ module Fidgit
         @spacer = label '', padding: 0, width: 0, height: 0
       end
 
-      @scroll_bar_v = VerticalScrollBar.new(nil, owner: self, width: @scroll_bar_width, height: options[:height])
-      @scroll_bar_h = HorizontalScrollBar.new(nil, owner: self, width: options[:width], height: @scroll_bar_width)
+      @scroll_bar_v = VerticalScrollBar.new(owner: self, width: @scroll_bar_width, height: options[:height])
+      @scroll_bar_h = HorizontalScrollBar.new(owner: self, width: options[:width], height: @scroll_bar_width)
     end
 
     protected

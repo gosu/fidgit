@@ -15,7 +15,7 @@ module Fidgit
     # @param (see Label#initialize)
     #
     # @option (see Label#initialize)
-    def initialize(parent, options = {}, &block)
+    def initialize(options = {}, &block)
       options = {
         z: Float::INFINITY,
         background_color: DEFAULT_BACKGROUND_COLOR,
@@ -23,7 +23,7 @@ module Fidgit
         text: '',
       }.merge! options
 
-      super(parent, options[:text], options)
+      super(options[:text], options)
     end
 
     protected

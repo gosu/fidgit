@@ -23,7 +23,7 @@ module Fidgit
     # @option options [Number] :offset_x (value of :offset option)
     # @option options [Number] :offset_y (value of :offset option)
     # @option options [Element] :owner The owner of the content, such as the scroll-window containing the content.
-    def initialize(parent, options = {})
+    def initialize(options = {})
       options = {
         offset: 0,
         owner: nil,
@@ -31,9 +31,9 @@ module Fidgit
 
       @owner = options[:owner]
 
-      super(parent, options)
+      super(options)
 
-      @content = VerticalPacker.new(self, padding: 0)
+      @content = VerticalPacker.new(parent: self, padding: 0)
 
       self.offset_x = options[:offset_x] || options[:offset]
       self.offset_y = options[:offset_y] || options[:offset]

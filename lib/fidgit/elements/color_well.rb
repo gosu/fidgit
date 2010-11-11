@@ -14,7 +14,7 @@ module Fidgit
 
     # @param (see RadioButton#initialize)
     # @option (see RadioButton#initialize)
-    def initialize(parent, options = {}, &block)
+    def initialize(options = {}, &block)
       options = {
         width: DEFAULT_SIZE,
         height: DEFAULT_SIZE,
@@ -23,8 +23,7 @@ module Fidgit
         border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED,
       }.merge! options
 
-
-      super(parent, nil, options)
+      super(nil, options)
 
       @value = (options[:color] || options[:value]).dup
     end

@@ -27,7 +27,7 @@ module Fidgit
 
     # @param (see Composite#initialize)
     # @option (see Composite#initialize)
-    def initialize(parent, options = {}, &block)
+    def initialize(options = {}, &block)
       options = {
         padding: 0,
         spacing: 0,
@@ -37,7 +37,7 @@ module Fidgit
 
       @color = options[:color].dup
 
-      super(parent, options)
+      super(options)
 
       slider_width = width
       pack :vertical do

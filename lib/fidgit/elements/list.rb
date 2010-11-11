@@ -15,13 +15,13 @@ module Fidgit
     def size; @items.size; end
     def clear; @items.clear; end
 
-    def initialize(parent, options = {})
+    def initialize(options = {})
       options = {
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR,
       }.merge! options
 
-      super parent, options
+      super options
 
       group do
         subscribe :changed do |sender, value|
@@ -35,7 +35,7 @@ module Fidgit
     # @param [String] text
     # @option options [Gosu::Image] :icon
     def item(value, options = {}, &block)
-      Item.new(@items, value, options, &block)
+      Item.new(value, { parent: @items }.merge!(options), &block)
     end
 
     protected
