@@ -68,6 +68,8 @@ module Fidgit
     def min_height; @height_range.min; end
     def max_height; @height_range.max; end
 
+    # Can the object be dragged?
+    def drag?(button); false; end
 
     def enabled?; @enabled; end
     def enabled=(value); @enabled = value; end

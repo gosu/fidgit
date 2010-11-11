@@ -8,6 +8,28 @@ module Fidgit
     # @abstract
     class ScrollBar < Composite
       class Handle < Element
+        handles :begin_drag
+        handles :end_drag
+        handles :update_drag
+
+        def drag?(button); button == :left; end
+
+        def initialize(parent, options = {})
+          super parent, options
+
+          subscribe :begin_drag do |sender, x, y|
+            # Store position of the handle when it starts to drag.
+            @drag_start_pos = [x - self.x, y - self.y]
+          end
+
+          subscribe :update_drag do |sender, x, y|
+            parent.handle_dragged_to x - @drag_start_pos[0], y - @drag_start_pos[1]
+          end
+
+          subscribe :end_drag do
+            @drag_start_pos = nil
+          end
+        end
       end
 
       def initialize(parent, options = {})
@@ -33,6 +55,8 @@ module Fidgit
     end
 
     class HorizontalScrollBar < ScrollBar
+      attr_reader :owner
+
       def initialize(parent, options = {})
         super parent, options
 
@@ -56,6 +80,10 @@ module Fidgit
       def draw_foreground
         draw_rect x + padding_x, y + (height - @rail_width) / 2, width, @rail_width, z, @rail_color
         super
+      end
+
+      def handle_dragged_to(x, y)
+        @owner.offset_x = @owner.content_width * ((x - self.x) / width.to_f)
       end
     end
 
@@ -81,6 +109,10 @@ module Fidgit
       def draw_foreground
         draw_rect x + (width - @rail_width) / 2, y + padding_y, @rail_width, height, z, @rail_color
         super
+      end
+
+      def handle_dragged_to(x, y)
+        @owner.offset_y = @owner.content_height * ((y - self.y) / height.to_f)
       end
     end
 

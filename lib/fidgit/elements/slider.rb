@@ -6,8 +6,14 @@ module Fidgit
   class Slider < Composite
     # @private
     class Handle < Element
-      DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(255, 0, 0)
+      DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(0, 0, 100)
       DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
+
+      handles :begin_drag
+      handles :end_drag
+      handles :update_drag
+
+      def drag?(button); button == :left; end
 
       # @param (see Element#initialize)
       #
@@ -19,6 +25,19 @@ module Fidgit
         }.merge! options
 
         super parent, options
+
+        subscribe :begin_drag do |sender, x, y|
+          # Store position of the handle when it starts to drag.
+          @drag_start_pos = [x - self.x, y - self.y]
+        end
+
+        subscribe :update_drag do |sender, x, y|
+          parent.handle_dragged_to x - @drag_start_pos[0], y - @drag_start_pos[1]
+        end
+
+        subscribe :end_drag do
+          @drag_start_pos = nil
+        end
       end
     end
 
@@ -27,7 +46,7 @@ module Fidgit
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(100, 100, 100, 255)
     DEFAULT_GROOVE_COLOR = Gosu::Color.rgb(200, 200, 200)
-    DEFAULT_HANDLE_COLOR = Gosu::Color.rgb(255, 0, 0)
+    DEFAULT_HANDLE_COLOR = Gosu::Color.rgb(0, 100, 0)
 
     attr_reader :value, :range
 
@@ -54,11 +73,6 @@ module Fidgit
 
       super(parent, options)
 
-      # TODO: This should probably be done with proper dragging, but will do for now.
-      subscribe :hover do |sender, x, y|
-        left_mouse_button(sender, x, y) if $window.button_down? Gosu::MsLeft
-      end
-
       @handle = Handle.new(self, width: (height / 2 - padding_x), height: height - padding_y * 2,
                            background_color: options[:handle_color])
 
@@ -80,20 +94,16 @@ module Fidgit
     end
 
     def left_mouse_button(sender, x, y)
-      self.value = ((x - self.x - (@handle.width / 2)) / (width - @handle.width)) * (@range.max - @range.min) + @range.min
+      # In this case, x should be the centre of the handle after it has moved.
+      self.value = ((x - (@handle.width / 2) - self.x) / (width - @handle.width)) * (@range.max - @range.min) + @range.min
       @mouse_down = true
 
       nil
     end
 
-    def hit_element(x, y)
-      if @handle.hit?(x, y)
-        self # TODO: should pass this to the handle, so it can be dragged.
-      elsif hit?(x, y)
-        self
-      else
-        nil
-      end
+    def handle_dragged_to(x, y)
+      # In this case, x is the left-hand side fo the handle.
+      self.value = ((x - self.x) / (width - @handle.width)) * (@range.max - @range.min) + @range.min
     end
 
     protected

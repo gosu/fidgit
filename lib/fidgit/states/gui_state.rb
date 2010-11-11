@@ -70,6 +70,13 @@ module Fidgit
       end
 
       @mouse_over = nil # Element the mouse is hovering over.
+      @left_mouse_down_on = nil
+      @left_mouse_down_pos = nil
+      @right_mouse_down_on = nil
+      @right_mouse_down_pos = nil
+
+      @min_drag_distance = 0
+
       @@mouse_moved_at = Gosu::milliseconds
 
       super()
@@ -180,6 +187,10 @@ module Fidgit
       nil
     end
 
+    def distance(x1, y1, x2, y2)
+      Gosu.distance(x1, y1, x2, y2)
+    end
+
     protected
     def redirect_left_mouse_button
       # Ensure that if the user clicks away from a menu, it is automatically closed.
@@ -192,8 +203,10 @@ module Fidgit
 
       if @mouse_over
         @mouse_over.publish :left_mouse_button, cursor.x, cursor.y
+        @left_mouse_down_pos = [cursor.x, cursor.y]
         @left_mouse_down_on = @mouse_over
       else
+        @left_mouse_down_pos = nil
         @left_mouse_down_on = nil
       end
 
@@ -205,9 +218,36 @@ module Fidgit
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu if @menu and @mouse_over != @menu
 
-      if @mouse_over
+      if @dragging
+        @dragging.publish :end_drag, cursor.x, cursor.y
+        if @dragging == @mouse_over
+          @dragging.publish :released_left_mouse_button, cursor.x, cursor.y
+          @dragging.publish :clicked_left_mouse_button, cursor.x, cursor.y
+        end
+        @dragging = nil
+
+      else @mouse_over
         @mouse_over.publish :released_left_mouse_button, cursor.x, cursor.y
         @mouse_over.publish :clicked_left_mouse_button, cursor.x, cursor.y if @mouse_over == @left_mouse_down_on
+      end
+
+      @left_mouse_down_on = nil
+      @left_mouse_down_pos = nil
+
+      nil
+    end
+
+    protected
+    def redirect_holding_left_mouse_button
+      if not @dragging and @left_mouse_down_on.drag?(:left) and distance(*@left_mouse_down_pos, cursor.x, cursor.y) > @min_drag_distance
+        @dragging = @left_mouse_down_on
+        @dragging.publish :begin_drag, *@left_mouse_down_pos
+      end
+
+      if @dragging
+        @dragging.publish :update_drag, cursor.x, cursor.y
+      else
+        @mouse_over.publish :holding_left_mouse_button, cursor.x, cursor.y if @mouse_over
       end
 
       nil
@@ -222,6 +262,8 @@ module Fidgit
         @focus.publish :blur
         @focus = nil
       end
+
+      @left_mouse_down_pos = [cursor.x, cursor.y]
 
       if @mouse_over
         @mouse_over.publish :right_mouse_button, cursor.x, cursor.y
@@ -238,23 +280,37 @@ module Fidgit
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu if @menu and @mouse_over != @menu
 
-      if @mouse_over
+      if @dragging
+        @dragging.publish :end_drag, cursor.x, cursor.y
+        if @dragging == @mouse_over
+          @dragging.publish :released_right_mouse_button, cursor.x, cursor.y
+          @dragging.publish :clicked_right_mouse_button, cursor.x, cursor.y
+        end
+        @dragging = nil
+
+      else @mouse_over
         @mouse_over.publish :released_right_mouse_button, cursor.x, cursor.y
         @mouse_over.publish :clicked_right_mouse_button, cursor.x, cursor.y if @mouse_over == @right_mouse_down_on
       end
 
-      nil
-    end
+      @right_mouse_down_on = nil
+      @right_mouse_down_pos = nil
 
-    protected
-    def redirect_holding_left_mouse_button
-      @mouse_over.publish :holding_left_mouse_button, cursor.x, cursor.y if @mouse_over
       nil
     end
 
     protected
     def redirect_holding_right_mouse_button
-      @mouse_over.publish :holding_right_mouse_button, cursor.x, cursor.y if @mouse_over
+      if not @dragging and @right_mouse_down_on.drag?(:right) and distance(*@right_mouse_down_pos, cursor.x, cursor.y) > @min_drag_distance
+        @dragging = @right_mouse_down_on
+        @dragging.publish :begin_drag, *@right_mouse_down_pos
+      end
+
+      if @dragging
+        @dragging.publish :update_drag, cursor.x, cursor.y
+      else
+        @mouse_over.publish :holding_right_mouse_button, cursor.x, cursor.y if @mouse_over
+      end
     end
 
     protected
