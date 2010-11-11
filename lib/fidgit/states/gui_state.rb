@@ -5,6 +5,7 @@ module Fidgit
     # A 1x1 white pixel used for drawing.
     PIXEL_IMAGE = 'pixel.png'
 
+    # Inputs automatically passed on to the active element.
     DEFAULT_INPUTS = [
       :left_mouse_button, :right_mouse_button,
       :holding_left_mouse_button, :holding_right_mouse_button,
@@ -12,26 +13,45 @@ module Fidgit
       :mouse_wheel_up, :mouse_wheel_down,
     ]
 
+    # The Container that contains all the elements for this GuiState.
+    # @return [Packer]
     attr_reader :container
+
+    # The element with focus.
+    # @return [Element]
     attr_reader :focus
 
+    # The Cursor.
+    # @return [Cursor]
     def cursor; @@cursor; end
 
-    def focus=(focus)
-      @focus.publish :blur if @focus and focus
-      @focus = focus
+    # Sets the focus to a particular element.
+    def focus=(element)
+      @focus.publish :blur if @focus and element
+      @focus = element
     end
 
+    # Delay, in ms, before a tool-tip will appear.
     def tool_tip_delay
       500 # TODO: configure this.
     end
 
+    # Show a file_dialog.
+    # (see FileDialog#initialize)
     def file_dialog(type, options = {}, &block)
       FileDialog.new(type, options, &block)
     end
+
+    # (see MenuPane#initialize)
     def menu(options = {}, &block); MenuPane.new(options, &block); end
+
+    # (see MessageDialog#initialize)
     def message(text, options = {}, &block); MessageDialog.new(text, options, &block); end
+
+    # (see Container#pack)
     def pack(*args, &block); @container.pack *args, &block; end
+
+    # (see Container#clear)
     def clear(*args, &block); @container.clear *args, &block; end
 
     def initialize
@@ -55,7 +75,7 @@ module Fidgit
       super()
 
       DEFAULT_INPUTS.each do |input|
-        on_input input, "redirect_#{input}"
+        on_input input, method("redirect_#{input}")
       end
     end
 
@@ -130,6 +150,7 @@ module Fidgit
       nil
     end
 
+    # Hides the currently shown menu, if any.
     # @return nil
     def hide_menu
       @menu = nil
@@ -137,6 +158,29 @@ module Fidgit
       nil
     end
 
+    # Flush all pending drawing to the screen.
+    def flush
+      $window.flush
+    end
+
+    # Draw a filled rectangle.
+    def draw_rect(x, y, width, height, z, color, mode = :default)
+      @@draw_pixel.draw x, y, z, width, height, color, mode
+
+      nil
+    end
+
+    # Draw an unfilled rectangle.
+    def draw_frame(x, y, width, height, z, color, mode = :default)
+      draw_rect(x, y + 1, 1, height - 2, z, color, mode) # left
+      draw_rect(x, y, width, 1, z, color, mode) # top
+      draw_rect(x + width - 1, y + 1, 1, height - 1, z, color, mode) # right
+      draw_rect(x, y + height - 1, width, 1, z, color, mode) # bottom
+
+      nil
+    end
+
+    protected
     def redirect_left_mouse_button
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu unless @menu and @menu == @mouse_over
@@ -156,6 +200,7 @@ module Fidgit
       nil
     end
 
+    protected
     def redirect_released_left_mouse_button
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu if @menu and @mouse_over != @menu
@@ -168,6 +213,7 @@ module Fidgit
       nil
     end
 
+    protected
     def redirect_right_mouse_button
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu unless @menu and @menu == @mouse_over
@@ -187,6 +233,7 @@ module Fidgit
       nil
     end
 
+    protected
     def redirect_released_right_mouse_button
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu if @menu and @mouse_over != @menu
@@ -199,46 +246,31 @@ module Fidgit
       nil
     end
 
+    protected
     def redirect_holding_left_mouse_button
       @mouse_over.publish :holding_left_mouse_button, cursor.x, cursor.y if @mouse_over
       nil
     end
 
+    protected
     def redirect_holding_right_mouse_button
       @mouse_over.publish :holding_right_mouse_button, cursor.x, cursor.y if @mouse_over
     end
 
+    protected
     def redirect_mouse_wheel_up
       @mouse_over.publish :mouse_wheel_up, cursor.x, cursor.y if @mouse_over
       nil
     end
 
+    protected
     def redirect_mouse_wheel_down
       @mouse_over.publish :mouse_wheel_down, cursor.x, cursor.y if @mouse_over
       nil
     end
 
-    def flush
-      $window.flush
-    end
-
-    def draw_rect(x, y, width, height, z, color, mode = :default)
-      @@draw_pixel.draw x, y, z, width, height, color, mode
-
-      nil
-    end
-
-    def draw_frame(x, y, width, height, z, color, mode = :default)
-      draw_rect(x, y + 1, 1, height - 2, z, color, mode) # left
-      draw_rect(x, y, width, 1, z, color, mode) # top
-      draw_rect(x + width - 1, y + 1, 1, height - 1, z, color, mode) # right
-      draw_rect(x, y + height - 1, width, 1, z, color, mode) # bottom
-
-      nil
-    end
-
-    # Hide the tool-tip, if any.
     protected
+    # Hide the tool-tip, if any.
     def clear_tip
       @@mouse_moved_at = Gosu::milliseconds
       @tool_tip = nil
