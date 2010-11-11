@@ -89,7 +89,7 @@ Elements can be placed inside a packer or group.
 * _label(text, ...)_ - Label with text and, optionally, an icon (No block accepted).
 * _slider(...)_ - Horizontal slider with handle (Block handles :changed event handler).
 * _text_area(...)_ - An multi-line element, containing editable text (Block handles :changed event).
-* _toggle_button(...)_ - Button that can be toggled on/off (Block handles :clicked_left_mouse_button event).
+* _toggle_button(...)_ - Button that can be toggled on/off (Block handles :changed event).
 
 h5. Groupable elements
 

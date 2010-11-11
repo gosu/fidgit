@@ -3,22 +3,25 @@
 require_relative 'button'
 
 module Fidgit
+  # A button that toggles its value from false<->true when clicked.
   class ToggleButton < Button
     DEFAULT_BORDER_COLOR_ON = Gosu::Color.new(255, 255, 0)
     DEFAULT_BORDER_COLOR_OFF = Gosu::Color.new(100, 100, 0)
 
-    def on?; @on; end
-    def on=(value); @on = value; update_status; end
+    handles :changed
+
+    attr_reader :value
+    def value=(value); @value = value; update_status; end
 
     # @param (see Button#initialize)
     #
     # @option (see Button#initialize)
     def initialize(parent, options = {}, &block)
       options = {
-        on: false
+        value: false
       }.merge! options
 
-      @on = options[:on]
+      @value = options[:value]
 
       super(parent, options)
 
@@ -33,18 +36,23 @@ module Fidgit
       @border_color_off = (options[:border_color_off] || options[:border_color] || DEFAULT_BORDER_COLOR_OFF).dup
 
       update_status
+
+      subscribe :clicked_left_mouse_button do |sender, x, y|
+        @value = (not @value)
+        update_status
+        publish :changed, @value
+      end
     end
 
-    def clicked_left_mouse_button(sender, x, y)
-      @on = (not @on)
-      update_status
-
-      super
+    protected
+    # The block for a toggle-button is connected to :changed event.
+    def post_init_block(&block)
+      subscribe :changed, &block
     end
 
     protected
     def update_status
-      if @on
+      if @value
         @text = @text_on.dup
         @icon = @icon_on ? @icon_on.dup : nil
         @tip = @tip_on.dup

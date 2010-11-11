@@ -10,8 +10,8 @@ class ExampleState < GuiState
         my_label.text = "Pressed the button!"
       end
 
-      toggle_button(text: "ToggleButton", tip: "I'm a button that toggles") do |sender, x, y|
-        my_label.text = "Turned the toggle button #{sender.on? ? "on" : "off"}!"
+      toggle_button(text: "ToggleButton", tip: "I'm a button that toggles") do |sender, value|
+        my_label.text = "Turned the toggle button #{value ? "on" : "off"}!"
       end
     end
   end
