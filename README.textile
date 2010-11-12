@@ -67,6 +67,8 @@ h3. GuiState methods
 * _pack([:vertical|:horizontal|:grid], ...)_ - Add a packer to the state (Block has access to public methods).
 * _clear()_ - remove any packers added to the state.
 * _menu(...)_ - Show a context menu (Block has access to public methods).
+** _item(value, ...)_ - Item in a menu (Block handles :clicked_left_mouse_button event).
+** _separator(...)_ - A horizontal separator between menu items.
 * _message(text, ...)_ - Show a message box with button(s) (Block subscribes to a button getting clicked).
 * _file_dialog([:open, :save], ...)_ - Open a file dialog to load or save a file (Block is passed the button pressed and the file path set).
 
