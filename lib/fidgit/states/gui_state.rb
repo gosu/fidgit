@@ -5,14 +5,6 @@ module Fidgit
     # A 1x1 white pixel used for drawing.
     PIXEL_IMAGE = 'pixel.png'
 
-    # Inputs automatically passed on to the active element.
-    DEFAULT_INPUTS = [
-      :left_mouse_button, :right_mouse_button,
-      :holding_left_mouse_button, :holding_right_mouse_button,
-      :released_left_mouse_button, :released_right_mouse_button,
-      :mouse_wheel_up, :mouse_wheel_down,
-    ]
-
     # The Container that contains all the elements for this GuiState.
     # @return [Packer]
     attr_reader :container
@@ -70,10 +62,9 @@ module Fidgit
       end
 
       @mouse_over = nil # Element the mouse is hovering over.
-      @left_mouse_down_on = nil
-      @left_mouse_down_pos = nil
-      @right_mouse_down_on = nil
-      @right_mouse_down_pos = nil
+      @mouse_down_on = Hash.new # Element that each button was pressed over.
+      @mouse_down_pos = Hash.new # Position that each button was pressed down at.
+      @drag_button = nil
 
       @min_drag_distance = 0
 
@@ -81,9 +72,22 @@ module Fidgit
 
       super()
 
-      DEFAULT_INPUTS.each do |input|
-        on_input input, method("redirect_#{input}")
-      end
+      add_inputs(
+        left_mouse_button: ->{ redirect_mouse_button(:left) },
+        holding_left_mouse_button: ->{ redirect_holding_mouse_button(:left) },
+        released_left_mouse_button: ->{ redirect_released_mouse_button(:left) },
+        
+        middle_mouse_button: ->{ redirect_mouse_button(:middle) },
+        holding_middle_mouse_button: ->{ redirect_holding_mouse_button(:middle) },
+        released_middle_mouse_button: ->{ redirect_released_mouse_button(:middle) },
+  
+        right_mouse_button: ->{ redirect_mouse_button(:right) },
+        holding_right_mouse_button: ->{ redirect_holding_mouse_button(:right) },
+        released_right_mouse_button: ->{ redirect_released_mouse_button(:right) },
+  
+        mouse_wheel_up: :redirect_mouse_wheel_up,
+        mouse_wheel_down: :redirect_mouse_wheel_down
+      )
     end
 
     # Internationalisation helper.
@@ -125,6 +129,9 @@ module Fidgit
         clear_tip
         @@mouse_moved_at = Gosu::milliseconds
       end
+
+      # The element that grabs input.
+      @active_element = @dragging_element || @focus || @mouse_over
 
       @last_cursor_pos = [cursor.x, cursor.y]
 
@@ -192,136 +199,80 @@ module Fidgit
     end
 
     protected
-    def redirect_left_mouse_button
+    def redirect_mouse_button(button)
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu unless @menu and @menu == @mouse_over
 
+      # Blur if clicking outside the focused element.
       if @focus and @mouse_over != @focus
         @focus.publish :blur
         @focus = nil
       end
 
+      # Publish :left_mouse_button for the element that is clicked.
       if @mouse_over
-        @mouse_over.publish :left_mouse_button, cursor.x, cursor.y
-        @left_mouse_down_pos = [cursor.x, cursor.y]
-        @left_mouse_down_on = @mouse_over
+        @mouse_down_pos[button] = [cursor.x, cursor.y]
+        @mouse_down_on[button] = @mouse_over
+        @mouse_over.publish :"#{button}_mouse_button", *@mouse_down_pos[button]
       else
-        @left_mouse_down_pos = nil
-        @left_mouse_down_on = nil
+        @mouse_down_pos[button] = nil
+        @mouse_down_on[button] = nil
       end
 
       nil
     end
 
     protected
-    def redirect_released_left_mouse_button
+    def redirect_released_mouse_button(button)
       # Ensure that if the user clicks away from a menu, it is automatically closed.
       hide_menu if @menu and @mouse_over != @menu
 
-      if @dragging
-        @dragging.publish :end_drag, cursor.x, cursor.y
-        if @dragging == @mouse_over
-          @dragging.publish :released_left_mouse_button, cursor.x, cursor.y
-          @dragging.publish :clicked_left_mouse_button, cursor.x, cursor.y
-        end
-        @dragging = nil
-
-      else @mouse_over
-        @mouse_over.publish :released_left_mouse_button, cursor.x, cursor.y
-        @mouse_over.publish :clicked_left_mouse_button, cursor.x, cursor.y if @mouse_over == @left_mouse_down_on
-      end
-
-      @left_mouse_down_on = nil
-      @left_mouse_down_pos = nil
-
-      nil
-    end
-
-    protected
-    def redirect_holding_left_mouse_button
-      if not @dragging and @left_mouse_down_on.drag?(:left) and distance(*@left_mouse_down_pos, cursor.x, cursor.y) > @min_drag_distance
-        @dragging = @left_mouse_down_on
-        @dragging.publish :begin_drag, *@left_mouse_down_pos
-      end
-
-      if @dragging
-        @dragging.publish :update_drag, cursor.x, cursor.y
-      else
-        @mouse_over.publish :holding_left_mouse_button, cursor.x, cursor.y if @mouse_over
-      end
-
-      nil
-    end
-
-    protected
-    def redirect_right_mouse_button
-      # Ensure that if the user clicks away from a menu, it is automatically closed.
-      hide_menu unless @menu and @menu == @mouse_over
-
-      if @focus and @mouse_over != @focus
-        @focus.publish :blur
-        @focus = nil
-      end
-
-      @left_mouse_down_pos = [cursor.x, cursor.y]
-
       if @mouse_over
-        @mouse_over.publish :right_mouse_button, cursor.x, cursor.y
-        @right_mouse_down_on = @mouse_over
-      else
-        @right_mouse_down_on = nil
+        @mouse_over.publish :"released_#{button}_mouse_button", cursor.x, cursor.y
+        @mouse_over.publish :"clicked_#{button}_mouse_button", cursor.x, cursor.y if @mouse_over == @mouse_down_on[button]
       end
+
+      if @dragging_element and @drag_button == button
+        @dragging_element.publish :end_drag, cursor.x, cursor.y, @drag_button, @mouse_over
+        @dragging_element = nil
+        @drag_button = nil
+      end
+
+      @mouse_down_on[button] = nil
+      @mouse_down_pos[button] = nil
 
       nil
     end
 
     protected
-    def redirect_released_right_mouse_button
-      # Ensure that if the user clicks away from a menu, it is automatically closed.
-      hide_menu if @menu and @mouse_over != @menu
+    def redirect_holding_mouse_button(button)
+      if not @dragging_element and @mouse_down_on[button].drag?(button) and
+          distance(*@mouse_down_pos[button], cursor.x, cursor.y) > @min_drag_distance
+        @drag_button = button
+        @dragging_element = @mouse_down_on[button]
+        @dragging_element.publish :begin_drag, *@mouse_down_pos[button], :left
+      end
 
-      if @dragging
-        @dragging.publish :end_drag, cursor.x, cursor.y
-        if @dragging == @mouse_over
-          @dragging.publish :released_right_mouse_button, cursor.x, cursor.y
-          @dragging.publish :clicked_right_mouse_button, cursor.x, cursor.y
+      if @dragging_element
+        if @drag_button == button
+          @dragging_element.publish :update_drag, cursor.x, cursor.y
         end
-        @dragging = nil
-
-      else @mouse_over
-        @mouse_over.publish :released_right_mouse_button, cursor.x, cursor.y
-        @mouse_over.publish :clicked_right_mouse_button, cursor.x, cursor.y if @mouse_over == @right_mouse_down_on
+      else
+        @mouse_over.publish :"holding_#{button}_mouse_button", cursor.x, cursor.y if @mouse_over
       end
-
-      @right_mouse_down_on = nil
-      @right_mouse_down_pos = nil
 
       nil
-    end
-
-    protected
-    def redirect_holding_right_mouse_button
-      if not @dragging and @right_mouse_down_on.drag?(:right) and distance(*@right_mouse_down_pos, cursor.x, cursor.y) > @min_drag_distance
-        @dragging = @right_mouse_down_on
-        @dragging.publish :begin_drag, *@right_mouse_down_pos
-      end
-
-      if @dragging
-        @dragging.publish :update_drag, cursor.x, cursor.y
-      else
-        @mouse_over.publish :holding_right_mouse_button, cursor.x, cursor.y if @mouse_over
-      end
     end
 
     protected
     def redirect_mouse_wheel_up
-      @mouse_over.publish :mouse_wheel_up, cursor.x, cursor.y if @mouse_over
+      @active_element.publish :mouse_wheel_up, cursor.x, cursor.y if @active_element
       nil
     end
 
     protected
     def redirect_mouse_wheel_down
-      @mouse_over.publish :mouse_wheel_down, cursor.x, cursor.y if @mouse_over
+      @active_element.publish :mouse_wheel_down, cursor.x, cursor.y if @active_element
       nil
     end
 
