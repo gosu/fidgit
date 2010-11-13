@@ -261,19 +261,22 @@ module Fidgit
             # The current word is longer than the whole word, so split it.
             # Go back and set all the character positions we have.
             position_letters_in_word(word, line_width)
-            line_width = 0
 
             # Push as much of the current word as possible as a complete line.
             @lines.push word + (char == ' ' ? '' : '-')
+            line_width = font.text_width(word)
 
             word = ''
             word_width = 0
           else
+
             # Adding the current word would be too wide, so add the current line and start a new one.
             @lines.push line
             line = ''
-            line_width = 0
           end
+
+          @char_widths[-1] += (width - line_width - padding_x * 2) unless @char_widths.empty?
+          line_width = 0
         end
 
         case char
@@ -282,6 +285,7 @@ module Fidgit
             line += word
             line_width = position_letters_in_word(word, line_width)
             @caret_positions.push [line_width, y_at_line(@lines.size)]
+            @char_widths[-1] += (width - line_width - padding_x * 2) unless @char_widths.empty?
             @char_widths.push 0
             @lines.push line
             word = ''
