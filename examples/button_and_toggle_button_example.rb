@@ -2,7 +2,9 @@ require_relative 'helpers/example_window'
 
 # Example for Button and ToggleButton
 class ExampleState < GuiState
-  def setup
+  def initialize
+    super
+
     pack :vertical do
       my_label = label "Label", tip: "I'm a label"
 

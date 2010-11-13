@@ -2,7 +2,9 @@ require_relative 'helpers/example_window'
 
 # Labels can have text and/or icons.
 class ExampleState < GuiState
-  def setup
+  def initialize
+    super
+
     pack :vertical, background_color: Gosu::Color.rgb(255, 0, 0) do
       label "Hello!", tip: 'A label with text'
       label "Hello!", icon: Gosu::Image["head_icon.png"], tip: 'A label with text & icon'

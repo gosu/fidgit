@@ -2,7 +2,9 @@ require_relative 'helpers/example_window'
 
 # Labels can have text and/or icons.
 class ExampleState < GuiState
-  def setup
+  def initialize
+    super
+
     pack :vertical do
       my_label = label "No clicky"
 

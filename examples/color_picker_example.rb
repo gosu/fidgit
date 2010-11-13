@@ -1,7 +1,9 @@
 require_relative 'helpers/example_window'
 
 class ExampleState < GuiState
-  def setup
+  def initialize
+    super
+
     pack :vertical do
       my_label = label 'No color picked'
 

@@ -3,7 +3,9 @@ require_relative 'helpers/example_window'
 Fidgit.default_font_size = 15
 
 class ExampleState < GuiState
-  def setup
+  def initialize
+    super
+
     container.background_color = Gosu::Color.rgb(50, 50, 50)
     pack :vertical  do
       full_base_directory = ''

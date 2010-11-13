@@ -4,7 +4,9 @@ require_relative 'helpers/example_window'
 class ExampleState < GuiState
   HEIGHT = 225
   WIDTH = 140
-  def setup
+  def initialize
+    super
+
     pack :vertical do
       pack :horizontal do
         [

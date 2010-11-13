@@ -1,7 +1,9 @@
 require_relative 'helpers/example_window'
 
 class ExampleState < GuiState
-  def setup
+  def initialize
+    super
+
     pack :horizontal do
       pack :vertical do
         label 'editable'

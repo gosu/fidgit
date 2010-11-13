@@ -17,7 +17,9 @@ class ExampleState < GuiState
   CELL_BACKGROUND = Gosu::Color.rgb(100, 0, 0)
   OUTER_BACKGROUND = Gosu::Color.rgb(0, 0, 100)
 
-  def setup
+  def initialize
+    super
+
     pack :vertical, align: :center, background_color: OUTER_BACKGROUND do
       label "h => align_h, v => align_v", align_h: :center
 

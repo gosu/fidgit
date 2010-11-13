@@ -198,6 +198,16 @@ module Fidgit
       Gosu.distance(x1, y1, x2, y2)
     end
 
+    def show
+      $window.game_state_manager.push self unless $window.game_state_manager.game_states.include? self
+      nil
+    end
+
+    def hide
+      $window.game_state_manager.pop if $window.game_state_manager.current == self
+      nil
+    end
+
     protected
     def redirect_mouse_button(button)
       # Ensure that if the user clicks away from a menu, it is automatically closed.

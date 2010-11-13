@@ -5,7 +5,9 @@ class ExampleState < GuiState
   FIXED_NUM = 5
   NUM_CELLS = 17
 
-  def setup
+  def initialize
+    super
+
     pack :vertical do
       label "Grid with #{FIXED_NUM} columns"
       pack :grid, num_columns: FIXED_NUM, border_color: BORDER_COLOR, cell_border_color: Gosu::Color.rgba(0, 255, 0, 255) do

@@ -40,15 +40,5 @@ module Fidgit
 
       super
     end
-
-    def show
-      $window.game_state_manager.push_game_state self, finalize: false
-      nil
-    end
-
-    def hide
-      $window.game_state_manager.pop_game_state(setup: false)
-      nil
-    end
   end
 end

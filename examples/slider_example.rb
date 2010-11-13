@@ -1,7 +1,9 @@
 require_relative 'helpers/example_window'
 
 class ExampleState < GuiState
-  def setup
+  def initialize
+    super
+
     pack :vertical do
       pack :horizontal do
         # Discrete values (0..100)
