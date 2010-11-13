@@ -9,18 +9,11 @@ Gosu::Sample.autoload_dirs << File.join(media_dir, 'sounds')
 
 class ExampleWindow < Fidgit::GuiWindow
   def initialize(options = {})
-    default_caption = "#{File.basename($0).chomp(".rb").tr('_', ' ')} #{ENV['FIDGIT_EXAMPLES_TEXT']}"
+    super(640, 480, false)
+
     on_input(:escape) { close }
 
-    options = {
-      state: ExampleState,
-      caption: default_caption,
-    }.merge! options
-
-    super(options)
-  end
-
-  def needs_cursor?
-    false
+    caption = "#{File.basename($0).chomp(".rb").tr('_', ' ')} #{ENV['FIDGIT_EXAMPLES_TEXT']}"
+    push_game_state ExampleState
   end
 end
