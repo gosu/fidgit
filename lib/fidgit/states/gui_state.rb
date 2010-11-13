@@ -50,8 +50,6 @@ module Fidgit
       # The container is where the user puts their content.
       @container = VerticalPacker.new(padding: 0, width: $window.width, height: $window.height)
 
-      @focus = nil
-
       unless defined? @@draw_pixel
         media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'media'))
         Gosu::Image.autoload_dirs << File.join(media_dir, 'images')
@@ -61,14 +59,7 @@ module Fidgit
         @@cursor = Cursor.new
       end
 
-      @mouse_over = nil # Element the mouse is hovering over.
-      @mouse_down_on = Hash.new # Element that each button was pressed over.
-      @mouse_down_pos = Hash.new # Position that each button was pressed down at.
-      @drag_button = nil
-
       @min_drag_distance = 0
-
-      @@mouse_moved_at = Gosu::milliseconds
 
       super()
 
@@ -114,20 +105,20 @@ module Fidgit
 
       # Check if the mouse has moved, and no menu is shown, so we can show a tooltip.
       if [cursor.x, cursor.y] == @last_cursor_pos and (not @menu)
-        if @mouse_over and (Gosu::milliseconds - @@mouse_moved_at) > tool_tip_delay
+        if @mouse_over and (Gosu::milliseconds - @mouse_moved_at) > tool_tip_delay
           if text = @mouse_over.tip and not text.empty?
             @tool_tip ||= ToolTip.new
             @tool_tip.text = text
             @tool_tip.x = cursor.x
             @tool_tip.y = cursor.y + cursor.height # Place the tip beneath the cursor.
           else
-            clear_tip
-            @@mouse_moved_at = Gosu::milliseconds
+            @tool_tip = nil
+            @mouse_moved_at = Gosu::milliseconds
           end
         end
       else
-        clear_tip
-        @@mouse_moved_at = Gosu::milliseconds
+        @tool_tip = nil
+        @mouse_moved_at = Gosu::milliseconds
       end
 
       # The element that grabs input.
@@ -147,8 +138,25 @@ module Fidgit
       nil
     end
 
+    def setup
+      super
+
+      @tool_tip = nil
+      @mouse_over = nil # Element the mouse is hovering over.
+      @mouse_down_on = Hash.new # Element that each button was pressed over.
+      @mouse_down_pos = Hash.new # Position that each button was pressed down at.
+      @drag_button = nil
+      @dragging_element = nil
+      @focus = nil
+      @mouse_moved_at = Gosu::milliseconds
+
+      nil
+    end
+
     def finalize
-      clear_tip
+      super
+
+      @tool_tip = nil
 
       nil
     end
@@ -283,15 +291,6 @@ module Fidgit
     protected
     def redirect_mouse_wheel_down
       @active_element.publish :mouse_wheel_down, cursor.x, cursor.y if @active_element
-      nil
-    end
-
-    protected
-    # Hide the tool-tip, if any.
-    def clear_tip
-      @@mouse_moved_at = Gosu::milliseconds
-      @tool_tip = nil
-
       nil
     end
   end
