@@ -154,8 +154,6 @@ module Fidgit
     end
 
     def finalize
-      super
-
       @tool_tip = nil
 
       nil
