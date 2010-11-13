@@ -6,7 +6,7 @@ module Fidgit
   # @example
   #   class JumpingBean
   #     include Event
-  #     handles :jump
+  #     event :jump
   #   end
   #
   #   bean = JumpingBean.new
@@ -32,7 +32,7 @@ module Fidgit
     #   @return [nil]
     def subscribe(event, method = nil, &block)
       raise ArgumentError, "Expected method or block for event handler" unless !block.nil? ^ !method.nil?
-      raise ArgumentError, "#{self.class} does not handle #{event.inspect}" unless events_handled.include? event
+      raise ArgumentError, "#{self.class} does not handle #{event.inspect}" unless events.include? event
 
       @_event_handlers = Hash.new() { |hash, key| hash[key] = [] } unless @_event_handlers
       @_event_handlers[event].push(method ? method : block)
@@ -50,7 +50,7 @@ module Fidgit
     # @param [Array] args Arguments to pass to the event handlers.
     # @return [Symbol, nil] :handled if any handler handled the event or nil if none did.
     def publish(event, *args)
-      raise ArgumentError, "#{self.class} does not handle #{event.inspect}" unless events_handled.include? event
+      raise ArgumentError, "#{self.class} does not handle #{event.inspect}" unless events.include? event
 
       if respond_to? event
         return :handled if send(event, self, *args) == :handled
@@ -66,29 +66,28 @@ module Fidgit
     end
 
     # The list of events that this object can publish/subscribe.
-    def events_handled
-      self.class.events_handled
+    def events
+      self.class.events
     end
 
-    # Add the handles method to the class that includes Event.
+    # Add singleton methods to the class that includes Event.
     def self.included(base)
       class << base
-        attr_reader :events_handled
-        def events_handled
-          unless @events_handled
+        def events
+          unless @events
             # Copy the events already set up for your parent.
-            @events_handled = if ancestors[1].respond_to? :events_handled
-              ancestors[1].events_handled.dup
+            @events = if superclass.respond_to? :events
+              superclass.events.dup
             else
               []
             end
           end
 
-          @events_handled
+          @events
         end
 
-        def handles(event)
-          events_handled.push event.to_sym
+        def event(event)
+          events.push event.to_sym unless events.include? event
           event
         end
       end

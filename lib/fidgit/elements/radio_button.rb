@@ -9,9 +9,9 @@ module Fidgit
 
     attr_reader :group, :value
 
-    handles :changed
-    handles :checked
-    handles :unchecked
+    event :changed
+    event :checked
+    event :unchecked
 
     def checked?; @checked; end
 

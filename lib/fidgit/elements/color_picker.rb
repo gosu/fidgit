@@ -10,7 +10,7 @@ module Fidgit
 
     INDICATOR_HEIGHT = 25
 
-    handles :changed
+    event :changed
 
     def color; @color.dup; end
 

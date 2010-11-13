@@ -64,7 +64,7 @@ module Fidgit
       end
     end
 
-    handles :selected
+    event :selected
 
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(50, 50, 50)
 

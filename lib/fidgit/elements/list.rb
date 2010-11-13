@@ -7,7 +7,7 @@ module Fidgit
     class Item < RadioButton
     end
 
-    handles :changed
+    event :changed
 
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(200, 200, 200)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgb(255, 255, 255)

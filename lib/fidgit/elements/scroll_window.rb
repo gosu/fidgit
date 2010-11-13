@@ -8,9 +8,9 @@ module Fidgit
     # @abstract
     class ScrollBar < Composite
       class Handle < Element
-        handles :begin_drag
-        handles :end_drag
-        handles :update_drag
+        event :begin_drag
+        event :end_drag
+        event :update_drag
 
         def drag?(button); button == :left; end
 

@@ -22,9 +22,9 @@ module Fidgit
     # @return [Boolean]
     attr_writer :editable
 
-    handles :changed
-    handles :focus
-    handles :blur
+    event :changed
+    event :focus
+    event :blur
 
     # Is the area editable?
     def editable?

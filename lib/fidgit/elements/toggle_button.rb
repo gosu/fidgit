@@ -8,7 +8,7 @@ module Fidgit
     DEFAULT_BORDER_COLOR_ON = Gosu::Color.new(255, 255, 0)
     DEFAULT_BORDER_COLOR_OFF = Gosu::Color.new(100, 100, 0)
 
-    handles :changed
+    event :changed
 
     attr_reader :value
     def value=(value); @value = value; update_status; end

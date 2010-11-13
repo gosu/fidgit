@@ -8,7 +8,7 @@ class ComboBox < Button
   DEFAULT_BORDER_COLOR = Gosu::Color.new(255, 255, 255)
   DEFAULT_BACKGROUND_COLOR = Gosu::Color.new(100, 100, 100)
 
-  handles :changed
+  event :changed
 
   def index; @menu.index(@value) end
   def value; @value; end

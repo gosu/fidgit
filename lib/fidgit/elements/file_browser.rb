@@ -6,7 +6,7 @@ module Fidgit
   class FileBrowser < Composite
     VALID_TYPES = [:open, :save]
 
-    handles :selected
+    event :selected
 
     attr_reader :pattern, :base_directory
 

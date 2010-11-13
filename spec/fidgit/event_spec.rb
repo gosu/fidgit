@@ -16,29 +16,29 @@ module Fidgit
 
     subject { Test }
 
-    describe "events_handled" do
+    describe "events" do
       it "should initially be empty" do
-        subject.events_handled.should be_empty
+        subject.events.should be_empty
       end
     end
 
-    describe "handles" do
+    describe "event" do
       it "should add the event to the list of events handled" do
-        subject.handles :frog
-        subject.events_handled.should include :frog
+        subject.event :frog
+        subject.events.should include :frog
       end
 
       it "should inherit parent's events and be able to add more" do
-        Test.handles :frog
+        Test.event :frog
         class Test2 < Test; end
-        Test2.handles :fish
-        Test2.events_handled.should include :frog
-        Test2.events_handled.should include :fish
+        Test2.event :fish
+        Test2.events.should include :frog
+        Test2.events.should include :fish
       end
     end
 
     context "When included into a class that is instanced" do
-      subject { Test.handles :frog; Test.new }
+      subject { Test.event :frog; Test.new }
 
       describe "#subscribe" do
         it "should add a handler as a block" do
@@ -120,7 +120,7 @@ module Fidgit
         end
 
         it "should only call the handlers requested" do
-          Test.handles :fish
+          Test.event :fish
 
           subject.should_receive(:handler1).with(subject)
           subject.should_not_receive(:handler2)

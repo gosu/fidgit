@@ -9,9 +9,9 @@ module Fidgit
       DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(0, 0, 100)
       DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
 
-      handles :begin_drag
-      handles :end_drag
-      handles :update_drag
+      event :begin_drag
+      event :end_drag
+      event :update_drag
 
       def drag?(button); button == :left; end
 
@@ -41,7 +41,7 @@ module Fidgit
       end
     end
 
-    handles :changed
+    event :changed
 
     DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgba(100, 100, 100, 255)
