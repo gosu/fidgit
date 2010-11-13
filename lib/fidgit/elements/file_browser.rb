@@ -77,16 +77,16 @@ module Fidgit
         pack :horizontal, align: :center, padding: 0 do
           case @type
             when :open
-              button(text: options[:open_text]) do
+              button(options[:open_text]) do
                 publish :selected, :open, file_path
               end
             when :save
-              button(text: options[:save_text]) do
+              button(options[:save_text]) do
                 publish :selected, :save, file_path
               end
           end
 
-          button(text: options[:cancel_text]) do
+          button(options[:cancel_text]) do
             publish :selected, :cancel, file_path
           end
         end
@@ -103,7 +103,7 @@ module Fidgit
 
       @directories.each_with_index do |dir, i|
         if i < @directories.size - 1
-          @nav_buttons.button(text: dir) do
+          @nav_buttons.button(dir) do
             create_nav_buttons(i)
           end
         else
@@ -135,7 +135,7 @@ module Fidgit
                         File.basename(file_path, File.extname(file_path))
                       end
 
-          @files_list.item file_path, text: file_name, icon: Gosu::Image["file_file.png"]
+          @files_list.item file_name, file_path, icon: Gosu::Image["file_file.png"]
         end
       end
     end

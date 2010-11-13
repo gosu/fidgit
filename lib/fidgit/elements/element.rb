@@ -153,7 +153,6 @@ module Fidgit
       min_height = (options[:min_height] || options[:height] || 0)
       max_height = (options[:max_height] || options[:height] || Float::INFINITY)
       @height_range = min_height..max_height
-      
 
       @background_color = options[:background_color].dup
       @border_color = options[:border_color].dup

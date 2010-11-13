@@ -35,7 +35,7 @@ class ExampleState < GuiState
         pack :vertical do
           scroll_window(width: 300, height: 150) do
             %w[One Two Three Four Five Six].each do |name|
-              toggle_button(text: name)
+              toggle_button(name)
             end
           end
         end

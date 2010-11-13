@@ -246,7 +246,7 @@ module Fidgit
 
     protected
     def redirect_holding_mouse_button(button)
-      if not @dragging_element and @mouse_down_on[button].drag?(button) and
+      if not @dragging_element and @mouse_down_on[button] and @mouse_down_on[button].drag?(button) and
           distance(*@mouse_down_pos[button], cursor.x, cursor.y) > @min_drag_distance
         @drag_button = button
         @dragging_element = @mouse_down_on[button]

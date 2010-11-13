@@ -20,7 +20,7 @@ module Fidgit
     #
     # @option (see Button#initialize)
     # @option options [Boolean] :checked
-    def initialize(value, options = {}, &block)
+    def initialize(text, value, options = {}, &block)
       options = {
         checked: false,
         border_color_checked: DEFAULT_BORDER_COLOR_CHECKED,
@@ -30,7 +30,7 @@ module Fidgit
       @checked = options[:checked]
       @value = value
 
-      super(options)
+      super(text, options)
 
       @border_color_checked = (options[:border_color_checked] || @border_color).dup
       @border_color_unchecked = (options[:border_color_unchecked] || @border_color).dup

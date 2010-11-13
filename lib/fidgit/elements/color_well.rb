@@ -12,6 +12,8 @@ module Fidgit
 
     DEFAULT_SIZE = 20
 
+    alias_method :color, :value
+
     # @param (see RadioButton#initialize)
     # @option (see RadioButton#initialize)
     def initialize(options = {}, &block)
@@ -23,9 +25,7 @@ module Fidgit
         border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED,
       }.merge! options
 
-      super(nil, options)
-
-      @value = (options[:color] || options[:value]).dup
+      super('', (options[:color] || options[:value]).dup, options)
     end
 
     protected
@@ -39,7 +39,7 @@ module Fidgit
 
     protected
     def draw_foreground
-      draw_rect x + 3, y + 3, width - 6, height - 6, z, @value
+      draw_rect x + 3, y + 3, width - 6, height - 6, z, value
 
       nil
     end

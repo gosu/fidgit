@@ -16,7 +16,7 @@ module Fidgit
       # @param [any] value Value if the user picks this item
       # @option options [Boolean] :enabled (true)
       # @option options [String] :shortcut ('')
-      def initialize(value, options = {})
+      def initialize(text, value, options = {})
         options = {
           enabled: true,
           border_color: DEFAULT_BORDER_COLOR,
@@ -26,7 +26,7 @@ module Fidgit
         @enabled = [true, false].include?(options[:enabled]) ? options[:enabled] : true
         @shortcut = options[:shortcut] || ''
 
-        super(options)
+        super(text, options)
       end
 
       def draw_foreground
@@ -46,28 +46,21 @@ module Fidgit
       end
     end
 
-    class Separator < Item
+    class Separator < Label
       DEFAULT_LINE_HEIGHT = 2
+      DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(75, 75, 75)
 
       # @param (see Item#initialize)
       #
       # @option (see Item#initialize)
       def initialize(options = {})
         options = {
-          enabled: false,
-          line_height: DEFAULT_LINE_HEIGHT,
+          height: DEFAULT_LINE_HEIGHT,
+          background_color: DEFAULT_BACKGROUND_COLOR,
+          padding: 0,
         }.merge! options
 
-        @line_height = options[:line_height]
-
-        super options
-      end
-
-      protected
-      def layout
-        super
-        rect.height = @line_height
-        nil
+        super '', options
       end
     end
 
@@ -118,9 +111,9 @@ module Fidgit
       Separator.new({ parent: @items }.merge!(options))
     end
 
-    def item(value, options = {}, &block)
+    def item(text, value, options = {}, &block)
       options[:z] = z
-      item = Item.new(value, { parent: @items }.merge!(options), &block)
+      item = Item.new(text, value, { parent: @items }.merge!(options), &block)
 
       item.subscribe :left_mouse_button, method(:item_selected)
       item.subscribe :right_mouse_button, method(:item_selected)

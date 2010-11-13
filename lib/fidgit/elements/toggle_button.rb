@@ -16,14 +16,14 @@ module Fidgit
     # @param (see Button#initialize)
     #
     # @option (see Button#initialize)
-    def initialize(options = {}, &block)
+    def initialize(text, options = {}, &block)
       options = {
         value: false
       }.merge! options
 
       @value = options[:value]
 
-      super(options)
+      super(text, options)
 
       @text_on = (options[:text_on] || text).dup
       @icon_on = options[:icon_on] || icon

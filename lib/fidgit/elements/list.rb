@@ -34,8 +34,8 @@ module Fidgit
 
     # @param [String] text
     # @option options [Gosu::Image] :icon
-    def item(value, options = {}, &block)
-      Item.new(value, { parent: @items }.merge!(options), &block)
+    def item(text, value, options = {}, &block)
+      Item.new(text, value, { parent: @items }.merge!(options), &block)
     end
 
     protected

@@ -10,8 +10,8 @@ class ExampleState < GuiState
       restricted_base_directory = File.expand_path(File.join(__FILE__, '..', '..'))
       directory = File.join(restricted_base_directory, 'media', 'images')
 
-      my_label = label "No file loaded"
-      button(text: "Load...(limited path access)") do
+      my_label = label "No files are actually loaded or saved by this example"
+      button("Load...(limited path access)") do
         file_dialog(:open, base_directory: restricted_base_directory, directory: directory, pattern: "*.png") do |result, file|
           case result
             when :open
@@ -22,7 +22,7 @@ class ExampleState < GuiState
         end
       end
 
-      button(text: "Save...(unrestricted path access)") do
+      button("Save...(unrestricted path access)") do
         file_dialog(:save, base_directory: full_base_directory, directory: directory, pattern: "*.png") do |result, file|
           case result
             when :save

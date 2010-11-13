@@ -11,9 +11,9 @@ class ExampleState < GuiState
           my_label.text = "Chose #{value}!"
         end
 
-        item 1, text: "One"
-        item 2, text: "Two"
-        item 3, text: "Three"
+        item "One", 1
+        item "Two", 2
+        item "Three", 3
       end
     end
   end

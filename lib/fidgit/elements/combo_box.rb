@@ -50,14 +50,14 @@ class ComboBox < Button
       end
     end
 
-    super(options)
+    super('', options)
 
     rect.height = [height, font_size + padding_y * 2].max
     rect.width = [width, font_size * 4 + padding_x * 2].max
   end
 
-  def item(value, options = {}, &block)
-    item = @menu.item(value, options, &block)
+  def item(text, value, options = {}, &block)
+    item = @menu.item(text, value, options, &block)
 
     # Force text to be updated if the item added has the same value.
     if item.value == @value

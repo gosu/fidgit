@@ -13,15 +13,14 @@ module Fidgit
 
     # @param (see Label#initialize)
     # @option (see Label#initialize)
-    def initialize(options = {}, &block)
+    def initialize(text, options = {}, &block)
       options = {
         color: DEFAULT_COLOR,
         background_color: DEFAULT_BACKGROUND_COLOR,
         border_color: DEFAULT_BORDER_COLOR,
-        text: '',
       }.merge! options
 
-      super(options[:text], options)
+      super(text, options)
 
       update_colors
     end

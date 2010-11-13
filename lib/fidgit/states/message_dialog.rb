@@ -49,7 +49,7 @@ module Fidgit
 
         pack :horizontal, align_h: :center do
           @type.to_s.split('_').each do |type|
-            button(text: options[:"#{type}_text"]) do
+            button(options[:"#{type}_text"]) do
               hide
               block.call type.to_sym if block
             end

@@ -8,10 +8,10 @@ class ExampleState < GuiState
 
       my_label.subscribe :released_right_mouse_button do
         menu do
-          item :CHUNKYBACON, text: "chunky bacon", shortcut: "Ctrl-^-*"
+          item "Chunky bacon", :CHUNKY_BACON, shortcut: "Ctrl-^-*"
           separator
-          item :LENTILS, text: "lentils", shortcut: "Alt-F15"
-          item :GRUEL, text: "tepid gruel", shortcut: "CenterMeta"
+          item "Lentils", :LENTILS, shortcut: "Alt-F15"
+          item "Tepid gruel", :GRUEL, shortcut: "CenterMeta"
 
           subscribe :selected do |sender, value|
             my_label.text = "I like #{value} more than anything. Mmmm!"

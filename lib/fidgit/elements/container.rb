@@ -60,8 +60,8 @@ module Fidgit
     end
 
     # Create a button within the container.
-    def button(options = {}, &block)
-      Button.new({parent: self}.merge!(options), &block)
+    def button(text, options = {}, &block)
+      Button.new(text, {parent: self}.merge!(options), &block)
     end
 
     # Create a color picker within the container.
@@ -110,8 +110,8 @@ module Fidgit
       klass.new({parent: self}.merge!(options), &block)
     end
 
-    def radio_button(value, options = {}, &block)
-      RadioButton.new(value, {parent: self}.merge!(options), &block)
+    def radio_button(text, value, options = {}, &block)
+      RadioButton.new(text, value, {parent: self}.merge!(options), &block)
     end
 
     def scroll_area(options = {}, &block)
@@ -130,8 +130,8 @@ module Fidgit
       TextArea.new({parent: self}.merge!(options), &block)
     end
 
-    def toggle_button(options = {}, &block)
-      ToggleButton.new({parent: self}.merge!(options), &block)
+    def toggle_button(text, options = {}, &block)
+      ToggleButton.new(text, {parent: self}.merge!(options), &block)
     end
 
     def clear
