@@ -7,7 +7,7 @@ media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'media'))
 Gosu::Image.autoload_dirs << File.join(media_dir, 'images')
 Gosu::Sample.autoload_dirs << File.join(media_dir, 'sounds')
 
-class ExampleWindow < Fidgit::GuiWindow
+class ExampleWindow < Fidgit::Window
   def initialize(options = {})
     super(640, 480, false)
 
