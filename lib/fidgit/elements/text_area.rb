@@ -106,7 +106,8 @@ module Fidgit
       @border_color_focused = options[:border_color_focused]
 
       @lines = [''] # List of lines of wrapped text.
-      @text_positions = [[0, 0, 0]] # [x, y, width] of each character.
+      @caret_positions = [[0, 0]] # [x, y] of each position the caret can be in.
+      @char_widths = [] # Width of each character in the text.
       @text_input = Gosu::TextInput.new
       @old_text = ''
       @old_caret_position = 0
@@ -135,11 +136,10 @@ module Fidgit
 
       # Move caret to position the user clicks on.
       mouse_x, mouse_y = x - (self.x + padding_x), y - (self.y + padding_y)
-      @text_positions.each.with_index do |data, index|
-
-        char_x, char_y, width = data
-        if mouse_x.between?(char_x - width, char_x) and mouse_y.between?(char_y, char_y + font_size)
-          self.caret_position = @text_input.selection_start = index - 1
+      @char_widths.each_with_index do |width, i|
+        char_x, char_y = @caret_positions[i]
+        if mouse_x.between?(char_x, char_x + width) and mouse_y.between?(char_y, char_y + font_size)
+          self.caret_position = @text_input.selection_start = i
           break
         end
       end
@@ -188,8 +188,8 @@ module Fidgit
 
       # Draw the selection.
       selection_range.each do |pos|
-        char_x, char_y = @text_positions[pos]
-        char_width = @text_positions[pos + 1][2] rescue 0
+        char_x, char_y = @caret_positions[pos]
+        char_width = @char_widths[pos]
         left, top = x + padding_x + char_x, y + padding_y + char_y
         draw_rect left, top, char_width, font_size, z, SELECTION_COLOR
       end
@@ -201,7 +201,7 @@ module Fidgit
 
       # Draw the caret.
       if focused? and ((Gosu::milliseconds / CARET_PERIOD) % 2 == 0)
-        caret_x, caret_y = @text_positions[caret_position]
+        caret_x, caret_y = @caret_positions[caret_position]
         left, top = x + padding_x + caret_x, y + padding_y + caret_y
         draw_rect left, top, 1, font_size, z, CARET_COLOR
       end
@@ -220,7 +220,8 @@ module Fidgit
       word.each_char do |c|
         char_width = font.text_width(c)
         line_width += char_width
-        @text_positions.push [line_width, y_at_line(@lines.size), char_width]
+        @caret_positions.push [line_width, y_at_line(@lines.size)]
+        @char_widths.push char_width
       end
 
       line_width
@@ -236,10 +237,12 @@ module Fidgit
 
       # Save these in case we are too long.
       old_lines = @lines
-      old_text_positions = @text_positions
+      old_caret_positions = @caret_positions
+      old_char_widths = @char_widths
 
       @lines = []
-      @text_positions = [[0, 0, 0]] # Position 0 is before the first character.
+      @caret_positions = [[0, 0]] # Position 0 is before the first character.
+      @char_widths = []
 
       space_width = font.text_width ' '
       max_width = width - padding_x * 2 - space_width
@@ -278,7 +281,8 @@ module Fidgit
             # A new-line ends the word and puts it on the line.
             line += word
             line_width = position_letters_in_word(word, line_width)
-            @text_positions.push [line_width, y_at_line(@lines.size), 0]
+            @caret_positions.push [line_width, y_at_line(@lines.size)]
+            @char_widths.push 0
             @lines.push line
             word = ''
             word_width = 0
@@ -290,7 +294,8 @@ module Fidgit
             line += word + char
             line_width = position_letters_in_word(word, line_width)
             line_width += space_width
-            @text_positions.push [line_width, y_at_line(@lines.size), space_width]
+            @caret_positions.push [line_width, y_at_line(@lines.size)]
+            @char_widths.push space_width
 
             word = ''
             word_width = 0
@@ -298,7 +303,7 @@ module Fidgit
           else
             # If there was a previous line and we start a new line, put the caret pos on the current line.
             if line.empty?
-              @text_positions.last[0..1] = [0, y_at_line(@lines.size)]
+              @caret_positions[-1] = [0, y_at_line(@lines.size)]
             end
 
             # Start building up a new word.
@@ -325,7 +330,8 @@ module Fidgit
       else
         # Roll back!
         @lines = old_lines
-        @text_positions = old_text_positions
+        @caret_positions = old_caret_positions
+        @char_widths = old_char_widths
         @text_input.text = @old_text
         self.caret_position = @old_caret_position
         @text_input.selection_start = @old_selection_start
