@@ -14,18 +14,18 @@
 
 # Default element attributes.
 :elements:
-
   :Button:
-    :background_color: :gray
+    :background_color: @gray
 
     :disabled:
-      :background_color: :dark_gray
+      :background_color: @dark_gray
 
   :Element:
-    :color: :white
+    :color: @white
+    :align_h: :left
 
   :HorizontalScrollBar:
-    :height: :scroll_bar_thickness
+    :height: @scroll_bar_thickness
 
   :VerticalScrollBar:
-    :width: :scroll_bar_thickness
+    :width: @scroll_bar_thickness

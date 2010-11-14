@@ -43,8 +43,16 @@ describe Schema do
         ->{ subject.default(String, :frog) }.should raise_error ArgumentError
       end
 
+      it "should fail if the value is not ever defined" do
+        ->{ subject.default(Element, :knee_walking_turkey) }.should raise_error
+      end
+
       it "should give the correct value for a defined color" do
         subject.default(Element, :color).should eq Gosu::Color.rgb(255, 255, 255)
+      end
+
+      it "should give the symbol name if the value is one" do
+        subject.default(Element, :align_h).should be :left
       end
 
       it "should give the correct value for a defined constant" do

@@ -2,6 +2,7 @@
 ---
 
 # Define named colours used elsewhere. Either use [R, G, B] or [R, G, B, A].
+# Reference constants with @color_name
 :colors:
   :none: [0, 0, 0, 0]
 
@@ -18,29 +19,36 @@
   :blue: [0, 0, 255]
 
 # Define all constant values here, other than colours, for use in other areas of the file.
+# Reference constants with @constant_name
 :constants:
   :scroll_bar_thickness: 12
 
 # Default element attributes.
 :elements:
   :Button:
-    :background_color: :dark_gray
-    :border_color: :light_gray
+    :background_color: @dark_gray
+    :border_color: @light_gray
     :border_thickness: 2
 
     :disabled:
-      :background_color: very_dark_gray
-      :border_color: :gray
+      :background_color: @very_dark_gray
+      :border_color: @gray
 
     :hover:
-      :background_color: :gray
+      :background_color: @gray
+
+  :ColorWell:
+     :outline_color: @gray
+
+     :checked:
+       :border_color: @very_dark_gray
 
   :Element:
     :align_h: :left
     :align_v: :top
-    :background_color: :none
+    :background_color: @none
     :background_image: nil
-    :border_color: :none
+    :border_color: @none
     :border_thickness: 0
     :color: :white
     :font_size: 30
@@ -49,14 +57,14 @@
     :padding_y: 4
 
   :Label:
-    :disabled_color: :light_gray
+    :disabled_color: @light_gray
 
   :Packer:
     :spacing_h: 4
     :spacing_v: 4
 
   :HorizontalScrollBar:
-    :height: :scroll_bar_thickness
+    :height: @scroll_bar_thickness
 
   :VerticalScrollBar:
-    :width: :scroll_bar_thickness
+    :width: @scroll_bar_thickness

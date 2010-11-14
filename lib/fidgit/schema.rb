@@ -91,18 +91,17 @@ module Fidgit
     # @param [Class] klass Class to look for defaults for.
     # @param [Symbol, Array<Symbol>] names Hash names to search for in that class's schema.
     def default(klass, names)
-      default_internal(klass, Array(names), true)
+      raise ArgumentError, "#{klass} is not a descendent of the #{Element} class" unless klass.ancestors.include? Element
+      value = default_internal(klass, Array(names), true)
+      raise("Failed to find named value") unless value
+      value
     end
 
     protected
     # @param [Class] klass Class to look for defaults for.
-    # @param [Symbol, Array<Symbol>] names Hash names to search for in that class's schema.
+    # @param [Array<Symbol>] names Hash names to search for in that class's schema.
     # @param [Boolean] default_to_outer Whether to default to an outer value (used internally)
     def default_internal(klass, names, default_to_outer)
-      raise ArgumentError, "#{klass} is not a descendent of the #{Element} class" unless klass.ancestors.include? Element
-
-      names = Array(names)
-
       # Find the value by moving through the nested hash via the names.
       value = @elements[klass]
 
@@ -112,12 +111,12 @@ module Fidgit
       end
 
       # Convert the value to a color/constant if they are symbols.
-      value = case value
-        when Symbol
+      value = if value.is_a? String and value[0] == '@'
+          str = value[1..-1]
           if names.last == :color or names.last.to_s.end_with? "_color"
-            color(value)
+            color(str.to_sym)
           else
-            constant(value)
+            constant(str.to_sym) || value # If the value isn't a constant, return the symbol.
           end
         else
           value
