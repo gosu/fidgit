@@ -1,15 +1,14 @@
 # encoding: utf-8
 
 require_relative '../event'
+require_relative '../schema'
 
 # The Fidgit GUI framework for Gosu.
 module Fidgit
   class << self
-    attr_accessor :default_font_name, :default_font_size, :fonts, :debug_mode
+    attr_accessor :fonts, :debug_mode
   end
 
-  self.default_font_name = '' # Just use the default Gosu font.
-  self.default_font_size = 15
   self.fonts = Hash.new { |fonts, name| fonts[name] = Hash.new { |sizes, size| sizes[size] = Gosu::Font.new($window, name, size) } }
   self.debug_mode = false
 
@@ -37,14 +36,10 @@ module Fidgit
     event :hover
     event :leave
 
-    DEFAULT_PADDING_X, DEFAULT_PADDING_Y = 4, 4
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
+    DEFAULT_SCHEMA_FILE = File.expand_path(File.join(__FILE__, '..', '..', '..', '..', 'config', 'default_schema.yml'))
 
     VALID_ALIGN_H = [:left, :center, :right, :fill]
-    DEFAULT_ALIGN_H = :left
     VALID_ALIGN_V = [:top, :center, :bottom, :fill]
-    DEFAULT_ALIGN_V = :top
 
     attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector, :align_h, :align_v, :parent
 
@@ -77,6 +72,8 @@ module Fidgit
 
     def rect; @rect; end; protected :rect
 
+    def self.schema; @@schema ||= Schema.new(YAML.load(File.read(DEFAULT_SCHEMA_FILE)));; end
+
     class << self
       alias_method :original_new, :new
 
@@ -86,6 +83,13 @@ module Fidgit
         obj.send :post_init_block, &block if block_given?
         obj
       end
+    end
+
+    # Get the default value from the schema.
+    #
+    # @param [Symbol, Array<Symbol>] names
+    def default(*names)
+      self.class.schema.default(self.class, names)
     end
 
     # @param [Element, nil] parent
@@ -127,25 +131,25 @@ module Fidgit
         y: 0,
         z: 0,
         tip: '',
-        font_name: Fidgit.default_font_name,
-        font_size: Fidgit.default_font_size,
+        font_name: default(:font_name),
+        font_size: default(:font_size),
         debug: Fidgit.debug_mode?,
-        background_color: DEFAULT_BACKGROUND_COLOR.dup,
-        border_color: DEFAULT_BORDER_COLOR.dup,
+        background_color: default(:background_color),
+        border_color: default(:border_color),
         enabled: true,
       }.merge! options
 
       @enabled = options[:enabled]
 
       # Alignment and min/max dimensions.
-      @align_h = options[:align_h] || Array(options[:align]).last || DEFAULT_ALIGN_H
+      @align_h = options[:align_h] || Array(options[:align]).last || default(:align_h)
       raise ArgumentError, "Invalid align_h: #{@align_h}" unless VALID_ALIGN_H.include? @align_h
 
       min_width = (options[:min_width] || options[:width] || 0)
       max_width = (options[:max_width] || options[:width] || Float::INFINITY)
       @width_range = min_width..max_width                                         
 
-      @align_v = options[:align_v] || Array(options[:align]).first || DEFAULT_ALIGN_V
+      @align_v = options[:align_v] || Array(options[:align]).first ||  default(:align_v)
       raise ArgumentError, "Invalid align_v: #{@align_v}" unless VALID_ALIGN_V.include? @align_v
 
       min_height = (options[:min_height] || options[:height] || 0)
@@ -155,8 +159,8 @@ module Fidgit
       @background_color = options[:background_color].dup
       @border_color = options[:border_color].dup
 
-      @padding_x = options[:padding_x] || options[:padding] || DEFAULT_PADDING_X
-      @padding_y = options[:padding_y] || options[:padding] || DEFAULT_PADDING_Y
+      @padding_x = options[:padding_x] || options[:padding] ||  default(:padding_x)
+      @padding_y = options[:padding_y] || options[:padding] ||  default(:padding_y)
       self.parent = options[:parent]
       @debug = options[:debug]
 

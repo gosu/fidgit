@@ -4,14 +4,9 @@ require_relative 'button'
 
 module Fidgit
   class RadioButton < Button
-    DEFAULT_BORDER_COLOR_CHECKED = Gosu::Color.new(255, 0, 255)
-    DEFAULT_BORDER_COLOR_UNCHECKED = Gosu::Color.new(50, 50, 50)
-
     attr_reader :group, :value
 
     event :changed
-    event :checked
-    event :unchecked
 
     def checked?; @checked; end
 
@@ -23,8 +18,7 @@ module Fidgit
     def initialize(text, value, options = {}, &block)
       options = {
         checked: false,
-        border_color_checked: DEFAULT_BORDER_COLOR_CHECKED,
-        border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED
+        checked_border_color: default(:checked, :border_color),
       }.merge! options
 
       @checked = options[:checked]
@@ -32,11 +26,11 @@ module Fidgit
 
       super(text, options)
 
-      @border_color_checked = (options[:border_color_checked] || @border_color).dup
-      @border_color_unchecked = (options[:border_color_unchecked] || @border_color).dup
+      @checked_border_color = options[:checked_border_color].dup
+      @unchecked_border_color = border_color
       add_to_group
 
-      @border_color = (checked? ? @border_color_checked : @border_color_unchecked).dup
+      @border_color = (checked? ? @checked_border_color : @unchecked_border_color).dup
     end
 
     def clicked_left_mouse_button(sender, x, y)
@@ -51,9 +45,8 @@ module Fidgit
 
       @checked = true
       @group.value = value
-      @border_color = @border_color_checked.dup
+      @border_color = @checked_border_color.dup
       publish :changed, @checked
-      publish :checked
 
       nil
     end
@@ -64,9 +57,8 @@ module Fidgit
 
       @checked = false
       @group.value = value
-      @border_color = @border_color_unchecked.dup
+      @border_color = @unchecked_border_color.dup
       publish :changed, @checked
-      publish :unchecked
 
       nil
     end

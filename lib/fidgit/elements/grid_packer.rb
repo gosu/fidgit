@@ -6,9 +6,6 @@ module Fidgit
   # A vertically aligned element packing container.
 
   class GridPacker < Packer
-    DEFAULT_CELL_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-    DEFAULT_CELL_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-
     # @return [Integer]
     attr_reader :num_rows
     # @return [Integer]
@@ -23,8 +20,8 @@ module Fidgit
     # @option options [Integer] :num_rows Maximum number of rows to use (incompatible with :num_columns)
     def initialize(options = {})
       options = {
-        cell_border_color: DEFAULT_CELL_BORDER_COLOR,
-        cell_background_color: DEFAULT_CELL_BACKGROUND_COLOR,
+        cell_border_color: default(:cell_border_color),
+        cell_background_color: default(:cell_background_color),
       }.merge! options
 
       @num_columns = options[:num_columns]
@@ -78,27 +75,43 @@ module Fidgit
       @widths = Array.new(@num_columns, 0)
       @heights = Array.new(@num_rows, 0)
 
+      filled_columns = []
+      filled_rows = []
+
       # Calculate the maximum widths of each column and the maximum height of each row.
       @rows.each_with_index do |row, row_num|
         row.each_with_index do |element, column_num|
-          @widths[column_num] = [element.width, @widths[column_num] || 0].max || 0
-          @heights[row_num] = [element.height, @heights[row_num] || 0].max || 0
+          fills = (element.align_h == :fill)
+          @widths[column_num] = [fills ? 0 : element.width, @widths[column_num] || 0].max
+          filled_columns.push fills
+
+          fills = (element.align_v == :fill)
+          @heights[row_num] = [fills ? 0 : element.height, @heights[row_num] || 0].max
+          filled_rows.push fills
         end
       end
 
-      # Expand the size of the rightmost column to the minimum size required.
-      if @num_columns > 0
+      # Expand the size of each filled column to make the minimum size required.
+      num_filled_columns = filled_columns.select {|value| value }.count
+      if num_filled_columns > 0
         total_width = @widths.inject(0, :+) + (padding_x * 2) + ((@num_columns - 1) * spacing_x)
         if total_width < min_width
-          @widths[@num_columns - 1] += min_width - total_width
+          extra_width = total_width / num_filled_columns
+          filled_columns.each_with_index do |filled, i|
+            @widths[i] += extra_width if filled
+          end
         end
       end
 
-      # Expand the size of the bottommost column to the minimum size required.
-      if @num_rows > 0
+      # Expand the size of each filled row to make the minimum size required.
+      num_filled_rows = filled_rows.select {|value| value }.count
+      if num_filled_rows > 0
         total_height = @heights.inject(0, :+) + (padding_y * 2) + ((@num_rows - 1) * spacing_y)
         if total_height < min_height
-          @heights[@num_rows - 1] += min_height - total_height
+          extra_height = total_height / num_filled_rows
+          filled_rows.each_with_index do |filled, i|
+            @heights[i] += extra_height if filled
+          end
         end
       end
 

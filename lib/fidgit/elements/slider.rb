@@ -6,9 +6,6 @@ module Fidgit
   class Slider < Composite
     # @private
     class Handle < Element
-      DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(0, 0, 100)
-      DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-
       event :begin_drag
       event :end_drag
       event :update_drag
@@ -20,8 +17,8 @@ module Fidgit
       # @option (see Element#initialize)
       def initialize(options = {}, &block)
         options = {
-          background_color: DEFAULT_BACKGROUND_COLOR,
-          border_color: DEFAULT_BORDER_COLOR,
+          background_color: default(:background_color),
+          border_color: default(:border_color),
         }.merge! options
 
         super options
@@ -43,11 +40,6 @@ module Fidgit
 
     event :changed
 
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgba(100, 100, 100, 255)
-    DEFAULT_GROOVE_COLOR = Gosu::Color.rgb(200, 200, 200)
-    DEFAULT_HANDLE_COLOR = Gosu::Color.rgb(0, 100, 0)
-
     attr_reader :value, :range
 
     # @param (see Composite#initialize)
@@ -59,10 +51,10 @@ module Fidgit
       options = {
         range: 0.0..1.0,
         height: 25,
-        background_color: DEFAULT_BACKGROUND_COLOR,
-        border_color: DEFAULT_BORDER_COLOR,
-        groove_color: DEFAULT_GROOVE_COLOR,
-        handle_color: DEFAULT_HANDLE_COLOR,
+        background_color: default(:background_color),
+        border_color: default(:border_color),
+        groove_color: default(:groove_color),
+        handle_color: default(:handle_color),
         groove_thickness: 5,
       }.merge! options
 

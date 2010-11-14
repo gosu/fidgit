@@ -5,9 +5,6 @@ require_relative 'menu_pane'
 
 module Fidgit
 class ComboBox < Button
-  DEFAULT_BORDER_COLOR = Gosu::Color.new(255, 255, 255)
-  DEFAULT_BACKGROUND_COLOR = Gosu::Color.new(100, 100, 100)
-
   event :changed
 
   def index; @menu.index(@value) end
@@ -36,8 +33,8 @@ class ComboBox < Button
   # @option options [] :value
   def initialize(options = {}, &block)
     options = {
-      border_color: DEFAULT_BORDER_COLOR,
-      background_color: DEFAULT_BACKGROUND_COLOR
+      background_color: default(:background_color),
+      border_color: default(:border_color),
     }.merge! options
 
     @value = options[:value]

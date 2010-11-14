@@ -1,9 +1,13 @@
 # Default schema for Fidgit
 ---
 
-# Define named colours used elsewhere. Either use [R, G, B] or [R, G, B, A].
-# Reference constants with @color_name
-:colors:
+# Define all constant values here. For colours, use [R, G, B] or [R, G, B, A].
+# Reference constants with ?constant_name
+:constants:
+  # General constants (strings and numbers).
+  :scroll_bar_thickness: 12
+
+  # Gosu::Color constants
   :none: [0, 0, 0, 0]
 
   :black: [0, 0, 0]
@@ -18,53 +22,149 @@
   :green: [0, 0, 255]
   :blue: [0, 0, 255]
 
-# Define all constant values here, other than colours, for use in other areas of the file.
-# Reference constants with @constant_name
-:constants:
-  :scroll_bar_thickness: 12
+  :dark_red: [100, 0, 0]
+  :dark_green: [0, 100, 0]
+  :dark_blue: [0, 0, 100]
 
 # Default element attributes.
 :elements:
-  :Button:
-    :background_color: @dark_gray
-    :border_color: @light_gray
+  :Button: # < Label
+    :background_color: ?dark_gray
+    :border_color: ?light_gray
     :border_thickness: 2
 
     :disabled:
-      :background_color: @very_dark_gray
-      :border_color: @gray
+      :background_color: ?very_dark_gray
+      :border_color: ?gray
 
     :hover:
-      :background_color: @gray
+      :background_color: ?gray
 
-  :ColorWell:
-     :outline_color: @gray
+  :ColorPicker:
+    :indicator_height: 30
 
-     :checked:
-       :border_color: @very_dark_gray
+  :ColorWell: # < RadioButton
+    :height: 32
+    :outline_color: ?gray
+    :width: 32
+
+    :checked:
+      :border_color: ?very_dark_gray
+
+  :ComboBox: # < Button
+    :background_color: ?dark_gray
+    :border_color: ?white
+
+  :Composite: # < Container
+    :debug:
+      :border_color: ?green
+
+  :Container: # < Element
+    :nothing: nil
 
   :Element:
     :align_h: :left
     :align_v: :top
-    :background_color: @none
+    :background_color: ?none
     :background_image: nil
-    :border_color: @none
+    :border_color: ?none
     :border_thickness: 0
-    :color: :white
+    :color: ?white
     :font_size: 30
     :font_name: ''
     :padding_x: 4
     :padding_y: 4
 
-  :Label:
-    :disabled_color: @light_gray
+  :FileBrowser: # < Composite
+    :pattern: *.*
+    :show_extension: true
 
-  :Packer:
-    :spacing_h: 4
-    :spacing_v: 4
+  :GridPacker: # < Packer
+    :cell_background_color: ?none
+    :cell_border_color: ?none
 
-  :HorizontalScrollBar:
-    :height: @scroll_bar_thickness
+  :Group: # < Packer
+    :padding_x: 0
+    :padding_y: 0
 
-  :VerticalScrollBar:
-    :width: @scroll_bar_thickness
+  :HorizontalPacker: # < GridPacker
+    :nothing: nil
+
+  :HorizontalScrollBar: # < ScrollBar
+    :height: ?scroll_bar_thickness
+
+  :Label: # < Element
+    :disabled:
+      :color: ?light_gray
+
+  :List:
+    :background_color: ?light_gray
+    :border_color: ?white
+
+  :List::Item:
+    :border_color: ?none
+
+  :MenuPane:
+    :background_color: ?very_dark_gray
+
+  :MenuPane::Item: # < Button
+    :border_color: ?none
+
+  :MenuPane::Separator: # < Label
+     :line_height: 2
+     :background_color: ?black
+
+  :Packer: # < Container
+    :spacing_x: 4
+    :spacing_y: 4
+
+  :RadioButton: # < Button
+    :checked:
+      :border_color: ?blue
+
+  :ScrollArea: # < Composite
+    :nothing: nil
+
+  :ScrollBar: # < Composite
+    :background_color: ?none
+    :border_color: ?none
+    :handle_color: ?dark_red
+    :rail_color: ?very_dark_gray
+    :rail_width: ?scroll_bar_thickness
+
+  :ScrollWindow: # < Composite
+    :scroll_bar_thickness: ?scroll_bar_thickness
+
+  :Slider: # < Element
+    :background_color: ?none
+    :border_color: ?dark_gray
+    :groove_color: ?light_gray
+    :handle_color: ?dark_green
+
+  :Slider::Handle: # < Element
+    :background_color: ?dark_blue
+
+  :TextArea: # < Composite
+    :background_color: ?very_dark_gray
+    :border_color: ?light_gray
+    :caret_color: ?red
+    :caret_period: 500 # In milliseconds
+    :line_spacing: 0
+    :selection_color: ?dark_gray
+
+    :focused:
+      :border_color: ?green
+
+  :ToggleButton: # < Button
+    :toggled:
+      :border_color: ?red
+
+  :ToolTip: # < Label
+    :background_color: ?very_dark_gray
+    :border_color: ?white
+
+  :VerticalPacker: # < GridPacker
+    :nothing: nil
+
+  :VerticalScrollBar: # < ScrollBar
+    :width: ?scroll_bar_thickness

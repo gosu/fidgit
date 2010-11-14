@@ -32,16 +32,16 @@ module Fidgit
 
     def initialize(options = {})
       options = {
-        background_color: Gosu::Color.rgba(0, 0, 0, 0),
-        border_color: Gosu::Color.rgba(0, 0, 0, 0),
-        rail_width: 16,
-        rail_color: Gosu::Color.rgb(50, 50, 50),
-        handle_color: Gosu::Color.rgb(150, 0, 0),
+        background_color: default(:background_color),
+        border_color: default(:border_color),
+        rail_width: default(:rail_width),
+        rail_color: default(:rail_color),
+        handle_color: default(:handle_color),
         owner: nil,
       }.merge! options
 
       @owner = options[:owner]
-      @rail_width = options[:rail_width]
+      @rail_thickness = options[:rail_width]
       @rail_color = options[:rail_color]
 
       super options
@@ -76,7 +76,7 @@ module Fidgit
     end
 
     def draw_foreground
-      draw_rect x + padding_x, y + (height - @rail_width) / 2, width, @rail_width, z, @rail_color
+      draw_rect x + padding_x, y + (height - @rail_thickness) / 2, width, @rail_thickness, z, @rail_color
       super
     end
 
@@ -105,7 +105,7 @@ module Fidgit
     end
 
     def draw_foreground
-      draw_rect x + (width - @rail_width) / 2, y + padding_y, @rail_width, height, z, @rail_color
+      draw_rect x + (width - @rail_thickness) / 2, y + padding_y, @rail_thickness, height, z, @rail_color
       super
     end
 

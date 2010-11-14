@@ -7,7 +7,6 @@ module Fidgit
   class MenuPane < Composite
     # An item within the menu.
     class Item < Button
-      DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
       attr_reader :value, :shortcut
 
       # @param (see Button#initialize)
@@ -19,7 +18,7 @@ module Fidgit
       def initialize(text, value, options = {})
         options = {
           enabled: true,
-          border_color: DEFAULT_BORDER_COLOR,
+          border_color: default(:border_color),
         }.merge! options
 
         @value = value
@@ -47,16 +46,13 @@ module Fidgit
     end
 
     class Separator < Label
-      DEFAULT_LINE_HEIGHT = 2
-      DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(75, 75, 75)
-
       # @param (see Item#initialize)
       #
       # @option (see Item#initialize)
       def initialize(options = {})
         options = {
-          height: DEFAULT_LINE_HEIGHT,
-          background_color: DEFAULT_BACKGROUND_COLOR,
+          height: default(:line_height),
+          background_color: default(:background_color),
           padding: 0,
         }.merge! options
 
@@ -65,8 +61,6 @@ module Fidgit
     end
 
     event :selected
-
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(50, 50, 50)
 
     def index(value); @items.index find(value); end
     def size; @items.size; end
@@ -78,7 +72,7 @@ module Fidgit
     # @option options [Boolean] :show (true) Whether to show immediately (show later with #show).
     def initialize(options = {}, &block)
       options = {
-        background_color: DEFAULT_BACKGROUND_COLOR.dup,
+        background_color: default(:color),
         z: Float::INFINITY,
         show: true,
       }.merge! options

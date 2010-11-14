@@ -4,7 +4,6 @@ require_relative 'composite'
 
 module Fidgit
   class ColorPicker < Composite
-    DEFAULT_COLOR = Gosu::Color.rgba(255, 255, 255, 255)
     CHANNELS = [:red, :green, :blue]
     DEFAULT_CHANNEL_NAMES = CHANNELS.map {|c| c.to_s.capitalize }
 
@@ -32,10 +31,12 @@ module Fidgit
         padding: 0,
         spacing: 0,
         channel_names: DEFAULT_CHANNEL_NAMES,
-        color: DEFAULT_COLOR,
+        color: default(:color),
+        indicator_height: default(:indicator_height),
       }.merge! options
 
       @color = options[:color].dup
+      @indicator_height = options[:indicator_height]
 
       super(options)
 
@@ -51,7 +52,7 @@ module Fidgit
           end
         end
 
-        @indicator = label '', background_color: @color, width: slider_width, height: INDICATOR_HEIGHT
+        @indicator = label '', background_color: @color, width: slider_width, height: @indicator_height
       end
     end
 

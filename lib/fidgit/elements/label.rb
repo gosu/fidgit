@@ -4,10 +4,6 @@ require_relative 'element'
 
 module Fidgit
   class Label < Element
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgba(0, 0, 0, 0)
-    DEFAULT_COLOR = Gosu::Color.rgb(255, 255, 255)
-
     attr_accessor :color, :background_color, :border_color
     attr_reader :text, :icon
 
@@ -30,9 +26,9 @@ module Fidgit
     # @option options [Fidgit::Thumbnail, Gosu::Image, nil] :icon (nil)
     def initialize(text, options = {})
       options = {
-        color: DEFAULT_COLOR,
-        background_color: DEFAULT_BACKGROUND_COLOR,
-        border_color: DEFAULT_BORDER_COLOR
+        color: default(:color),
+        background_color: default(:background_color),
+        border_color: default(:border_color),
       }.merge! options
 
       @text = text.dup

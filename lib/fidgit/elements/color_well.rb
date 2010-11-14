@@ -4,26 +4,20 @@ require_relative 'radio_button'
 
 module Fidgit
   class ColorWell < RadioButton
-    DEFAULT_COLOR = Gosu::Color.rgb(0, 0, 0)
-    DEFAULT_BORDER_COLOR_CHECKED = Gosu::Color.rgb(255, 255, 255)
-    DEFAULT_BORDER_COLOR_UNCHECKED = Gosu::Color.rgb(100, 100, 100)
-
-    OUTLINE_COLOR = Gosu::Color.rgb(0, 0, 0)
-
-    DEFAULT_SIZE = 20
-
     alias_method :color, :value
 
     # @param (see RadioButton#initialize)
     # @option (see RadioButton#initialize)
     def initialize(options = {}, &block)
       options = {
-        width: DEFAULT_SIZE,
-        height: DEFAULT_SIZE,
-        color: DEFAULT_COLOR,
-        border_color_checked: DEFAULT_BORDER_COLOR_CHECKED,
-        border_color_unchecked: DEFAULT_BORDER_COLOR_UNCHECKED,
+        width: default(:width),
+        height: default(:height),
+        color: default(:color),
+        outline_color: default(:outline_color),
+        checked_border_color: default(:checked, :border_color),
       }.merge! options
+
+      @outline_color = options[:outline_color].dup
 
       super('', (options[:color] || options[:value]).dup, options)
     end
@@ -32,7 +26,7 @@ module Fidgit
     def draw_background
       super
 
-      draw_frame x + 2, y + 2, width - 4, height - 4, z, OUTLINE_COLOR
+      draw_frame x + 2, y + 2, width - 4, height - 4, z, @outline_color
 
       nil
     end

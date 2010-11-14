@@ -24,8 +24,8 @@
     # @option (see Packer#initialize)
     def initialize(options = {}, &block)
       options = {
-        padding_x: 0,
-        padding_y: 0
+        padding_x: default(:padding_x),
+        padding_y: default(:padding_y),
       }.merge! options
 
       super(options)

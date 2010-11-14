@@ -9,16 +9,13 @@ module Fidgit
 
     event :changed
 
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(200, 200, 200)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgb(255, 255, 255)
-
     def size; @items.size; end
     def clear; @items.clear; end
 
     def initialize(options = {})
       options = {
-        background_color: DEFAULT_BACKGROUND_COLOR,
-        border_color: DEFAULT_BORDER_COLOR,
+        background_color: default(:background_color),
+        border_color: default(:border_color),
       }.merge! options
 
       super options

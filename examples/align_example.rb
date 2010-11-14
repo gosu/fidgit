@@ -1,21 +1,12 @@
 require_relative 'helpers/example_window'
 
-Fidgit.default_font_size = 24
-
-# Change labels created within packers, just so we can see their shape.
-class Fidgit::Packer
-  LABEL_BACKGROUND = Gosu::Color.new(50, 0, 50)
-
-  def label(text, options = {})
-    options[:background_color] = LABEL_BACKGROUND
-    super(text, options)
-  end
-end
+# Change font and labels in the schema.
+Fidgit::Element.schema.merge_elements!(Element: { font_size: 24 }, Label: { background_color: "?dark_blue" })
 
 class ExampleState < GuiState
   ROW_BACKGROUND = Gosu::Color.rgb(0, 100, 0)
   CELL_BACKGROUND = Gosu::Color.rgb(100, 0, 0)
-  OUTER_BACKGROUND = Gosu::Color.rgb(0, 0, 100)
+  OUTER_BACKGROUND = Gosu::Color.rgb(100, 0, 100)
 
   def initialize
     super

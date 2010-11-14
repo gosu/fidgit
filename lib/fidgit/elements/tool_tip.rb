@@ -4,9 +4,6 @@ require_relative 'label'
 
 module Fidgit
   class ToolTip < Label
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(25, 25, 25)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgb(255, 255, 255)
-
     def x=(value); super(value); recalc; value; end
     def y=(value); super(value); recalc; value; end
     def hit?(x, y); false; end
@@ -18,8 +15,8 @@ module Fidgit
     def initialize(options = {}, &block)
       options = {
         z: Float::INFINITY,
-        background_color: DEFAULT_BACKGROUND_COLOR,
-        border_color: DEFAULT_BORDER_COLOR,
+        background_color: default(:background_color),
+        border_color: default(:border_color),
         text: '',
       }.merge! options
 

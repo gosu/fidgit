@@ -14,26 +14,20 @@ describe Schema do
   context "given the default schema" do
     subject { Schema.new(YAML.load(File.read(DEFAULT_SCHEMA_FILE_NAME))) }
 
-    describe "#color" do
-      it "should have the color :none" do
-        subject.color(:none).should eq Gosu::Color.rgba(0, 0, 0, 0)
-      end
-
-      it "should have the color :white" do
-        subject.color(:white).should eq Gosu::Color.rgb(255, 255, 255)
-      end
-
-      it "should not have the color :sky_blue_pink" do
-        subject.color(:sky_blue_pink).should be_nil
-      end
-    end
-
     describe "#constant" do
       it "should have the constant :scroll_bar_thickness" do
         subject.constant(:scroll_bar_thickness).should equal 12
       end
 
-      it "should have the constant :moon_cow_height" do
+      it "should have the color constant :none" do
+        subject.constant(:none).should eq Gosu::Color.rgba(0, 0, 0, 0)
+      end
+
+      it "should have the color constant :white" do
+        subject.constant(:white).should eq Gosu::Color.rgb(255, 255, 255)
+      end
+
+      it "should not have the constant :moon_cow_height" do
         subject.constant(:moon_cow_height).should be_nil
       end
     end

@@ -4,20 +4,13 @@ require_relative 'label'
 
 module Fidgit
   class Button < Label
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(100, 100, 100)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgb(150, 150, 150)
-    DEFAULT_COLOR = Gosu::Color.rgb(255, 255, 255)
-
-    HOVER_COLOR = Gosu::Color.rgb(150, 150, 150)
-    DISABLED_COLOR = Gosu::Color.rgb(150, 150, 150)
-
     # @param (see Label#initialize)
     # @option (see Label#initialize)
     def initialize(text, options = {}, &block)
       options = {
-        color: DEFAULT_COLOR,
-        background_color: DEFAULT_BACKGROUND_COLOR,
-        border_color: DEFAULT_BORDER_COLOR,
+        color: default(:color),
+        background_color: default(:background_color),
+        border_color: default(:border_color),
       }.merge! options
 
       super(text, options)
@@ -54,15 +47,15 @@ module Fidgit
     protected
     def update_colors
       @background_color = if @mouse_over and enabled?
-        HOVER_COLOR
+        default(:hover, :background_color)
       else
-        DEFAULT_BACKGROUND_COLOR
+        default(:background_color)
       end
 
       @color = if enabled?
-        DEFAULT_COLOR
+        default(:color)
       else
-        DISABLED_COLOR
+        default(:disabled, :color)
       end
 
       nil

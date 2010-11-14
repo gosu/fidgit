@@ -11,11 +11,12 @@ module Fidgit
   #   schema.merge_schema!(YAML.load(file.read('override_schema.yml'))
   #   overridden_color = schema.default(Element, :disabled, :color)
   class Schema
+    CONSTANT_PREFIX = '?'
+
     # @param [Hash<Symbol => Hash>] schema data containing
     def initialize(schema)
       @constants = {}
       @elements = {}
-      @colors = {}
 
       merge_schema! schema
     end
@@ -24,35 +25,27 @@ module Fidgit
     #
     # @param [Hash<Symbol => Hash>] constants_hash Containing :colors, :constants and :elements hashes.
     def merge_schema!(schema)
-      merge_colors!(schema[:colors]) if schema[:colors]
       merge_constants!(schema[:constants]) if schema[:constants]
       merge_elements!(schema[:elements]) if schema[:elements]
 
       self
     end
 
-    # Merge in a hash containing constant values.
+    # Merge in a hash containing constant values. Arrays will be resolved as colors in RGBA or RGB format.
     #
     # @param [Hash<Symbol => Object>] constants_hash
     def merge_constants!(constants_hash)
       constants_hash.each_pair do |name, value|
-        @constants[name] = value
-      end
-
-      self
-    end
-
-    # Merge in a hash containing color values as arrays.
-    #
-    # @param [Hash<Symbol => Array>] colors_hash
-    def merge_colors!(colors_hash)
-      colors_hash.each_pair do |name, channels|
-        raise "Color data must be an Array" unless channels.is_a? Array
-        @colors[name] = case channels.size
-          when 3 then Gosu::Color.rgb(*channels)
-          when 4 then Gosu::Color.rgba(*channels)
+        @constants[name] = case value
+        when Array
+          case value.size
+          when 3 then Gosu::Color.rgb(*value)
+          when 4 then Gosu::Color.rgba(*value)
           else
             raise "Colors must be in 0..255, RGB or RGBA array format"
+          end
+        else
+          value
         end
       end
 
@@ -63,21 +56,18 @@ module Fidgit
     #
     # @param [Hash<Symbol => Hash>] elements_hash
     def merge_elements!(elements_hash)
-      elements_hash.each_pair do |klass_name, data|
-        klass = Fidgit.const_get klass_name
+      elements_hash.each_pair do |klass_names, data|
+        klass = Fidgit
+        klass_names.to_s.split('::').each do |klass_name|
+          klass = klass.const_get klass_name
+        end
+
         raise "elements must be names of classes derived from #{Element}" unless klass.ancestors.include? Fidgit::Element
-        @elements[klass] = data
+        @elements[klass] ||= {}
+        @elements[klass].deep_merge! data
       end
 
       self
-    end
-
-    # Get the color value associated with +name+.
-    #
-    # @param [Symbol] name
-    # @return [Color]
-    def color(name)
-      @colors.has_key?(name) ? @colors[name].dup : nil
     end
 
     # Get the constant value associated with +name+.
@@ -93,7 +83,7 @@ module Fidgit
     def default(klass, names)
       raise ArgumentError, "#{klass} is not a descendent of the #{Element} class" unless klass.ancestors.include? Element
       value = default_internal(klass, Array(names), true)
-      raise("Failed to find named value") unless value
+      raise("Failed to find named value #{names.inspect} for class #{klass}") unless value
       value
     end
 
@@ -111,13 +101,9 @@ module Fidgit
       end
 
       # Convert the value to a color/constant if they are symbols.
-      value = if value.is_a? String and value[0] == '@'
+      value = if value.is_a? String and value[0] == CONSTANT_PREFIX
           str = value[1..-1]
-          if names.last == :color or names.last.to_s.end_with? "_color"
-            color(str.to_sym)
-          else
-            constant(str.to_sym) || value # If the value isn't a constant, return the symbol.
-          end
+          constant(str.to_sym) || value # If the value isn't a constant, return the string.
         else
           value
       end

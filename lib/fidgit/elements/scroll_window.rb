@@ -23,20 +23,18 @@ module Fidgit
 
     def initialize(options = {})
       options = {
-        scroll_bar_width: 16,
+        scroll_bar_thickness: default(:scroll_bar_thickness),
       }.merge! options
 
       super(options)
-
-      @scroll_bar_width = options[:scroll_bar_width]
 
       @grid = pack :grid, num_columns: 2, padding: 0, spacing: 0 do
         @view = scroll_area(owner: self, width: options[:width], height: options[:height])
         @spacer = label '', padding: 0, width: 0, height: 0
       end
 
-      @scroll_bar_v = VerticalScrollBar.new(owner: self, width: @scroll_bar_width, align_v: :fill)
-      @scroll_bar_h = HorizontalScrollBar.new(owner: self, height: @scroll_bar_width, align_h: :fill)
+      @scroll_bar_v = VerticalScrollBar.new(owner: self, width: options[:scroll_bar_thickness], align_v: :fill)
+      @scroll_bar_h = HorizontalScrollBar.new(owner: self, height: options[:scroll_bar_thickness], align_h: :fill)
     end
 
     protected

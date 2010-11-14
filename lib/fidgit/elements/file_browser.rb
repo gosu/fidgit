@@ -30,8 +30,8 @@ module Fidgit
         base_directory: '',
         directory: Dir.pwd,
         file_name: '',
-        pattern: '*.*',
-        show_extension: true,
+        pattern: default(:pattern),
+        show_extension: default(:show_extension),
         width: 400,
         save_text: "Save",
         open_text: "Open",
@@ -107,7 +107,7 @@ module Fidgit
             create_nav_buttons(i)
           end
         else
-          @nav_buttons.label dir, border_color: Button::DEFAULT_BORDER_COLOR
+          @nav_buttons.label dir, border_color: @@schema.default(Button, :border_color)
         end
       end
 

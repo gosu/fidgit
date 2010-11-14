@@ -7,8 +7,6 @@ module Fidgit
   #
   # @abstract
   class Packer < Container
-    DEFAULT_SPACING_X, DEFAULT_SPACING_Y = 5, 5
-
     attr_reader :spacing_x, :spacing_y
 
     # @param (see Container#initialize)
@@ -18,8 +16,8 @@ module Fidgit
       options = {
       }.merge! options
 
-      @spacing_x = options[:spacing_x] || options[:spacing] || DEFAULT_SPACING_X
-      @spacing_y = options[:spacing_y] || options[:spacing] || DEFAULT_SPACING_Y
+      @spacing_x = options[:spacing_x] || options[:spacing] || default(:spacing_x)
+      @spacing_y = options[:spacing_y] || options[:spacing] || default(:spacing_y)
 
       super(options)
     end

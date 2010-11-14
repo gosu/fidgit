@@ -1,31 +1,32 @@
 # Test case schema
 ---
 
-# Define named colours used elsewhere. Either use [R, G, B] or [R, G, B, A].
-:colors:
-  :none: [0, 0, 0, 0] # RGBA
-  :white: [255, 255, 255] # RGB
-  :gray: [100, 100, 100] # RGB
-  :dark_gray: [50, 50, 50] # RGB
-
-# Define all constant values here, for use in other areas of the file.
+# Define all constant values here. For colours, use [R, G, B] or [R, G, B, A].
+# Reference constants with ?constant_name
 :constants:
+  # General constants (strings and numbers).
   :scroll_bar_thickness: 12
+
+  # Gosu::Color constants
+  :none: [0, 0, 0, 0]
+  :white: [255, 255, 255]
+  :gray: [100, 100, 100]
+  :dark_gray: [50, 50, 50]
 
 # Default element attributes.
 :elements:
   :Button:
-    :background_color: @gray
+    :background_color: ?gray
 
     :disabled:
-      :background_color: @dark_gray
+      :background_color: ?dark_gray
 
   :Element:
-    :color: @white
+    :color: ?white
     :align_h: :left
 
   :HorizontalScrollBar:
-    :height: @scroll_bar_thickness
+    :height: ?scroll_bar_thickness
 
   :VerticalScrollBar:
-    :width: @scroll_bar_thickness
+    :width: ?scroll_bar_thickness

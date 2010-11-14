@@ -2,14 +2,6 @@
 
 module Fidgit
   class TextArea < Element
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(50, 50, 50)
-    DEFAULT_BORDER_COLOR_FOCUSED = Gosu::Color.rgb(0, 255, 255)
-    DEFAULT_BORDER_COLOR = Gosu::Color.rgb(200, 200, 200)
-
-    CARET_COLOR = Gosu::Color.rgb(255, 0, 0)
-    SELECTION_COLOR = Gosu::Color.rgb(100, 100, 100)
-    CARET_PERIOD = 500 # ms
-
     # @return [Number]
     attr_reader :min_height
     # @return [Number]
@@ -96,14 +88,20 @@ module Fidgit
       options = {
         text: '',
         max_height: Float::INFINITY,
-        line_spacing: 0,
-        background_color: DEFAULT_BACKGROUND_COLOR .dup,
-        border_color: DEFAULT_BORDER_COLOR.dup,
-        border_color_focused: DEFAULT_BORDER_COLOR_FOCUSED.dup
+        line_spacing: default(:line_spacing),
+        background_color: default(:background_color),
+        border_color: default(:border_color),
+        caret_color: default(:caret_color),
+        caret_period: default(:caret_period),
+        focused_border_color: default(:focused, :border_color),
+        selection_color: default(:selection_color),
       }.merge! options
 
       @line_spacing = options[:line_spacing]
-      @border_color_focused = options[:border_color_focused]
+      @caret_color = options[:caret_color].dup
+      @caret_period = options[:caret_period]
+      @focused_border_color = options[:focused_border_color].dup
+      @selection_color = options[:selection_color].dup
 
       @lines = [''] # List of lines of wrapped text.
       @caret_positions = [[0, 0]] # [x, y] of each position the caret can be in.
@@ -113,7 +111,7 @@ module Fidgit
       @old_caret_position = 0
       @old_selection_start = 0
 
-      @text_input.text = options[:text]
+      @text_input.text = options[:text].dup
 
       super(options)
 
@@ -191,7 +189,7 @@ module Fidgit
         char_x, char_y = @caret_positions[pos]
         char_width = @char_widths[pos]
         left, top = x + padding_x + char_x, y + padding_y + char_y
-        draw_rect left, top, char_width, font_size, z, SELECTION_COLOR
+        draw_rect left, top, char_width, font_size, z, @selection_color
       end
 
       # Draw text.
@@ -200,10 +198,10 @@ module Fidgit
       end
 
       # Draw the caret.
-      if focused? and ((Gosu::milliseconds / CARET_PERIOD) % 2 == 0)
+      if focused? and ((Gosu::milliseconds / @caret_period) % 2 == 0)
         caret_x, caret_y = @caret_positions[caret_position]
         left, top = x + padding_x + caret_x, y + padding_y + caret_y
-        draw_rect left, top, 1, font_size, z, CARET_COLOR
+        draw_rect left, top, 1, font_size, z, @caret_color
       end
     end
 
