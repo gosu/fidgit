@@ -1,0 +1,31 @@
+# Test case schema
+---
+
+# Define named colours used elsewhere. Either use [R, G, B] or [R, G, B, A].
+:colors:
+  :none: [0, 0, 0, 0] # RGBA
+  :white: [255, 255, 255] # RGB
+  :gray: [100, 100, 100] # RGB
+  :dark_gray: [50, 50, 50] # RGB
+
+# Define all constant values here, for use in other areas of the file.
+:constants:
+  :scroll_bar_thickness: 12
+
+# Default element attributes.
+:elements:
+
+  :Button:
+    :background_color: :gray
+
+    :disabled:
+      :background_color: :dark_gray
+
+  :Element:
+    :color: :white
+
+  :HorizontalScrollBar:
+    :height: :scroll_bar_thickness
+
+  :VerticalScrollBar:
+    :width: :scroll_bar_thickness

@@ -1,0 +1,62 @@
+# Default schema for Fidgit
+---
+
+# Define named colours used elsewhere. Either use [R, G, B] or [R, G, B, A].
+:colors:
+  :none: [0, 0, 0, 0]
+
+  :black: [0, 0, 0]
+  :white: [255, 255, 255]
+
+  :very_dark_gray: [50, 50, 50]
+  :dark_gray: [100, 100, 100]
+  :gray: [150, 150, 150]
+  :light_gray: [200, 200, 200]
+
+  :red: [255, 0, 0]
+  :green: [0, 0, 255]
+  :blue: [0, 0, 255]
+
+# Define all constant values here, other than colours, for use in other areas of the file.
+:constants:
+  :scroll_bar_thickness: 12
+
+# Default element attributes.
+:elements:
+  :Button:
+    :background_color: :dark_gray
+    :border_color: :light_gray
+    :border_thickness: 2
+
+    :disabled:
+      :background_color: very_dark_gray
+      :border_color: :gray
+
+    :hover:
+      :background_color: :gray
+
+  :Element:
+    :align_h: :left
+    :align_v: :top
+    :background_color: :none
+    :background_image: nil
+    :border_color: :none
+    :border_thickness: 0
+    :color: :white
+    :font_size: 30
+    :font_name: ''
+    :padding_x: 4
+    :padding_y: 4
+
+  :Label:
+    :disabled_color: :light_gray
+
+  :Packer:
+    :spacing_h: 4
+    :spacing_v: 4
+
+  :HorizontalScrollBar:
+    :height: :scroll_bar_thickness
+
+  :VerticalScrollBar:
+    :width: :scroll_bar_thickness

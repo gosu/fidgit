@@ -17,6 +17,7 @@ require_relative 'fidgit/event'
 require_relative 'fidgit/window'
 require_relative 'fidgit/history'
 require_relative 'fidgit/redirector'
+require_relative 'fidgit/schema'
 require_relative 'fidgit/selection'
 require_relative 'fidgit/thumbnail'
 
