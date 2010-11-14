@@ -6,8 +6,6 @@ module Fidgit
   # A container that contains Elements.
   # @abstract
   class Container < Element
-    DEBUG_BORDER_COLOR = Gosu::Color.rgba(0, 0, 255, 100) # Color to draw an outline in when debugging layout.
-
     def size; @children.size; end
     def each(&block); @children.each &block; end
     def find(&block); @children.find &block; end
@@ -28,7 +26,7 @@ module Fidgit
     #
     # @option (see Element#initialize)
     def initialize(options = {})
-      options[:border_color] = DEBUG_BORDER_COLOR if options[:debug] or debug_mode?
+      options[:border_color] = default(:debug, :border_color) if Fidgit.debug_mode?
 
       @children = []
 
@@ -170,7 +168,7 @@ module Fidgit
     def draw_foreground
       each { |c| c.draw }
 
-      font.draw self.class.name, x, y, z if debug_mode?
+      font.draw self.class.name, x, y, z if Fidgit.debug_mode?
 
       nil
     end

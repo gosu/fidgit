@@ -66,7 +66,6 @@ module Fidgit
 
     def enabled?; @enabled; end
     def enabled=(value); @enabled = value; end
-    def debug_mode?; @debug_mode; end
 
     def font; Fidgit.fonts[@font_name][@font_size]; end
 
@@ -108,8 +107,7 @@ module Fidgit
     #
     # @option options [String] :tip ('') Tool-tip text
     # @option options [String] :font_name ('')
-    # @option options [String] :font_size (Fidgit.default_font_size)
-    # @option options [String] :debug (Fidgit.debug_mode?)
+    # @option options [String] :font_size (30)
     #
     # @option options [Gosu::Color] :background_color (transparent)
     # @option options [Gosu::Color] :border_color (transparent)
@@ -133,7 +131,6 @@ module Fidgit
         tip: '',
         font_name: default(:font_name),
         font_size: default(:font_size),
-        debug: Fidgit.debug_mode?,
         background_color: default(:background_color),
         border_color: default(:border_color),
         enabled: true,
@@ -162,7 +159,6 @@ module Fidgit
       @padding_x = options[:padding_x] || options[:padding] ||  default(:padding_x)
       @padding_y = options[:padding_y] || options[:padding] ||  default(:padding_y)
       self.parent = options[:parent]
-      @debug = options[:debug]
 
       @z = options[:z]
       @tip = options[:tip].dup
