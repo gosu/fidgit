@@ -45,7 +45,7 @@ module Fidgit
       options[:align_h] = options[:align_v] = :center
 
       pack :vertical, options do
-        text_area(text: message, enabled: false, width: options[:width] - padding_x * 2)
+        text_area(text: message, enabled: false, width: options[:width] - padding_left - padding_right)
 
         pack :horizontal, align_h: :center do
           @type.to_s.split('_').each do |type|

@@ -94,7 +94,7 @@ module Fidgit
       # Expand the size of each filled column to make the minimum size required.
       num_filled_columns = filled_columns.select {|value| value }.count
       if num_filled_columns > 0
-        total_width = @widths.inject(0, :+) + (padding_x * 2) + ((@num_columns - 1) * spacing_x)
+        total_width = @widths.inject(0, :+) + (padding_left + padding_right) + ((@num_columns - 1) * spacing_h)
         if total_width < min_width
           extra_width = total_width / num_filled_columns
           filled_columns.each_with_index do |filled, i|
@@ -106,7 +106,7 @@ module Fidgit
       # Expand the size of each filled row to make the minimum size required.
       num_filled_rows = filled_rows.select {|value| value }.count
       if num_filled_rows > 0
-        total_height = @heights.inject(0, :+) + (padding_y * 2) + ((@num_rows - 1) * spacing_y)
+        total_height = @heights.inject(0, :+) + (padding_left + padding_right) + ((@num_rows - 1) * spacing_v)
         if total_height < min_height
           extra_height = total_height / num_filled_rows
           filled_rows.each_with_index do |filled, i|
@@ -116,9 +116,9 @@ module Fidgit
       end
 
       # Actually place all the elements into the grid positions, modified by valign and align.
-      current_y = y + padding_y
+      current_y = y + padding_top
       @rows.each_with_index do |row, row_num|
-        current_x = x + padding_x
+        current_x = x + padding_left
 
         row.each_with_index do |element, column_num|
           element.x = current_x
@@ -136,7 +136,7 @@ module Fidgit
           end
 
           current_x += @widths[column_num]
-          current_x += spacing_x unless column_num == @num_columns - 1
+          current_x += spacing_h unless column_num == @num_columns - 1
 
           element.y = current_y
 
@@ -154,13 +154,13 @@ module Fidgit
           end
         end
 
-        self.width = current_x - x + padding_x if row_num == 0
+        self.width = current_x - x + padding_left if row_num == 0
 
         current_y += @heights[row_num] unless row.empty?
-        current_y += spacing_y unless row_num == num_rows - 1
+        current_y += spacing_h unless row_num == num_rows - 1
       end
 
-      self.height = current_y - y + padding_y
+      self.height = current_y - y + padding_top
 
       nil
     end
@@ -172,17 +172,17 @@ module Fidgit
     # @yieldparam [Number] width
     # @yieldparam [Number] height
     def each_cell_rect
-      x = self.x + padding_x
+      x = self.x + padding_left
 
       @widths.each_with_index do |width, column_num|
-        y = self.y + padding_y
+        y = self.y + padding_top
 
         @heights.each_with_index do |height, row_num|
           yield x, y, width, height if @rows[row_num][column_num]
-          y += height + spacing_y
+          y += height + spacing_v
         end
 
-        x += width + spacing_x
+        x += width + spacing_h
       end
 
       nil

@@ -76,7 +76,7 @@ module Fidgit
     end
 
     def draw_foreground
-      draw_rect x + padding_x, y + (height - @rail_thickness) / 2, width, @rail_thickness, z, @rail_color
+      draw_rect x + padding_left, y + (height - @rail_thickness) / 2, width, @rail_thickness, z, @rail_color
       super
     end
 
@@ -105,7 +105,7 @@ module Fidgit
     end
 
     def draw_foreground
-      draw_rect x + (width - @rail_thickness) / 2, y + padding_y, @rail_thickness, height, z, @rail_color
+      draw_rect x + (width - @rail_thickness) / 2, y + padding_top, @rail_thickness, height, z, @rail_color
       super
     end
 

@@ -115,14 +115,14 @@ module Fidgit
 
       super(options)
 
-      min_height = (padding_y * 2) + font_size
+      min_height = padding_left + padding_right + font_size
       if options[:height]
         @max_height = @min_height = [options[:height], min_height].max
       else
         @max_height = [options[:max_height], min_height].max
         @min_height = options[:min_height] ? [options[:min_height], min_height].max : min_height
       end
-      rect.height = [(padding_y * 2) + font_size, @min_height].max
+      rect.height = [padding_left + padding_right + font_size, @min_height].max
 
       subscribe :left_mouse_button, method(:click_in_text)
       subscribe :right_mouse_button, method(:click_in_text)
@@ -133,7 +133,7 @@ module Fidgit
       publish :focus unless focused?
 
       # Move caret to position the user clicks on.
-      mouse_x, mouse_y = x - (self.x + padding_x), y - (self.y + padding_y)
+      mouse_x, mouse_y = x - (self.x + padding_left), y - (self.y + padding_top)
       @char_widths.each_with_index do |width, i|
         char_x, char_y = @caret_positions[i]
         if mouse_x.between?(char_x, char_x + width) and mouse_y.between?(char_y, char_y + font_size)
@@ -188,19 +188,19 @@ module Fidgit
       selection_range.each do |pos|
         char_x, char_y = @caret_positions[pos]
         char_width = @char_widths[pos]
-        left, top = x + padding_x + char_x, y + padding_y + char_y
+        left, top = x + padding_left + char_x, y + padding_top + char_y
         draw_rect left, top, char_width, font_size, z, @selection_color
       end
 
       # Draw text.
       @lines.each_with_index do |line, index|
-        font.draw(line, x + padding_x, y + padding_y + y_at_line(index), z)
+        font.draw(line, x + padding_left, y + padding_top + y_at_line(index), z)
       end
 
       # Draw the caret.
       if focused? and ((Gosu::milliseconds / @caret_period) % 2 == 0)
         caret_x, caret_y = @caret_positions[caret_position]
-        left, top = x + padding_x + caret_x, y + padding_y + caret_y
+        left, top = x + padding_left + caret_x, y + padding_top + caret_y
         draw_rect left, top, 1, font_size, z, @caret_color
       end
     end
@@ -243,7 +243,7 @@ module Fidgit
       @char_widths = []
 
       space_width = font.text_width ' '
-      max_width = width - padding_x * 2 - space_width
+      max_width = width - padding_left - padding_right - space_width
 
       line = ''
       line_width = 0
@@ -273,7 +273,7 @@ module Fidgit
             line = ''
           end
 
-          @char_widths[-1] += (width - line_width - padding_x * 2) unless @char_widths.empty?
+          @char_widths[-1] += (width - line_width - padding_left - padding_right) unless @char_widths.empty?
           line_width = 0
         end
 
@@ -323,7 +323,7 @@ module Fidgit
       @lines.push line if @lines.empty? or not line.empty?
 
       # Roll back if the height is too long.
-      new_height = (padding_y * 2) + y_at_line(@lines.size)
+      new_height = padding_left + padding_right + y_at_line(@lines.size)
       if new_height <= max_height
         @old_text = text
         rect.height = [new_height, @min_height].max

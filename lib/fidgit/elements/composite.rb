@@ -11,11 +11,7 @@ module Fidgit
     #
     # @option (see Element#initialize)
     def initialize(options = {})
-      options = {
-        padding: 0,
-      }.merge! options
-
-      options[:border_color] = DEBUG_BORDER_COLOR if options[:debug] or debug_mode?
+      options[:border_color] = DEBUG_BORDER_COLOR if Fidgit.debug_mode?
 
       super(options)
     end

@@ -39,14 +39,14 @@ module Fidgit
     end
 
     def draw_foreground
-      current_x = x + padding_x
+      current_x = x + padding_left
       if @icon
-        @icon.draw(current_x, y + padding_y, z)
-        current_x += @icon.width + padding_x
+        @icon.draw(current_x, y + padding_top, z)
+        current_x += @icon.width + padding_left
       end
 
       unless @text.empty?
-        font.draw(@text, current_x, y + padding_y, z, 1, 1, @color)
+        font.draw(@text, current_x, y + padding_top, z, 1, 1, @color)
       end
 
       nil
@@ -56,19 +56,19 @@ module Fidgit
     def layout
       if @icon
         if @text.empty?
-          rect.width = [@icon.width + padding_x * 2, width].max
-          rect.height = [@icon.height + padding_y * 2, height].max
+          rect.width = [@icon.width + padding_left + padding_right, width].max
+          rect.height = [@icon.height + padding_top + padding_bottom, height].max
         else
-          rect.width = [@icon.width + font.text_width(@text) + padding_x * 3, width].max
-          rect.height = [[@icon.height, font_size].max + padding_y * 2, height].max
+          rect.width = [@icon.width + font.text_width(@text) + padding_left + padding_right, width].max
+          rect.height = [[@icon.height, font_size].max + padding_top + padding_bottom, height].max
         end
       else
         if @text.empty?
-          rect.width = [padding_x * 2, width].max
-          rect.height = [padding_y * 2, height].max
+          rect.width = [padding_left + padding_right, width].max
+          rect.height = [padding_top + padding_bottom, height].max
         else
-          rect.width = [font.text_width(@text) + padding_x * 2, width].max
-          rect.height = [font_size + padding_y * 2, height].max
+          rect.width = [font.text_width(@text) + padding_left + padding_right, width].max
+          rect.height = [font_size + padding_top + padding_bottom, height].max
         end
       end
 

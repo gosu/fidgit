@@ -56,8 +56,10 @@
     :border_color: ?white
 
   :Composite: # < Container
-    :debug:
-      :border_color: ?green
+    :padding_top: 0
+    :padding_right: 0
+    :padding_bottom: 0
+    :padding_left: 0
 
   :Container: # < Element
     :nothing: nil
@@ -72,8 +74,10 @@
     :color: ?white
     :font_size: 30
     :font_name: ''
-    :padding_x: 4
-    :padding_y: 4
+    :padding_top: 4
+    :padding_right: 4
+    :padding_bottom: 4
+    :padding_left: 4
 
   :FileBrowser: # < Composite
     :pattern: *.*
@@ -84,8 +88,10 @@
     :cell_border_color: ?none
 
   :Group: # < Packer
-    :padding_x: 0
-    :padding_y: 0
+    :padding_top: 0
+    :padding_right: 0
+    :padding_bottom: 0
+    :padding_left: 0
 
   :HorizontalPacker: # < GridPacker
     :nothing: nil
@@ -115,8 +121,8 @@
      :background_color: ?black
 
   :Packer: # < Container
-    :spacing_x: 4
-    :spacing_y: 4
+    :spacing_h: 4
+    :spacing_v: 4
 
   :RadioButton: # < Button
     :checked:

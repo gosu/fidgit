@@ -7,7 +7,7 @@ module Fidgit
   #
   # @abstract
   class Packer < Container
-    attr_reader :spacing_x, :spacing_y
+    attr_reader :spacing_h, :spacing_v
 
     # @param (see Container#initialize)
     #
@@ -16,8 +16,8 @@ module Fidgit
       options = {
       }.merge! options
 
-      @spacing_x = options[:spacing_x] || options[:spacing] || default(:spacing_x)
-      @spacing_y = options[:spacing_y] || options[:spacing] || default(:spacing_y)
+      @spacing_h = options[:spacing_h] || options[:spacing] || default(:spacing_h)
+      @spacing_v = options[:spacing_v] || options[:spacing] || default(:spacing_v)
 
       super(options)
     end
@@ -30,13 +30,13 @@ module Fidgit
 
       # Move all children if we have moved.
       @children.each.with_index do |child, index|
-        child.x = x + padding_x
-        child.y = y + padding_y
+        child.x = padding_left + x
+        child.y = padding_top + y
       end
 
       # Make us as wrap around the largest child.
-      rect.width = (@children.map {|c| c.width }.max || 0) + padding_x * 2
-      rect.height = (@children.map {|c| c.height }.max || 0) + padding_y * 2
+      rect.width = (@children.map {|c| c.width }.max || 0) + padding_left + padding_right
+      rect.height = (@children.map {|c| c.height }.max || 0) + padding_top + padding_bottom
 
       super
     end

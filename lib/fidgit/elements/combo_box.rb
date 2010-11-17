@@ -49,8 +49,8 @@ class ComboBox < Button
 
     super('', options)
 
-    rect.height = [height, font_size + padding_y * 2].max
-    rect.width = [width, font_size * 4 + padding_x * 2].max
+    rect.height = [height, font_size + padding_top + padding_bottom].max
+    rect.width = [width, font_size * 4 + padding_left + padding_right].max
   end
 
   def item(text, value, options = {}, &block)

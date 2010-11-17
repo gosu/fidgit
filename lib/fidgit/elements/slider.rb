@@ -65,7 +65,7 @@ module Fidgit
 
       super(options)
 
-      @handle = Handle.new(parent: self, width: (height / 2 - padding_x), height: height - padding_y * 2,
+      @handle = Handle.new(parent: self, width: (height / 2 - padding_left), height: height - padding_top + padding_bottom,
                            background_color: options[:handle_color])
 
       self.value = options.has_key?(:value) ? options[:value] : @range.min
@@ -74,7 +74,7 @@ module Fidgit
     def value=(value)
       @value = @continuous ? value.to_f : value.round
       @value = [[@value, @range.min].max, @range.max].min
-      @handle.x = x + padding_x + ((width - @handle.width) * (@value - @range.min) / (@range.max - @range.min).to_f)
+      @handle.x = x + padding_left + ((width - @handle.width) * (@value - @range.min) / (@range.max - @range.min).to_f)
       publish :changed, @value
 
       @value

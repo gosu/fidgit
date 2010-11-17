@@ -28,8 +28,8 @@ module Fidgit
       super
 
       # Ensure the tip can't go over the edge of the screen. If it can't be avoided, align with left edge of screen.
-      rect.x = [[x, $window.width - width - padding_x].min, 0].max
-      rect.y = [[y, $window.height - height - padding_y].min, 0].max
+      rect.x = [[x, $window.width - width - padding_right].min, 0].max
+      rect.y = [[y, $window.height - height - padding_bottom].min, 0].max
 
       nil
     end

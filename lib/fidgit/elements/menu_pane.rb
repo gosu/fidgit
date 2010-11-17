@@ -31,7 +31,7 @@ module Fidgit
       def draw_foreground
         super
         unless @shortcut.empty?
-          font.draw_rel("#{@shortcut}", rect.right - padding_x, y + ((height - font_size) / 2).floor, z, 1, 0, 1, 1, color)
+          font.draw_rel("#{@shortcut}", rect.right - padding_right, y + ((height - font_size) / 2).floor, z, 1, 0, 1, 1, color)
         end
 
         nil
@@ -134,12 +134,12 @@ module Fidgit
 
       if @items
         # Ensure the menu can't go over the edge of the screen. If it can't be avoided, align with left edge of screen.
-        rect.x = [[x, $window.width - width - padding_x].min, 0].max
-        rect.y = [[y, $window.height - height - padding_y].min, 0].max
+        rect.x = [[x, $window.width - width - padding_right].min, 0].max
+        rect.y = [[y, $window.height - height - padding_bottom].min, 0].max
 
         # Move the actual list if the menu has moved to keep on the screen.
-        @items.x = x + padding_x
-        @items.y = y + padding_y
+        @items.x = x + padding_left
+        @items.y = y + padding_top
 
         # Ensure that all items are of the same width.
         max_width = @items.each.to_a.map {|c| c.width }.max || 0

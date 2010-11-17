@@ -15,8 +15,8 @@ class ExampleState < GuiState
         @group.value = 7
       end
 
-      @group = group(padding_y: 10) do
-        pack :grid, num_columns: 5, padding: 0, spacing: 4 do
+      @group = group do
+        pack :grid, num_columns: 5, padding: 0 do
           15.times do |i|
             radio_button "##{i}", i, width: 60
           end

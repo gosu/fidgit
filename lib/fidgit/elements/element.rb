@@ -41,7 +41,7 @@ module Fidgit
     VALID_ALIGN_H = [:left, :center, :right, :fill]
     VALID_ALIGN_V = [:top, :center, :bottom, :fill]
 
-    attr_reader :z, :tip, :font_size, :padding_x, :padding_y, :redirector, :align_h, :align_v, :parent
+    attr_reader :z, :tip, :font_size, :padding_top, :padding_right, :padding_bottom, :padding_left, :redirector, :align_h, :align_v, :parent
 
     attr_accessor :background_color
 
@@ -115,8 +115,12 @@ module Fidgit
     # @option options [Boolean] :enabled (true)
     #
     # @option options [Number] :padding (4)
-    # @option options [Number] :padding_x (:padding option)
-    # @option options [Number] :padding_y (:padding option)
+    # @option options [Number] :padding_h (:padding option)
+    # @option options [Number] :padding_v (:padding option)
+    # @option options [Number] :padding_top (:padding_v option)
+    # @option options [Number] :padding_right (:padding_h option)
+    # @option options [Number] :padding_bottom (:padding_v option)
+    # @option options [Number] :padding_left (:padding_h option)
     #
     # @option options [Symbol] :align Align both horizontally and vertically. One of :center, :fill or [<align_v>, <align_h>] such as [:top, :right].
     # @option options [Symbol] :align_h (value or :align else :left) One of :left, :center, :right :fill
@@ -156,8 +160,10 @@ module Fidgit
       @background_color = options[:background_color].dup
       @border_color = options[:border_color].dup
 
-      @padding_x = options[:padding_x] || options[:padding] ||  default(:padding_x)
-      @padding_y = options[:padding_y] || options[:padding] ||  default(:padding_y)
+      @padding_top = options[:padding_top]       || options[:padding_v] || options[:padding] ||  default(:padding_top)
+      @padding_right = options[:padding_right]   || options[:padding_h] || options[:padding] ||  default(:padding_right)
+      @padding_bottom = options[:padding_bottom] || options[:padding_v] || options[:padding] ||  default(:padding_bottom)
+      @padding_left = options[:padding_left]     || options[:padding_h] || options[:padding] ||  default(:padding_left)
       self.parent = options[:parent]
 
       @z = options[:z]
