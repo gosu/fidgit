@@ -84,6 +84,12 @@ module Fidgit
     # Internationalisation helper.
     def t(*args); I18n.t(*args); end
 
+    # Clear the data which is specific to the current $window.
+    def self.clear
+      remove_class_variable '@@cursor'
+      remove_class_variable '@@draw_pixel'
+    end
+
     def update
       cursor.update
       @tool_tip.update if @tool_tip
