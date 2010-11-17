@@ -55,16 +55,18 @@ module Fidgit
       pack :vertical do
         @nav_buttons = pack :horizontal, padding: 0, spacing: 2
 
-        @files_list = list(width: options[:width]) do
-          subscribe :changed do |sender, file_path|
-            if file_path
-              file_name = File.basename file_path
-              if File.directory? file_path
-                @directories.push file_name
-                create_nav_buttons
-                update_files_list
-              else
-                @file_name_text.text = file_name
+        @scroll_window = scroll_window(height: 250, width: options[:width]) do
+          @files_list = list(width: options[:width]) do
+            subscribe :changed do |sender, file_path|
+              if file_path
+                file_name = File.basename file_path
+                if File.directory? file_path
+                  @directories.push file_name
+                  create_nav_buttons
+                  update_files_list
+                else
+                  @file_name_text.text = file_name
+                end
               end
             end
           end
@@ -118,11 +120,12 @@ module Fidgit
     def update_files_list
       @files_list.clear
       @file_name_text.text = ''
+      @scroll_window.offset_x = @scroll_window.offset_y = 0
 
       # Add folders.
       Dir.glob(File.join(directory, "*")).each do |file_path|
         if File.directory? file_path
-          @files_list.item file_path, text: File.basename(file_path), icon: Gosu::Image["file_directory.png"]
+          @files_list.item File.basename(file_path), file_path, icon: Gosu::Image["file_directory.png"]
         end
       end
 

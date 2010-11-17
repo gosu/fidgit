@@ -8,7 +8,7 @@ class ExampleState < GuiState
     super
 
     container.background_color = Gosu::Color.rgb(50, 50, 50)
-    pack :vertical  do
+    pack :vertical, align: :center do
       full_base_directory = ''
       restricted_base_directory = File.expand_path(File.join(__FILE__, '..', '..'))
       directory = File.join(restricted_base_directory, 'media', 'images')
@@ -33,16 +33,6 @@ class ExampleState < GuiState
             when :cancel
               my_label.text = "Save cancelled"
           end
-        end
-      end
-
-      # A file browser freely placed, rather than inside a dialog.
-      file_browser(:open, base_directory: restricted_base_directory, directory: directory, pattern: "*.png") do |result, file|
-        case result
-          when :open
-            my_label.text = "Loaded #{file}"
-          when :cancel
-            my_label.text = "Loading cancelled"
         end
       end
     end
