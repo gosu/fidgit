@@ -6,10 +6,9 @@ require_relative '../schema'
 # The Fidgit GUI framework for Gosu.
 module Fidgit
   class << self
-    attr_accessor :fonts, :debug_mode
+    attr_accessor :debug_mode
   end
 
-  self.fonts = Hash.new { |fonts, name| fonts[name] = Hash.new { |sizes, size| sizes[size] = Gosu::Font.new($window, name, size) } }
   self.debug_mode = false
 
   def self.debug_mode?; debug_mode; end
@@ -67,7 +66,7 @@ module Fidgit
     def enabled?; @enabled; end
     def enabled=(value); @enabled = value; end
 
-    def font; Fidgit.fonts[@font_name][@font_size]; end
+    def font; @font ||= Gosu::Font[@font_name, @font_size]; end
 
     def rect; @rect; end; protected :rect
 
