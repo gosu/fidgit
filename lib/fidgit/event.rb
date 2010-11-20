@@ -57,7 +57,7 @@ module Fidgit
       end
 
       if @_event_handlers
-        @_event_handlers[event].each do |handler|
+        @_event_handlers[event].reverse_each do |handler|
           return :handled if handler.call(self, *args) == :handled
         end
       end

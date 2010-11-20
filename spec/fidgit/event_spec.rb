@@ -76,17 +76,9 @@ module Fidgit
           subject.publish(:frog).should be_nil
         end
 
-        it "should not call any more handlers if one returns :handled" do
-          subject.should_receive(:handler1).with(subject).and_return(:handled)
-          subject.should_not_receive(:handler2)
-          subject.subscribe(:frog, subject.method(:handler1))
-          subject.subscribe(:frog, subject.method(:handler2))
-          subject.publish(:frog).should == :handled
-        end
-
         it "should return :handled if a manual handler handled the event and not call other handlers" do
-          subject.should_receive(:handler1).with(subject).and_return(:handled)
-          subject.should_not_receive(:handler2)
+          subject.should_not_receive(:handler1)
+          subject.should_receive(:handler2).with(subject).and_return(:handled)
           subject.subscribe(:frog, subject.method(:handler1))
           subject.subscribe(:frog, subject.method(:handler2))
           subject.publish(:frog).should == :handled
