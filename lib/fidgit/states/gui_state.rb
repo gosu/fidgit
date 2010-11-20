@@ -86,8 +86,8 @@ module Fidgit
 
     # Clear the data which is specific to the current $window.
     def self.clear
-      remove_class_variable '@@cursor'
-      remove_class_variable '@@draw_pixel'
+      remove_class_variable '@@cursor' if defined? @@cursor
+      remove_class_variable '@@draw_pixel' if defined? @@draw_pixel
     end
 
     def update

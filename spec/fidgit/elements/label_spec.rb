@@ -3,8 +3,12 @@ require_relative "helpers/helper"
 include Fidgit
 
 describe Label do
-  before :all do
-    GuiWindow.new
+  before :each do
+    Fidgit::Window.new(10, 10, false)
+  end
+
+  after :each do
+    $window.close
   end
 
   describe "#intialize" do
