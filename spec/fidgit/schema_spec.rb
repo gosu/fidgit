@@ -2,9 +2,7 @@ require_relative 'helpers/helper'
 
 require 'fidgit'
 
-require 'yaml'
-
-DEFAULT_SCHEMA_FILE_NAME = File.expand_path(File.join(__FILE__, '..', 'schema_test.yml'))
+SCHEMA_FILE_NAME = File.expand_path(File.join(__FILE__, '..', 'schema_test.yml'))
 
 include Fidgit
 
@@ -12,7 +10,7 @@ describe Schema do
   subject { Schema.new(Hash.new) }
 
   context "given the default schema" do
-    subject { Schema.new(YAML.load(File.read(DEFAULT_SCHEMA_FILE_NAME))) }
+    subject { Schema.new(YAML.load(File.read(SCHEMA_FILE_NAME))) }
 
     describe "#constant" do
       it "should have the constant :scroll_bar_thickness" do
@@ -58,7 +56,7 @@ describe Schema do
       end
 
       it "should give the correct value for a defined nested value" do
-        subject.default(Button, [:disabled, :background_color]).should eq Gosu::Color.rgb(50, 50, 50)
+        subject.default(Fidgit::Button, [:disabled, :background_color]).should eq Gosu::Color.rgb(50, 50, 50)
       end
 
       it "should give the outer value for an undefined nested value" do
