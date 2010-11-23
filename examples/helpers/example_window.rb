@@ -3,7 +3,8 @@ include Fidgit
 
 media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'media'))
 Gosu::Image.autoload_dirs << File.join(media_dir, 'images')
-Gosu::Sample.autoload_dirs << File.join(media_dir, 'sounds')
+Gosu::Sample.autoload_dirs << File.join(media_dir, 'samples')
+Gosu::Font.autoload_dirs << File.join(media_dir, 'fonts')
 
 class ExampleWindow < Fidgit::Window
   def initialize(options = {})

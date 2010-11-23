@@ -4,7 +4,7 @@ module Fidgit
     # Evaluate a block accessing methods and ivars from the calling context, but calling public methods
     # (not ivars or non-public methods) on this object in preference.
     def instance_methods_eval(&block)
-      raise ArgumentEror unless block_given?
+      raise ArgumentError, "block required" unless block_given?
 
       context = eval('self', block.binding)
 

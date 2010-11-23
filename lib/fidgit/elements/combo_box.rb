@@ -75,7 +75,14 @@ class ComboBox < Button
   protected
   # Any combo-box passed a block will allow you access to its methods.
   def post_init_block(&block)
-    instance_methods_eval &block
+      case block.arity
+        when 1
+          yield self
+        when 0
+          instance_methods_eval &block
+        else
+          raise "block arity must be 0 or 1"
+      end
   end
 end
 end

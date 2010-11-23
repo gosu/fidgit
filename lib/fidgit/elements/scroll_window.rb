@@ -83,7 +83,14 @@ module Fidgit
 
     protected
     def post_init_block(&block)
-      @view.content.instance_methods_eval &block
+      case block.arity
+        when 1
+          yield @view.content
+        when 0
+          @view.content.instance_methods_eval &block
+        else
+          raise "block arity must be 0 or 1"
+      end
     end
   end
 end
