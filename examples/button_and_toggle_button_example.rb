@@ -8,12 +8,17 @@ class ExampleState < GuiState
     pack :vertical do
       my_label = label "Label", tip: "I'm a label"
 
-      button("Button", tip: "I'm a button; press me!") do
+      my_button = button("Button", tip: "I'm a button; press me!") do
         my_label.text = "Pressed the button!"
       end
 
-      toggle_button("ToggleButton", tip: "I'm a button that toggles") do |sender, value|
+      my_toggle_button = toggle_button("ToggleButton", tip: "I'm a button that toggles") do |sender, value|
         my_label.text = "Turned the toggle button #{value ? "on" : "off"}!"
+      end
+
+      toggle_button("Enable other two buttons", value: true) do |sender, value|
+        my_button.enabled = value
+        my_toggle_button.enabled = value
       end
     end
   end

@@ -111,6 +111,20 @@ module Fidgit
           subject.publish(:frog, 1, 2).should be_nil
         end
 
+        it "should do nothing if the subject is disabled" do
+          subject.should_receive(:enabled?).and_return(false)
+          subject.should_not_receive(:handler)
+          subject.subscribe(:frog, subject.method(:handler))
+          subject.publish(:frog, 1, 2).should be_nil
+        end
+
+        it "should act normally if the subject is enabled" do
+          subject.should_receive(:enabled?).and_return(true)
+          subject.should_receive(:handler)
+          subject.subscribe(:frog, subject.method(:handler))
+          subject.publish(:frog, 1, 2).should be_nil
+        end
+
         it "should only call the handlers requested" do
           Test.event :fish
 

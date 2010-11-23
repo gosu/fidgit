@@ -77,19 +77,29 @@ module Fidgit
         create_nav_buttons
 
         pack :horizontal, align: :center, padding: 0 do
-          case @type
-            when :open
-              button(options[:open_text]) do
-                publish :selected, :open, file_path
-              end
-            when :save
-              button(options[:save_text]) do
-                publish :selected, :save, file_path
-              end
+          @action_button = case @type
+          when :open
+            button(options[:open_text]) do
+              publish :selected, :open, file_path
+            end
+          when :save
+            button(options[:save_text]) do
+              publish :selected, :save, file_path
+            end
           end
 
           button(options[:cancel_text]) do
             publish :selected, :cancel, file_path
+          end
+        end
+
+        # Ensure that the open/save button is enabled only when the path is sensible.
+        @file_name_text.subscribe :changed do |sender, text|
+          @action_button.enabled = case @type
+          when :open
+            File.exists? file_path and not File.directory? file_path
+          when :save
+            not text.empty?
           end
         end
 

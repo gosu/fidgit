@@ -52,6 +52,9 @@ module Fidgit
     def publish(event, *args)
       raise ArgumentError, "#{self.class} does not handle #{event.inspect}" unless events.include? event
 
+      # Do nothing if the object is disabled.
+      return if respond_to?(:enabled?) and not enabled?
+
       if respond_to? event
         return :handled if send(event, self, *args) == :handled
       end
