@@ -40,7 +40,7 @@ module Fidgit
     VALID_ALIGN_H = [:left, :center, :right, :fill]
     VALID_ALIGN_V = [:top, :center, :bottom, :fill]
 
-    attr_reader :z, :tip, :font_size, :padding_top, :padding_right, :padding_bottom, :padding_left, :redirector, :align_h, :align_v, :parent
+    attr_reader :z, :tip, :font_size, :padding_top, :padding_right, :padding_bottom, :padding_left, :align_h, :align_v, :parent, :border_thickness
 
     attr_accessor :background_color
 
@@ -50,15 +50,21 @@ module Fidgit
     def y; rect.y; end
     def y=(value); rect.y = value; end
 
+    # Width not including border.
     def width; rect.width; end
     def width=(value); rect.width = [[value, @width_range.max].min, @width_range.min].max; end
     def min_width; @width_range.min; end
     def max_width; @width_range.max; end
+    # Width including border thickness.
+    def outer_width; rect.width + @border_thickness * 2; end
 
+    # Height not including border.
     def height; rect.height; end
     def height=(value); rect.height = [[value, @height_range.max].min, @height_range.min].max; end
     def min_height; @height_range.min; end
     def max_height; @height_range.max; end
+    # Height including border thickness.
+    def outer_height; rect.height + @border_thickness * 2; end
 
     # Can the object be dragged?
     def drag?(button); false; end
@@ -136,6 +142,7 @@ module Fidgit
         font_size: default(:font_size),
         background_color: default(:background_color),
         border_color: default(:border_color),
+        border_thickness: default(:border_thickness),
         enabled: true,
       }.merge! options
 
@@ -158,6 +165,7 @@ module Fidgit
 
       @background_color = options[:background_color].dup
       @border_color = options[:border_color].dup
+      @border_thickness = options[:border_thickness]
 
       @padding_top = options[:padding_top]       || options[:padding_v] || options[:padding] ||  default(:padding_top)
       @padding_right = options[:padding_right]   || options[:padding_h] || options[:padding] ||  default(:padding_right)
@@ -217,7 +225,7 @@ module Fidgit
 
     protected
     def draw_border
-      draw_frame(x, y, width, height, z, @border_color) unless @border_color.transparent?
+      draw_frame(x, y, width, height, @border_thickness, z, @border_color) if @border_thickness > 0 and not @border_color.transparent?
     end
 
     protected

@@ -22,6 +22,7 @@ module Fidgit
       options = {
         cell_border_color: default(:cell_border_color),
         cell_background_color: default(:cell_background_color),
+        cell_border_thickness: default(:cell_border_thickness),
       }.merge! options
 
       @num_columns = options[:num_columns]
@@ -29,6 +30,7 @@ module Fidgit
       raise ArgumentError, "options :num_rows and :num_columns are not compatible" if @num_rows and @num_columns
 
       @cell_border_color = options[:cell_border_color].dup
+      @cell_border_thickness = options[:cell_border_thickness]
       @cell_background_color = options[:cell_background_color].dup
 
       @type = @num_rows ? :fixed_rows : :fixed_columns
@@ -82,11 +84,11 @@ module Fidgit
       @rows.each_with_index do |row, row_num|
         row.each_with_index do |element, column_num|
           fills = (element.align_h == :fill)
-          @widths[column_num] = [fills ? 0 : element.width, @widths[column_num] || 0].max
+          @widths[column_num] = [fills ? 0 : element.outer_width, @widths[column_num] || 0].max
           filled_columns.push fills
 
           fills = (element.align_v == :fill)
-          @heights[row_num] = [fills ? 0 : element.height, @heights[row_num] || 0].max
+          @heights[row_num] = [fills ? 0 : element.outer_height, @heights[row_num] || 0].max
           filled_rows.push fills
         end
       end
@@ -121,7 +123,7 @@ module Fidgit
         current_x = x + padding_left
 
         row.each_with_index do |element, column_num|
-          element.x = current_x
+          element.x = current_x + element.border_thickness
 
           case element.align_h # Take horizontal alignment into consideration.
             when :fill
@@ -138,7 +140,7 @@ module Fidgit
           current_x += @widths[column_num]
           current_x += spacing_h unless column_num == @num_columns - 1
 
-          element.y = current_y
+          element.y = current_y + element.border_thickness
 
           case element.align_v # Take horizontal alignment into consideration.
             when :fill
@@ -207,9 +209,9 @@ module Fidgit
       super
 
       # Draw the cell borders.
-      unless @cell_border_color.transparent?
+      if @cell_border_thickness > 0 and not @cell_border_color.transparent?
         each_cell_rect do |x, y, width, height|
-          draw_frame x, y, width, height, z, @cell_border_color
+          draw_frame x, y, width, height, @cell_border_thickness, z, @cell_border_color
         end
       end
 

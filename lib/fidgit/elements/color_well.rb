@@ -26,7 +26,7 @@ module Fidgit
     def draw_background
       super
 
-      draw_frame x + 2, y + 2, width - 4, height - 4, z, @outline_color
+      draw_frame x + 2, y + 2, width - 4, height - 4, 1, z, @outline_color
 
       nil
     end

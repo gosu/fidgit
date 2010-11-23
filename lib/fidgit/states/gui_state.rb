@@ -197,11 +197,11 @@ module Fidgit
     end
 
     # Draw an unfilled rectangle.
-    def draw_frame(x, y, width, height, z, color, mode = :default)
-      draw_rect(x, y + 1, 1, height - 2, z, color, mode) # left
-      draw_rect(x, y, width, 1, z, color, mode) # top
-      draw_rect(x + width - 1, y + 1, 1, height - 1, z, color, mode) # right
-      draw_rect(x, y + height - 1, width, 1, z, color, mode) # bottom
+    def draw_frame(x, y, width, height, thickness, z, color, mode = :default)
+      draw_rect(x - thickness, y, thickness, height, z, color, mode) # left
+      draw_rect(x - thickness, y - thickness, width + thickness * 2, thickness, z, color, mode) # top (full)
+      draw_rect(x + width, y, thickness, height, z, color, mode) # right
+      draw_rect(x - thickness, y + height, width + thickness * 2, thickness, z, color, mode) # bottom (full)
 
       nil
     end

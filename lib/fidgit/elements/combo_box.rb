@@ -66,7 +66,7 @@ class ComboBox < Button
 
   def clicked_left_mouse_button(sender, x, y)
     @menu.x = self.x
-    @menu.y = self.y + height + 1
+    @menu.y = self.y + height + border_thickness
     $window.game_state_manager.current_game_state.show_menu @menu
 
     nil

@@ -74,9 +74,9 @@
     :color: ?white
     :font_size: 30
     :font_name: ''
-    :padding_top: 4
+    :padding_top: 2
     :padding_right: 4
-    :padding_bottom: 4
+    :padding_bottom: 2
     :padding_left: 4
 
   :FileBrowser: # < Composite
@@ -86,6 +86,7 @@
   :GridPacker: # < Packer
     :cell_background_color: ?none
     :cell_border_color: ?none
+    :cell_border_thickness: 0
 
   :Group: # < Packer
     :padding_top: 0
@@ -108,13 +109,14 @@
     :border_color: ?white
 
   :List::Item:
-    :border_color: ?none
+    :border_thickness: 0
 
   :MenuPane:
     :background_color: ?very_dark_gray
 
   :MenuPane::Item: # < Button
     :border_color: ?none
+    :border_thickness: 0
 
   :MenuPane::Separator: # < Label
      :line_height: 2
@@ -140,6 +142,8 @@
 
   :ScrollWindow: # < Composite
     :scroll_bar_thickness: ?scroll_bar_thickness
+    :border_color: ?light_gray
+    :border_thickness: 1
 
   :Slider: # < Element
     :background_color: ?none
