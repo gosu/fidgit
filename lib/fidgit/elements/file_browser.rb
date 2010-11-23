@@ -72,20 +72,13 @@ module Fidgit
           end
         end
 
-        @file_name_text = text_area(text: options[:file_name], max_height: font_size * 2, width: options[:width])
+        @file_name_text = text_area(text: options[:file_name], max_height: font_size * 1.5, width: options[:width], border_thickness: 1)
 
         create_nav_buttons
 
         pack :horizontal, align: :center, padding: 0 do
-          @action_button = case @type
-          when :open
-            button(options[:open_text]) do
-              publish :selected, :open, file_path
-            end
-          when :save
-            button(options[:save_text]) do
-              publish :selected, :save, file_path
-            end
+          @action_button = button(options[:"#{type}_text"]) do
+            publish :selected, @type, file_path
           end
 
           button(options[:cancel_text]) do
@@ -119,7 +112,7 @@ module Fidgit
             create_nav_buttons(i)
           end
         else
-          @nav_buttons.label dir, border_color: @@schema.default(Button, :border_color)
+          @nav_buttons.label dir, border_color: @@schema.default(Button, :border_color), border_thickness: @@schema.default(Button, :border_thickness)
         end
       end
 

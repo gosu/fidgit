@@ -4,7 +4,7 @@ module Fidgit
   # A modal dialog.
   # @abstract
   class DialogState < GuiState
-    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(50, 50, 50)
+    DEFAULT_BACKGROUND_COLOR = Gosu::Color.rgb(75, 75, 75)
     DEFAULT_BORDER_COLOR = Gosu::Color.rgb(255, 255, 255)
 
     DEFAULT_SHADOW_COLOR = Gosu::Color.rgba(0, 0, 0, 100)
