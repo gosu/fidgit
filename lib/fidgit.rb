@@ -1,12 +1,5 @@
 # encoding: utf-8
-
-require 'yaml'
-
-gems = YAML.load(File.read(File.join(File.dirname(__FILE__), 'fidgit', 'gem_dependencies.yml')))
-
-gems.each_pair do |gem, version|
-  require gem
-end
+require 'chingu'
 
 require_relative 'fidgit/gosu_ext'
 require_relative 'fidgit/standard_ext'

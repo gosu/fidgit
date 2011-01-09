@@ -1,11 +1,19 @@
 # encoding: utf-8
 
 module Fidgit
-  class Window < Chingu::Window
-    def close
-      super
+  module Window
 
-      GuiState.clear
+    def self.included(base)
+      base.send :include, Methods
     end
+
+    module Methods
+
+      def close
+        super
+        GuiState.clear
+      end
+    end
+    
   end
 end

@@ -19,7 +19,7 @@ class ExampleState < GuiState
 
       button "Load game", icon: Gosu::Image["head_icon.png"] do
         $window.close
-        window = Fidgit::Window.new(*@width_combo.value, @full_screen_button.value)
+        window = Chingu::Window.new(*@width_combo.value, @full_screen_button.value)
         window.push_game_state ExampleAfterState
         window.show
       end

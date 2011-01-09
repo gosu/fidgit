@@ -2,9 +2,13 @@ require_relative "helpers/helper"
 
 include Fidgit
 
+class TestWindow < Chingu::Window
+  include Fidgit::Window
+end
+
 describe Label do
   before :each do
-    Fidgit::Window.new(10, 10, false)
+    TestWindow.new(10, 10, false)
   end
 
   after :each do

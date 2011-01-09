@@ -1,6 +1,8 @@
-
-/.idea
-/doc
-/.yardoc
-/pkg
-/README.html
+pkg/*
+*.gem
+.bundle
+Gemfile.lock
+doc/
+.yardoc
+README.html
+.idea/

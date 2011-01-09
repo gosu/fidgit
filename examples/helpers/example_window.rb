@@ -1,12 +1,13 @@
 require_relative '../../lib/fidgit'
-include Fidgit
 
 media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', 'media'))
 Gosu::Image.autoload_dirs << File.join(media_dir, 'images')
 Gosu::Sample.autoload_dirs << File.join(media_dir, 'samples')
 Gosu::Font.autoload_dirs << File.join(media_dir, 'fonts')
 
-class ExampleWindow < Fidgit::Window
+class ExampleWindow < Chingu::Window
+  include Fidgit::Window
+  
   def initialize(options = {})
     super(640, 480, false)
 
