@@ -283,7 +283,7 @@ module Fidgit
             line += word
             line_width = position_letters_in_word(word, line_width)
             @caret_positions.push [line_width, y_at_line(@lines.size)]
-            @char_widths[-1] += (width - line_width - padding_x * 2) unless @char_widths.empty?
+            @char_widths[-1] += (width - line_width - (padding_left + padding_right)) unless @char_widths.empty?
             @char_widths.push 0
             @lines.push line
             word = ''
