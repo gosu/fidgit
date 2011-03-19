@@ -8,7 +8,7 @@ module Fidgit
     def initialize(options = {})
       options = {
         image: Gosu::Image[ARROW],
-        center: 0,
+        rotation_center: :top_left,
         zorder: Float::INFINITY
       }.merge!(options)
 
