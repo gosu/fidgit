@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'element'
-
 module Fidgit
   class Label < Element
     attr_accessor :color, :background_color, :border_color

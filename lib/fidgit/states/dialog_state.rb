@@ -1,5 +1,3 @@
-require_relative 'gui_state'
-
 module Fidgit
   # A modal dialog.
   # @abstract

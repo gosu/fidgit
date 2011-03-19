@@ -1,5 +1,3 @@
-require_relative 'dialog_state'
-
 module Fidgit
   # A simple dialog that manages a message with a set of buttons beneath it.
   class FileDialog < DialogState

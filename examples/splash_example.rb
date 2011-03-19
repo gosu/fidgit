@@ -1,7 +1,7 @@
 require_relative 'helpers/example_window'
 
 # By using a splash screen of some sort, one can switch to another resolution for the main game.
-class ExampleState < GuiState
+class ExampleState < Fidgit::GuiState
   def initialize
     super
     pack :vertical do

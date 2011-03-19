@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'label'
-
 module Fidgit
   class Button < Label
     # @param (see Label#initialize)

@@ -1,7 +1,7 @@
 require_relative 'helpers/example_window'
 
 # Example for Button and ToggleButton
-class ExampleState < GuiState
+class ExampleState < Fidgit::GuiState
   HEIGHT = 225
   WIDTH = 140
   def initialize

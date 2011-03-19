@@ -24,9 +24,10 @@ h2. Requirements
 
 h2. Example
 
-<pre># require 'fidgit'
+<pre># examples/readme_example.rb
+require 'fidgit'
 
-class MyGame < Fidgit::Window
+class MyGame < Chingu::Window
   def initialize
     super(640, 480, false)
 

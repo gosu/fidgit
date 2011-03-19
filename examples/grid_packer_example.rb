@@ -1,6 +1,6 @@
 require_relative 'helpers/example_window'
 
-class ExampleState < GuiState
+class ExampleState < Fidgit::GuiState
   BORDER_COLOR = Gosu::Color.rgb(255, 0, 0)
   FIXED_NUM = 5
   NUM_CELLS = 17

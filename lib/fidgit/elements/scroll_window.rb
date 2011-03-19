@@ -1,9 +1,5 @@
 # encoding: utf-8
 
-require_relative 'composite'
-require_relative 'scroll_area'
-require_relative 'scroll_bar'
-
 module Fidgit
   class ScrollWindow < Composite
 	  def content; @view.content; end

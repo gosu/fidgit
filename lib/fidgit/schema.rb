@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'gosu_ext'
-
 module Fidgit
   # An object that manages Schema values. Usually loaded from a YAML file.
   #

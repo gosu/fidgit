@@ -3,7 +3,7 @@ require_relative 'helpers/example_window'
 # Change font and labels in the schema.
 Fidgit::Element.schema.merge_elements!(Element: { font_size: 24 }, Label: { background_color: "?dark_blue" })
 
-class ExampleState < GuiState
+class ExampleState < Fidgit::GuiState
   ROW_BACKGROUND = Gosu::Color.rgb(0, 100, 0)
   CELL_BACKGROUND = Gosu::Color.rgb(100, 0, 0)
   OUTER_BACKGROUND = Gosu::Color.rgb(100, 0, 100)

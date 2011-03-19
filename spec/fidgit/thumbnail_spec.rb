@@ -1,10 +1,7 @@
 require_relative 'helpers/helper'
 require_relative 'helpers/tex_play_helper'
 
-require 'fidgit/gosu_ext'
-include Gosu
-
-require 'fidgit/thumbnail'
+require 'fidgit'
 
 def check_thumbnail_is_square(dimension)
   {square: [10, 10], tall: [5, 12], wide: [6, 5]}.each_pair do |type, dimensions|
@@ -21,7 +18,7 @@ end
 module Fidgit
   describe Thumbnail do
     before :all do
-      $window = Gosu::Window.new(100, 100, false)
+      $window = Chingu::Window.new(100, 100, false)
       @image = Image.create(10, 10)
     end
 

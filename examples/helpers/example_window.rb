@@ -6,8 +6,6 @@ Gosu::Sample.autoload_dirs << File.join(media_dir, 'samples')
 Gosu::Font.autoload_dirs << File.join(media_dir, 'fonts')
 
 class ExampleWindow < Chingu::Window
-  include Fidgit::Window
-  
   def initialize(options = {})
     super(640, 480, false)
 

@@ -1,9 +1,9 @@
 require_relative "../lib/fidgit"
 
-# Normally, you'd load this from the gem.
-# require 'fidgit'
+# Normally, you'd load this from the gem using:
+#   require 'fidgit'
 
-class MyGame < Fidgit::Window
+class MyGame < Chingu::Window
   def initialize
     super(640, 480, false)
 

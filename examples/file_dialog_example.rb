@@ -3,7 +3,7 @@ require_relative 'helpers/example_window'
 
 Fidgit::Element.schema.merge_elements!(Element: { font_size: 15 })
 
-class ExampleState < GuiState
+class ExampleState < Fidgit::GuiState
   def initialize
     super
 

@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'packer'
-
 module Fidgit
   # A vertically aligned element packing container.
 

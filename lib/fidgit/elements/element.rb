@@ -1,8 +1,5 @@
 # encoding: utf-8
 
-require_relative '../event'
-require_relative '../schema'
-
 # The Fidgit GUI framework for Gosu.
 module Fidgit
   class << self

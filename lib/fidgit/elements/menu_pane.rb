@@ -1,8 +1,5 @@
 # encoding: utf-8
 
-require_relative 'composite'
-require_relative 'button'
-
 module Fidgit
   class MenuPane < Composite
     # An item within the menu.

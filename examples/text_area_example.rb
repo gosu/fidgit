@@ -1,6 +1,6 @@
 require_relative 'helpers/example_window'
 
-class ExampleState < GuiState
+class ExampleState < Fidgit::GuiState
   def initialize
     super
 

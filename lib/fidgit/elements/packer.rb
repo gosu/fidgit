@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'container'
-
 module Fidgit
   # Container that auto-packs elements.
   #

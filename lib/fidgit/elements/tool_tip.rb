@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'label'
-
 module Fidgit
   class ToolTip < Label
     def x=(value); super(value); recalc; value; end

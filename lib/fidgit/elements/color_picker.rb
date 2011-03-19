@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'composite'
-
 module Fidgit
   class ColorPicker < Composite
     CHANNELS = [:red, :green, :blue]

@@ -1,7 +1,7 @@
 require_relative 'helpers/example_window'
 
 # Labels can have text and/or icons.
-class ExampleState < GuiState
+class ExampleState < Fidgit::GuiState
   def initialize
     super
 

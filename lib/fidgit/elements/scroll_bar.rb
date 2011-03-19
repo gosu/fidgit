@@ -1,7 +1,5 @@
 # encoding: utf-8
 
-require_relative 'composite'
-
 module Fidgit
   # @abstract
   class ScrollBar < Composite

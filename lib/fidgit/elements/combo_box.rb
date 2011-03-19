@@ -1,8 +1,5 @@
 # encoding: utf-8
 
-require_relative 'button'
-require_relative 'menu_pane'
-
 module Fidgit
 class ComboBox < Button
   event :changed
