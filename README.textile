@@ -5,12 +5,19 @@ Fidgit is a GUI framework built on "Gosu":http://libgosu.org/ and "Chingu":http:
 
 h2. Description
 
-The API is inspired by "Shoes":http://shoesrb.com/, but since Shoes is very simplistic, the functionality is based around "FXRuby":http://www.fxruby.org/.
-Fidgit was originally developed as a part of the Sidney game, but as it got more complex, it was obvious it would be useful to separate.
+The API is inspired by "Shoes":http://shoesrb.com/, but since Shoes is very simplistic, the level of functionality is
+based around "FXRuby":http://www.fxruby.org/ and other GUI APIs.
+Fidgit was originally developed as a part of the Sidney game, but as it got more complex, it was obvious it would be
+useful to separate them.
 
 _WARNING: THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT AND THE API IS LIABLE TO CONTINUOUS CHANGE AND IT IS QUITE UNSTABLE!_
 
 Read the Yard documentation at "rubydoc.info":http://rubydoc.info/github/Spooner/fidgit/master
+
+h2. Aim
+
+Fidgit aims to be a toolkit which will provide the building blocks to quickly create a GUI either for a GUI-based game
+or for options screens and menus within a regular Gosu game.
 
 h2. License
 
@@ -18,9 +25,10 @@ GPL v3 (see COPYING.txt)
 
 h2. Requirements
 
-* Gosu and Chingu gems ("gem install gosu chingu").
 * Ruby 1.9.2 (sorry, I'm lazy!).
-
+* Gosu gem 0.7.27.1 ("gem install gosu")
+** "Installing Gosu dependencies on Linux":http://code.google.com/p/gosu/wiki/GettingStartedOnLinux (On Win32 and OS X there are binary gems available)
+* Chingu gem 0.9rc4 ("gem install chingu --pre").
 
 h2. Example
 
@@ -115,15 +123,16 @@ These elements contain items, which can easily be added from within a block pass
 
 h2. Alternative GUI frameworks
 
-There are two GUI other tool-kits that work with Gosu:
+There are two other GUI tool-kits that work with Gosu:
 
 * "Rubygoo":http://code.google.com/p/rubygoo/
 ** Additionally supports "Rubygame":http://rubygame.org/ (as well as Gosu).
-** Relatively cumbersome API.
 ** Only simple widgets are implemented.
+** No longer supported.
 
 * "GGLib":http://code.google.com/p/gglib/ (Gosu GUI Library)
 ** Pretty graphical themes.
 ** Only simple widgets are implemented.
+** No longer supported (though author has commented that they would like to pick it up again).
 
 Remember that if you primarily want a GUI for your GUI application, not just a GUI in your Gosu game, consider using a dedicated GUI tool-kit, such as "Shoes":http://shoesrb.com/, "FXRuby":http://www.fxruby.org/ or "wxRuby":http://wxruby.rubyforge.org/
