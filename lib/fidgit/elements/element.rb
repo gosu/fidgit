@@ -108,7 +108,7 @@ module Fidgit
     # @option options [Number] :max_height (value of :height option)
     #
     # @option options [String] :tip ('') Tool-tip text
-    # @option options [String] :font_name ('')
+    # @option options [String, :default] :font_name (:default, which resolves as the default Gosu font)
     # @option options [String] :font_size (30)
     #
     # @option options [Gosu::Color] :background_color (transparent)
@@ -172,7 +172,12 @@ module Fidgit
 
       @z = options[:z]
       @tip = options[:tip].dup
-      @font_name = options[:font_name].dup
+      @font_name = if options[:font_name].nil? or options[:font_name] == :default
+                     Gosu::default_font_name
+                   else
+                     options[:font_name].dup
+                   end
+
       @font_size = options[:font_size]
 
       @rect = Chingu::Rect.new(options[:x], options[:y], options[:width] || 0, options[:height] || 0)

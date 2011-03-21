@@ -73,7 +73,7 @@
     :border_thickness: 0
     :color: ?white
     :font_size: 30
-    :font_name: ''
+    :font_name: :default
     :padding_top: 2
     :padding_right: 4
     :padding_bottom: 2
