@@ -10,7 +10,9 @@ class ComboBox < Button
   def value=(value)
     if @value != value
       @value = value
-      @text = @menu.find(@value).text
+      item = @menu.find(@value)
+      self.text = item.text
+      self.icon = item.icon
       publish :changed, @value
     end
 
