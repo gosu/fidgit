@@ -5,6 +5,8 @@ module Fidgit
     attr_accessor :color, :background_color, :border_color
     attr_reader :text, :icon
 
+    VALID_JUSTIFICATION = [:left, :right, :center]
+
     def text=(value)
       @text = value
       recalc
@@ -22,9 +24,11 @@ module Fidgit
     #
     # @option (see Element#initialize)
     # @option options [Fidgit::Thumbnail, Gosu::Image, nil] :icon (nil)
+    # @option options [:left, :right, :center] :justify (:left) Text justification.
     def initialize(text, options = {})
       options = {
         color: default(:color),
+        justify: default(:justify),
         background_color: default(:background_color),
         border_color: default(:border_color),
       }.merge! options
@@ -32,6 +36,9 @@ module Fidgit
       @text = text.dup
       @icon = options[:icon]
       @color = options[:color].dup
+
+      raise "Justification must be one of #{VALID_JUSTIFICATION.inspect}" unless VALID_JUSTIFICATION.include? options[:justify]
+      @justify = options[:justify]
 
       super(options)
     end
@@ -44,7 +51,21 @@ module Fidgit
       end
 
       unless @text.empty?
-        font.draw(@text, current_x, y + padding_top, z, 1, 1, @color)
+        case @justify
+          when :left
+            rel_x = 0.0
+            center_x = current_x
+
+          when :right
+            rel_x = 1.0
+            center_x = x + rect.width - padding_right
+
+          when :center
+            rel_x = 0.5
+            center_x = (current_x + x + rect.width - padding_right) / 2.0
+        end
+
+        font.draw_rel(@text, center_x, y + padding_top, z, rel_x, 0, 1, 1, @color)
       end
 
       nil

@@ -101,6 +101,7 @@
     :height: ?scroll_bar_thickness
 
   :Label: # < Element
+    :justify: :left
     :disabled:
       :color: ?light_gray
 
