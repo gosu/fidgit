@@ -121,23 +121,23 @@ module Fidgit
         $x.should == 7
       end
     end
+  end
+  
+  # Abstract class, so doesn't really do anything.
+  describe History::Action do
+    before :each do
+      @object = described_class.new
+    end
 
-    # Abstract class, so doesn't really do anything.
-    describe History::Action do
-      before :each do
-        @object = described_class.new
+    describe "do()" do
+      it "should raise an error" do
+        lambda { @object.do }.should raise_error NotImplementedError
       end
+    end
 
-      describe "do()" do
-        it "should raise an error" do
-          lambda { @object.do }.should raise_error NotImplementedError
-        end
-      end
-
-      describe "undo()" do
-        it "should raise an error" do
-          lambda { @object.undo }.should raise_error NotImplementedError
-        end
+    describe "undo()" do
+      it "should raise an error" do
+        lambda { @object.undo }.should raise_error NotImplementedError
       end
     end
   end
