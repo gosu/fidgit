@@ -80,7 +80,7 @@
     :padding_left: 4
 
   :FileBrowser: # < Composite
-    :pattern: *.*
+    :pattern: "*.*"
     :show_extension: true
 
   :GridPacker: # < Packer
