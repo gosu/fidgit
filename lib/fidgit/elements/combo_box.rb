@@ -2,6 +2,10 @@
 
 module Fidgit
 class ComboBox < Button
+  extend Forwardable
+
+  def_delegators :@menu, :each
+
   event :changed
 
   def index; @menu.index(@value) end
@@ -57,7 +61,8 @@ class ComboBox < Button
 
     # Force text to be updated if the item added has the same value.
     if item.value == @value
-      @text = item.text
+      self.text = item.text
+      self.icon = item.icon
     end
 
     item
@@ -69,6 +74,12 @@ class ComboBox < Button
     $window.game_state_manager.current_game_state.show_menu @menu
 
     nil
+  end
+
+  def clear
+    self.text = ""
+    self.icon = nil
+    @menu.clear
   end
 
   protected

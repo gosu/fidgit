@@ -4,11 +4,9 @@ module Fidgit
   # A container that contains Elements.
   # @abstract
   class Container < Element
-    def size; @children.size; end
-    def each(&block); @children.each &block; end
-    def find(&block); @children.find &block; end
-    def index(value); @children.index value; end
-    def [](index); @children[index]; end
+    extend Forwardable
+
+    def_delegators :@children, :size, :each, :find, :index, :[]
 
     def x=(value)
       each {|c| c.x += value - x }

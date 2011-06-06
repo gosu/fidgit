@@ -57,11 +57,15 @@ module Fidgit
       end
     end
 
+    # -------------------
+
+    extend Forwardable
+
+    def_delegators :@items, :each, :clear, :size, :[]
+
     event :selected
 
     def index(value); @items.index find(value); end
-    def size; @items.size; end
-    def [](index); @items[index]; end
 
     # @option (see Composite#initialize)
     # @option options [Float] :x (cursor x, if in a GuiState)
