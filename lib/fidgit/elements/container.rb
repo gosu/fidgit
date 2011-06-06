@@ -91,6 +91,7 @@ module Fidgit
       List.new({parent: self}.merge!(options), &block)
     end
 
+    # Deprecated: use horizontal/vertical/grid
     def pack(arrangement, options = {}, &block)
       klass = case arrangement
         when :horizontal
@@ -104,6 +105,24 @@ module Fidgit
       end
 
       klass.new({parent: self}.merge!(options), &block)
+    end
+
+    public
+    # Pack elements within the block horizontally.
+    def horizontal(options = {}, &block)
+      HorizontalPacker.new({ parent: self }.merge!(options), &block)
+    end
+
+    public
+    # Pack elements within the blockvertically.
+    def vertical(options = {}, &block)
+      VerticalPacker.new({ parent: self }.merge!(options), &block)
+    end
+
+    public
+    # Pack elements within the block in a grid (matrix) formation.
+    def grid(options = {}, &block)
+      GridPacker.new({ parent: self }.merge!(options), &block)
     end
 
     def radio_button(text, value, options = {}, &block)
@@ -174,14 +193,7 @@ module Fidgit
     protected
     # Any container passed a block will allow you access to its methods.
     def post_init_block(&block)
-      case block.arity
-        when 1
-          yield self
-        when 0
-          instance_methods_eval &block
-        else
-          raise "block arity must be 0 or 1"
-      end
+      with(&block)
     end
   end
 end

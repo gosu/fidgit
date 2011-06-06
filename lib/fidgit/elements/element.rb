@@ -248,6 +248,20 @@ module Fidgit
       @parent.send :add, self if @parent
     end
 
+    public
+    # Evaluate a block, just like it was a constructor block.
+    def with(&block)
+      raise ArgumentError.new("Must pass a block") unless block_given?
+      case block.arity
+        when 1
+          yield self
+        when 0
+          instance_methods_eval &block
+        else
+          raise "block arity must be 0 or 1"
+      end
+    end
+
     protected
     # By default, elements do not accept block arguments.
     def post_init_block(&block)

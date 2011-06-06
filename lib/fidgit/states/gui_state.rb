@@ -5,6 +5,10 @@ module Fidgit
     # A 1x1 white pixel used for drawing.
     PIXEL_IMAGE = 'pixel.png'
 
+    extend Forwardable
+
+    def_delegators :@container, :horizontal, :vertical, :grid
+
     # The Container that contains all the elements for this GuiState.
     # @return [Packer]
     attr_reader :container
