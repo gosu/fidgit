@@ -251,7 +251,7 @@ module Fidgit
       word_width = 0
 
       text.each_char do |char|
-        char_width = font.text_width(char)
+        char_width = (char == "\n") ? 0 : font.text_width(char)
 
         overall_width = line_width + (line_width == 0 ? 0 : space_width) + word_width + char_width
         if overall_width > max_width and not (char == ' ' and not word.empty?)
