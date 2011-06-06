@@ -50,6 +50,8 @@ class ComboBox < Button
       end
     end
 
+    @@arrow ||= Gosu::Image["combo_arrow.png"]
+
     super('', options)
 
     rect.height = [height, font_size + padding_top + padding_bottom].max
@@ -68,6 +70,12 @@ class ComboBox < Button
     item
   end
 
+  def draw
+    super
+    size = height / @@arrow.width.to_f
+    @@arrow.draw x + width - height, y, z, size, size
+  end
+
   def clicked_left_mouse_button(sender, x, y)
     @menu.x = self.x
     @menu.y = self.y + height + border_thickness
@@ -81,6 +89,15 @@ class ComboBox < Button
     self.icon = nil
     @menu.clear
   end
+
+  protected
+  def layout
+    super
+    rect.width + height  # Allow size for the arrow.
+
+    nil
+  end
+
 
   protected
   # Any combo-box passed a block will allow you access to its methods.
