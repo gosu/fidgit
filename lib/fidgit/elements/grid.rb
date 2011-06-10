@@ -72,8 +72,8 @@ module Fidgit
     protected
     # Repack all the elements into their positions.
     def repack
-      @widths = Array.new(@num_columns, 0)
-      @heights = Array.new(@num_rows, 0)
+      @widths = Array.new(@rows.empty? ? 0 : @rows[0].size, 0)
+      @heights = Array.new(@rows.size, 0)
 
       filled_columns = []
       filled_rows = []
@@ -82,35 +82,39 @@ module Fidgit
       @rows.each_with_index do |row, row_num|
         row.each_with_index do |element, column_num|
           fills = (element.align_h == :fill)
-          @widths[column_num] = [fills ? 0 : element.outer_width, @widths[column_num] || 0].max
+          @widths[column_num] = [fills ? 0 : element.outer_width, @widths[column_num]].max
           filled_columns.push fills
 
           fills = (element.align_v == :fill)
-          @heights[row_num] = [fills ? 0 : element.outer_height, @heights[row_num] || 0].max
+          @heights[row_num] = [fills ? 0 : element.outer_height, @heights[row_num]].max
           filled_rows.push fills
         end
       end
 
       # Expand the size of each filled column to make the minimum size required.
-      num_filled_columns = filled_columns.select {|value| value }.count
-      if num_filled_columns > 0
+      unless @widths.empty?
+        num_filled_columns = filled_columns.select {|value| value }.count
         total_width = @widths.inject(0, :+) + (padding_left + padding_right) + ((@num_columns - 1) * spacing_h)
-        if total_width < min_width
-          extra_width = total_width / num_filled_columns
-          filled_columns.each_with_index do |filled, i|
-            @widths[i] += extra_width if filled
+        extra_width = min_width - total_width
+        if extra_width > 0
+          if num_filled_columns > 0
+            @widths[filled_columns.index true] += extra_width
+          else
+            @widths[-1] += extra_width
           end
         end
       end
 
       # Expand the size of each filled row to make the minimum size required.
-      num_filled_rows = filled_rows.select {|value| value }.count
-      if num_filled_rows > 0
+      unless @heights.empty?
+        num_filled_rows = filled_rows.select {|value| value }.count
         total_height = @heights.inject(0, :+) + (padding_left + padding_right) + ((@num_rows - 1) * spacing_v)
-        if total_height < min_height
-          extra_height = total_height / num_filled_rows
-          filled_rows.each_with_index do |filled, i|
-            @heights[i] += extra_height if filled
+        extra_height = min_height - total_height
+        if extra_height > 0
+          if num_filled_rows > 0
+            @heights[filled_rows.index true] += extra_height
+          else
+            @heights[-1] += extra_height
           end
         end
       end

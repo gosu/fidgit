@@ -49,7 +49,7 @@ module Fidgit
 
     def initialize
       # The container is where the user puts their content.
-      @container = Vertical.new(padding: 0, width: $window.width, height: $window.height)
+      @container = MainPacker.new
 
       unless defined? @@draw_pixel
         media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'media'))

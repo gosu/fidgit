@@ -9,8 +9,6 @@ module Gosu
 
     public
     def register_entity(name, image)
-      raise ArgumentError.new("Entity already registered") if @entities.has_key? name
-
       name = name.to_sym
       register_entity_fidgit(name, image)
       @entities[name] = image
