@@ -10,10 +10,10 @@ class ExampleState < Fidgit::GuiState
 
       my_label.subscribe :released_right_mouse_button do
         menu do
-          item "Chunky bacon", :CHUNKY_BACON, shortcut: "Ctrl-^-*"
+          item "Chunky bacon", :CHUNKY_BACON, shortcut_text: "Ctrl-^-*"
           separator
-          item "Lentils", :LENTILS, shortcut: "Alt-F15"
-          item "Tepid gruel", :GRUEL, shortcut: "CenterMeta"
+          item "Lentils", :LENTILS, shortcut_text: "Alt-F15"
+          item "Tepid gruel", :GRUEL, shortcut_text: "CenterMeta"
 
           subscribe :selected do |sender, value|
             my_label.text = "I like #{value} more than anything. Mmmm!"

@@ -4,31 +4,30 @@ module Fidgit
   class MenuPane < Composite
     # An item within the menu.
     class Item < Button
-      attr_reader :value, :shortcut
+      attr_reader :value, :shortcut_text
 
       # @param (see Button#initialize)
       #
       # @option (see Button#initialize)
       # @param [any] value Value if the user picks this item
-      # @option options [Boolean] :enabled (true)
-      # @option options [String] :shortcut ('')
+      # @option options [String] :shortcut_text ('')
       def initialize(text, value, options = {})
         options = {
           enabled: true,
           border_color: default(:border_color),
+          shortcut_text: '',
         }.merge! options
 
         @value = value
-        @enabled = [true, false].include?(options[:enabled]) ? options[:enabled] : true
-        @shortcut = options[:shortcut] || ''
+        @shortcut_text = options[:shortcut_text]
 
         super(text, options)
       end
 
       def draw_foreground
         super
-        unless @shortcut.empty?
-          font.draw_rel("#{@shortcut}", rect.right - padding_right, y + ((height - font_size) / 2).floor, z, 1, 0, 1, 1, color)
+        unless @shortcut_text.empty?
+          font.draw_rel("#{@shortcut_text}", rect.right - padding_right, y + ((height - font_size) / 2).floor, z, 1, 0, 1, 1, color)
         end
 
         nil
@@ -37,7 +36,7 @@ module Fidgit
       protected
       def layout
         super
-        rect.width += font.text_width("  #{@shortcut}") unless @shortcut.empty?
+        rect.width += font.text_width("  #{@shortcut_text}") unless @shortcut_text.empty?
         nil
       end
     end

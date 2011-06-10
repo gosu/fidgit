@@ -32,6 +32,7 @@
     :background_color: ?dark_gray
     :border_color: ?light_gray
     :border_thickness: 2
+    :shortcut_color: ?red
 
     :disabled:
       :background_color: ?very_dark_gray

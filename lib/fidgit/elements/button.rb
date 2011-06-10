@@ -4,16 +4,48 @@ module Fidgit
   class Button < Label
     # @param (see Label#initialize)
     # @option (see Label#initialize)
+    # @option options [Symbol] :shortcut (nil) Adds a shortcut key for this element, that activates it. :auto takes the first letter of the text.
     def initialize(text, options = {}, &block)
       options = {
         color: default(:color),
         background_color: default(:background_color),
         border_color: default(:border_color),
+        shortcut_color: default(:shortcut_color),
+        shortcut: nil,
       }.merge! options
+
+      @shortcut_color = options[:shortcut_color].dup
+
+      @shortcut = if options[:shortcut] == :auto
+                    raise ArgumentError.new("Can't use :auto for :shortcut without text") if text.empty?
+                    text[0].downcase.to_sym
+                  else
+                    options[:shortcut]
+                  end
+
+      raise ArgumentError.new(":shortcut must be a symbol") unless @shortcut.nil? or @shortcut.is_a? Symbol
+
+      if @shortcut
+        text = text.sub(/#{@shortcut}/i) {|char| "<c=#{@shortcut_color.to_hex}>#{char}</c>" }
+      end
 
       super(text, options)
 
       update_colors
+    end
+
+    def parent=(value)
+      if @shortcut
+        state = $window.game_state_manager.inside_state || $window.current_game_state
+        if parent
+          raise ArgumentError.new("Repeat of shortcut #{@shortcut.inspect}") if state.input.has_key? @shortcut
+          state.on_input(@shortcut) { activate unless state.focus }
+        else
+          state.input.delete @shortcut
+        end
+      end
+
+      super(value)
     end
 
     def clicked_left_mouse_button(sender, x, y)
