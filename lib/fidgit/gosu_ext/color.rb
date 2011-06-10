@@ -77,6 +77,13 @@ module Gosu
       [red / 255.0, green / 255.0, blue / 255.0,  alpha / 255.0]
     end
 
+    # Convert to a 6-digit hexadecimal value, appropriate for passing to the Gosu +<c>+ tag. The alpha channel is ignored.
+    #
+    # @return [String] RGB hexadecimal string, such as "AABB00"
+    def to_hex
+      "%02x%02x%02x" % [red, green, blue]
+    end
+
     # Show the Color as <RGBA [0, 0, 0, 0]> or, if opaque, <RGB [0, 0, 0]> (Gosu default is '(ARGB:0/0/0/0)')
     def to_s
       if opaque?
