@@ -64,5 +64,12 @@ module Fidgit
     def post_init_block(&block)
       subscribe :clicked_left_mouse_button, &block
     end
+
+    public
+    # Activate the button, as though it had been clicked on.
+    # Does not do anything if the button is disabled.
+    def activate
+      publish(:clicked_left_mouse_button, x + width / 2, y + height / 2) if enabled?
+    end
   end
 end
