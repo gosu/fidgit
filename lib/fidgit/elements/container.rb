@@ -6,7 +6,7 @@ module Fidgit
   class Container < Element
     extend Forwardable
 
-    def_delegators :@children, :size, :each, :find, :index, :[]
+    def_delegators :@children, :size, :each, :find, :index, :[], :empty?, :map, :select, :inject
 
     def x=(value)
       each {|c| c.x += value - x }
