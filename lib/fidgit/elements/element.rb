@@ -67,7 +67,14 @@ module Fidgit
     def drag?(button); false; end
 
     def enabled?; @enabled; end
-    def enabled=(value); @enabled = value; end
+
+    def enabled=(value)
+      if @mouse_over and enabled? and not value
+        $window.current_game_state.unset_mouse_over
+      end
+
+      @enabled = value
+    end
 
     def font; @font ||= Gosu::Font[@font_name, @font_size]; end
 

@@ -161,9 +161,17 @@ module Fidgit
     end
 
     def finalize
+      unset_mouse_over
+
       @tool_tip = nil
 
       nil
+    end
+
+    # Called by active elements when they are disabled.
+    def unset_mouse_over
+      @mouse_over.publish :leave if @mouse_over
+      @mouse_over = nil
     end
 
     # Set the menu pane to be displayed.
