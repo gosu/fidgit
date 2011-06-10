@@ -25,13 +25,17 @@ module Fidgit
 
       raise ArgumentError.new(":shortcut must be a symbol") unless @shortcut.nil? or @shortcut.is_a? Symbol
 
-      if @shortcut
-        text = text.sub(/#{@shortcut}/i) {|char| "<c=#{@shortcut_color.to_hex}>#{char}</c>" }
-      end
-
       super(text, options)
 
       update_colors
+    end
+
+    def text=(value)
+      if @shortcut
+        super value.sub(/#{@shortcut}/i) {|char| "<c=#{@shortcut_color.to_hex}>#{char}</c>" }
+      else
+        super value
+      end
     end
 
     def parent=(value)

@@ -41,6 +41,8 @@ module Fidgit
       @justify = options[:justify]
 
       super(options)
+
+      self.text = text # Forces stuff that manipulates text to work.
     end
 
     def draw_foreground

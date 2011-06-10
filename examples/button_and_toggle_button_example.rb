@@ -12,7 +12,7 @@ class ExampleState < Fidgit::GuiState
         my_label.text = "Pressed the button!"
       end
 
-      my_toggle_button = toggle_button("ToggleButton", tip: "I'm a button that toggles", shortcut: :t) do |sender, value|
+      my_toggle_button = toggle_button("ToggleButton", tip: "I'm a button that toggles", shortcut: :o) do |sender, value|
         my_label.text = "Turned the toggle button #{value ? "on" : "off"}!"
       end
 

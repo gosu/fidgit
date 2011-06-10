@@ -48,12 +48,12 @@ module Fidgit
     protected
     def update_status
       if @value
-        @text = @text_on.dup
+        self.text = @text_on.dup
         @icon = @icon_on ? @icon_on.dup : nil
         @tip = @tip_on.dup
         @border_color = @border_color_on.dup
       else
-        @text = @text_off.dup
+        self.text = @text_off.dup
         @icon = @icon_off ? @icon_off.dup : nil
         @tip = @tip_off.dup
         @border_color = @border_color_off.dup
