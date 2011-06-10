@@ -2,9 +2,9 @@
 
 module Fidgit
   # A vertically aligned element packing container.
-  class HorizontalPacker < GridPacker
+  class Vertical < Grid
     def initialize(options = {})
-      options[:num_rows] = 1
+      options[:num_columns] = 1
 
       super options
     end

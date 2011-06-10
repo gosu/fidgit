@@ -3,7 +3,7 @@
 module Fidgit
   # A basic scrolling area. It is not managed in any way (use ScrollWindow for that).
   class ScrollArea < Container
-    # @return [VerticalPacker] The content shown within this ScrollArea
+    # @return [Vertical] The content shown within this ScrollArea
     attr_reader :content
 
     def offset_x; x - @content.x; end
@@ -31,7 +31,7 @@ module Fidgit
 
       super(options)
 
-      @content = VerticalPacker.new(parent: self, padding: 0)
+      @content = Vertical.new(parent: self, padding: 0)
 
       self.offset_x = options[:offset_x] || options[:offset]
       self.offset_y = options[:offset_y] || options[:offset]

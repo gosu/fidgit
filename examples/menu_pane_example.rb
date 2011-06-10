@@ -5,7 +5,7 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    pack :vertical do
+    vertical do
       my_label = label "Right click to open context menu"
 
       my_label.subscribe :released_right_mouse_button do

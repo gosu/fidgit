@@ -5,7 +5,7 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    pack :vertical do
+    vertical do
       my_label = label "Label", tip: "I'm a label"
 
       combo_box(value: 1, tip: "I'm a combo box; press me and make a selection!") do

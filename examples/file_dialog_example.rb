@@ -8,7 +8,7 @@ class ExampleState < Fidgit::GuiState
     super
 
     container.background_color = Gosu::Color.rgb(50, 50, 50)
-    pack :vertical, align: :center do
+    vertical align: :center do
       full_base_directory = ''
       restricted_base_directory = File.expand_path(File.join(__FILE__, '..', '..'))
       directory = File.join(restricted_base_directory, 'media', 'images')

@@ -17,7 +17,7 @@ class MyGuiState < Fidgit::GuiState
     super
 
     # Create a vertically packed section, centred on the window.
-    pack :vertical, align: :center do
+    vertical align: :center do
       # Create a label with a dark green background.
       my_label = label "Hello world!", background_color: Gosu::Color.rgb(0, 100, 0)
 

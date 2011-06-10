@@ -5,7 +5,7 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    pack :vertical do
+    vertical do
       my_label = label "Why not open a dialog? You know you want to!", tip: "I'm a label"
 
       button("Open an ok message dialog") do

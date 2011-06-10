@@ -39,7 +39,7 @@ module Fidgit
       super(options)
 
       slider_width = width
-      pack :vertical do
+      vertical do
         @sliders = {}
         CHANNELS.each_with_index do |channel, i|
           @sliders[channel] = slider(value: @color.send(channel), range: 0..255, width: slider_width,

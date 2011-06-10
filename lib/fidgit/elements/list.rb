@@ -23,7 +23,7 @@ module Fidgit
           publish :changed, value
         end
 
-        @items = pack :vertical, spacing: 0
+        @items = vertical spacing: 0
       end
     end
 

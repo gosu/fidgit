@@ -3,7 +3,7 @@
 module Fidgit
   # A vertically aligned element packing container.
 
-  class GridPacker < Packer
+  class Grid < Packer
     # @return [Integer]
     attr_reader :num_rows
     # @return [Integer]
@@ -127,7 +127,7 @@ module Fidgit
             when :fill
               if element.width < @widths[column_num]
                 element.width = @widths[column_num]
-                element.send :repack if element.is_a? GridPacker
+                element.send :repack if element.is_a? Grid
               end
             when :center
               element.x += (@widths[column_num] - element.width) / 2
@@ -144,7 +144,7 @@ module Fidgit
             when :fill
               if element.height < @heights[row_num]
                 element.height = @heights[row_num]
-                element.send :repack if element.is_a? GridPacker
+                element.send :repack if element.is_a? Grid
               end
             when :center
               element.y += (@heights[row_num] - element.height) / 2

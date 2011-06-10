@@ -4,8 +4,8 @@ require_relative 'helpers/example_window'
 class ExampleState < Fidgit::GuiState
   def initialize
     super
-    pack :vertical do
-      pack :horizontal do
+    vertical do
+      horizontal do
         text = label "Width:"
 
         @width_combo = combo_box(value: [640, 480]) do
@@ -33,7 +33,7 @@ class ExampleAfterState < GuiState
 
     on_input(:esc, :exit)
 
-    pack :vertical do
+    vertical do
       label "Game loaded!", icon: Gosu::Image["head_icon.png"], border_color: Gosu::Color.rgb(255, 255, 255)
     end
   end

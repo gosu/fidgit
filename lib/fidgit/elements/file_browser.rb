@@ -50,8 +50,8 @@ module Fidgit
 
       super options
 
-      pack :vertical do
-        @nav_buttons = pack :horizontal, padding: 0, spacing: 2
+      vertical do
+        @nav_buttons = horizontal padding: 0, spacing: 2
 
         @scroll_window = scroll_window(height: 250, width: options[:width]) do
           @files_list = list(width: options[:width]) do
@@ -74,7 +74,7 @@ module Fidgit
 
         create_nav_buttons
 
-        pack :horizontal, align: :center, padding: 0 do
+        horizontal align: :center, padding: 0 do
           @action_button = button(options[:"#{type}_text"]) do
             publish :selected, @type, file_path
           end

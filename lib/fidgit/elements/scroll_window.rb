@@ -24,7 +24,7 @@ module Fidgit
 
       super(options)
 
-      @grid = pack :grid, num_columns: 2, padding: 0, spacing: 0 do
+      @grid = grid num_columns: 2, padding: 0, spacing: 0 do
         @view = scroll_area(owner: self, width: options[:width], height: options[:height])
         @spacer = label '', padding: 0, width: 0, height: 0
       end

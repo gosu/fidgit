@@ -89,7 +89,7 @@ module Fidgit
 
       super(options)
 
-      @items = pack :vertical, spacing: 0, padding: 0
+      @items = vertical spacing: 0, padding: 0
 
       if options[:show] and state.is_a? GuiState
         show

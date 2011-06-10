@@ -4,7 +4,7 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    pack :vertical do
+    vertical do
       my_label = label 'No color picked'
 
       color_picker(width: 100) do |sender, color|

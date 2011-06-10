@@ -11,17 +11,17 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    pack :vertical, align: :center, background_color: OUTER_BACKGROUND do
+    vertical align: :center, background_color: OUTER_BACKGROUND do
       label "h => align_h, v => align_v", align_h: :center
 
-      pack :grid, num_columns: 4, align: :center, cell_background_color: CELL_BACKGROUND, background_color: ROW_BACKGROUND, align_h: :fill do
+      grid num_columns: 4, align: :center, cell_background_color: CELL_BACKGROUND, background_color: ROW_BACKGROUND, align_h: :fill do
         label "xxx"
         label "h fill", align_h: :fill
         label "h right", align_h: :right
         label "h center", align_h: :center
 
 
-        pack :vertical do
+        vertical do
           label "xxx"
           label "xxx"
         end
@@ -29,7 +29,7 @@ class ExampleState < Fidgit::GuiState
         label "v center", align_v: :center
         label "v bottom", align_v: :bottom
 
-        pack :vertical, align_h: :center do
+        vertical align_h: :center do
           label "h center"
           label "h center"
         end
@@ -40,7 +40,7 @@ class ExampleState < Fidgit::GuiState
         label ""
         label "bottom right", align_h: :right, align_v: :bottom
         label "bottom center", align_h: :center, align_v: :bottom
-        pack :vertical, align_h: :right do
+        vertical align_h: :right do
           label "h right"
           label "h right"
         end

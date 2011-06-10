@@ -83,7 +83,7 @@
     :pattern: "*.*"
     :show_extension: true
 
-  :GridPacker: # < Packer
+  :Grid: # < Packer
     :cell_background_color: ?none
     :cell_border_color: ?none
     :cell_border_thickness: 0
@@ -94,7 +94,7 @@
     :padding_bottom: 0
     :padding_left: 0
 
-  :HorizontalPacker: # < GridPacker
+  :Horizontal: # < Grid
     :nothing: nil
 
   :HorizontalScrollBar: # < ScrollBar
@@ -174,7 +174,7 @@
     :background_color: ?very_dark_gray
     :border_color: ?white
 
-  :VerticalPacker: # < GridPacker
+  :Vertical: # < Grid
     :nothing: nil
 
   :VerticalScrollBar: # < ScrollBar

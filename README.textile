@@ -49,7 +49,7 @@ class MyGuiState < Fidgit::GuiState
     super
 
     # Create a vertically packed section, centred in the window.
-    pack :vertical, align: :center do
+    vertical align: :center do
       # Create a label with a dark green background.
       my_label = label "Hello world!", background_color: Gosu::Color.rgb(0, 100, 0)
 
@@ -71,7 +71,7 @@ As well as a cursor and tool-tips that are managed by the GuiState for you, ther
 
 Elements are best added by using simple methods (listed below). Most of these method accept a block, some offering access to public methods of the element and others being default event handlers.
 
-The GuiState itself only accepts #pack, but any packer or group accepts any other element method.
+The GuiState itself only accepts #vertical/#horizontal/#grid, but any packer or group accepts any other element method.
 
 h3. GuiState methods
 

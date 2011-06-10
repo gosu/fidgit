@@ -10,7 +10,7 @@
 
     # @example
     #   group do
-    #     pack :horizontal do
+    #     horizontal do
     #       radio_button 1, text: '1', checked: true
     #       radio_button 2, text: '2'
     #       subscribe :changed do |sender, value|
@@ -43,7 +43,7 @@
 
     # @example
     #   @my_group = group do
-    #     pack :horizontal do
+    #     horizontal do
     #       radio_button(1, text: '1', checked: true)
     #       radio_button(2, text: '2')
     #     end

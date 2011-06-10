@@ -44,15 +44,12 @@ module Fidgit
     # (see MessageDialog#initialize)
     def message(text, options = {}, &block); MessageDialog.new(text, options, &block); end
 
-    # (see Container#pack)
-    def pack(*args, &block); @container.pack *args, &block; end
-
     # (see Container#clear)
     def clear(*args, &block); @container.clear *args, &block; end
 
     def initialize
       # The container is where the user puts their content.
-      @container = VerticalPacker.new(padding: 0, width: $window.width, height: $window.height)
+      @container = Vertical.new(padding: 0, width: $window.width, height: $window.height)
 
       unless defined? @@draw_pixel
         media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'media'))

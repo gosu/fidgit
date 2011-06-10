@@ -5,7 +5,7 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    pack :vertical do
+    vertical do
       my_label = label "No clicky"
 
       list do

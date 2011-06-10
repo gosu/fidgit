@@ -89,38 +89,22 @@ module Fidgit
       List.new({parent: self}.merge!(options), &block)
     end
 
-    # Deprecated: use horizontal/vertical/grid
-    def pack(arrangement, options = {}, &block)
-      klass = case arrangement
-        when :horizontal
-          HorizontalPacker
-        when :vertical
-          VerticalPacker
-        when :grid
-          GridPacker
-        else
-          raise ArgumentError, "packing arrangement must be one of :horizontal, :vertical or :grid"
-      end
-
-      klass.new({parent: self}.merge!(options), &block)
-    end
-
     public
     # Pack elements within the block horizontally.
     def horizontal(options = {}, &block)
-      HorizontalPacker.new({ parent: self }.merge!(options), &block)
+      Horizontal.new({ parent: self }.merge!(options), &block)
     end
 
     public
     # Pack elements within the blockvertically.
     def vertical(options = {}, &block)
-      VerticalPacker.new({ parent: self }.merge!(options), &block)
+      Vertical.new({ parent: self }.merge!(options), &block)
     end
 
     public
     # Pack elements within the block in a grid (matrix) formation.
     def grid(options = {}, &block)
-      GridPacker.new({ parent: self }.merge!(options), &block)
+      Grid.new({ parent: self }.merge!(options), &block)
     end
 
     def radio_button(text, value, options = {}, &block)

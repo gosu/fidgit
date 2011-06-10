@@ -5,7 +5,7 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    pack :vertical do
+    vertical do
       my_label = label "Label", tip: "I'm a label"
 
       my_button = button("Button", tip: "I'm a button; press me!") do
