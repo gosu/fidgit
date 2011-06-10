@@ -11,17 +11,10 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-#=begin
-    vertical align: :center, width: 10, height: 10, background_color: Gosu::Color::RED do
-      label "x"
-      label "y"
-    end
-#=end
-=begin
     vertical align: :center, background_color: OUTER_BACKGROUND do
       label "h => align_h, v => align_v", align_h: :center
 
-      grid num_columns: 4, align: :center, cell_background_color: CELL_BACKGROUND, background_color: ROW_BACKGROUND, align_h: :fill do
+      grid num_columns: 4, align: :center, cell_background_color: CELL_BACKGROUND, background_color: ROW_BACKGROUND do
         label "xxx"
         label "h fill", align_h: :fill
         label "h right", align_h: :right
@@ -57,8 +50,6 @@ class ExampleState < Fidgit::GuiState
         label "Bazingo by jingo!"
       end
     end
-
-=end
   end
 end
 
