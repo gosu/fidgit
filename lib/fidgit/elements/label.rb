@@ -77,20 +77,20 @@ module Fidgit
     def layout
       if @icon
         if @text.empty?
-          rect.width = [padding_left + @icon.width + padding_right, width].max
-          rect.height = [padding_top + @icon.height + padding_bottom, height].max
+          rect.width = [padding_left + @icon.width + padding_right, min_width].max
+          rect.height = [padding_top + @icon.height + padding_bottom, min_height].max
         else
           # Todo: Use padding_h inside here? Probably by making this a Composite.
-          rect.width = [padding_left + @icon.width + [padding_left + padding_right].max + font.text_width(@text) + padding_right, width].max
-          rect.height = [padding_top + [@icon.height, font_size].max + padding_bottom, height].max
+          rect.width = [padding_left + @icon.width + [padding_left + padding_right].max + font.text_width(@text) + padding_right, min_width].max
+          rect.height = [padding_top + [@icon.height, font_size].max + padding_bottom, min_height].max
         end
       else
         if @text.empty?
-          rect.width = [padding_left + padding_right, width].max
-          rect.height = [padding_top + padding_bottom, height].max
+          rect.width = [padding_left + padding_right, min_width].max
+          rect.height = [padding_top + padding_bottom, min_height].max
         else
-          rect.width = [padding_left + font.text_width(@text) + padding_right, width].max
-          rect.height = [padding_top + font_size + padding_bottom, height].max
+          rect.width = [padding_left + font.text_width(@text) + padding_right, min_width].max
+          rect.height = [padding_top + font_size + padding_bottom, min_height].max
         end
       end
 
