@@ -45,11 +45,14 @@ module Fidgit
     def message(text, options = {}, &block); MessageDialog.new(text, options, &block); end
 
     # (see Container#clear)
-    def clear(*args, &block); @container.clear *args, &block; end
+    def clear(*args, &block); @container.clear(*args, &block); end
 
     def initialize
       # The container is where the user puts their content.
       @container = MainPacker.new
+      @menu = nil
+      @last_cursor_pos = [-1, -1]
+      @mouse_over = nil
 
       unless defined? @@draw_pixel
         media_dir = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', '..', 'media'))

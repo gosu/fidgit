@@ -34,7 +34,7 @@ module Fidgit
       raise ArgumentError, "Expected method or block for event handler" unless !block.nil? ^ !method.nil?
       raise ArgumentError, "#{self.class} does not handle #{event.inspect}" unless events.include? event
 
-      @_event_handlers = Hash.new() { |hash, key| hash[key] = [] } unless @_event_handlers
+      @_event_handlers ||= Hash.new() { |hash, key| hash[key] = [] }
       @_event_handlers[event].push(method ? method : block)
 
       nil
@@ -59,7 +59,7 @@ module Fidgit
         return :handled if send(event, self, *args) == :handled
       end
 
-      if @_event_handlers
+      if defined? @_event_handlers
         @_event_handlers[event].reverse_each do |handler|
           return :handled if handler.call(self, *args) == :handled
         end
@@ -77,8 +77,8 @@ module Fidgit
     def self.included(base)
       class << base
         def events
-          unless @events
-            # Copy the events already set up for your parent.
+          # Copy the events already set up for your parent.
+          unless defined? @events
             @events = if superclass.respond_to? :events
               superclass.events.dup
             else

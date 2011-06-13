@@ -93,7 +93,7 @@ class ComboBox < Button
   protected
   def layout
     super
-    rect.width + height  # Allow size for the arrow.
+    rect.width += height  # Allow size for the arrow.
 
     nil
   end

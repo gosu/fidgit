@@ -152,6 +152,8 @@ module Fidgit
 
       @enabled = options[:enabled]
 
+      @mouse_over = false
+
       # Alignment and min/max dimensions.
       @align_h = options[:align_h] || Array(options[:align]).last || default(:align_h)
       raise ArgumentError, "Invalid align_h: #{@align_h}" unless VALID_ALIGN_H.include? @align_h
@@ -263,7 +265,7 @@ module Fidgit
         when 1
           yield self
         when 0
-          instance_methods_eval &block
+          instance_methods_eval(&block)
         else
           raise "block arity must be 0 or 1"
       end

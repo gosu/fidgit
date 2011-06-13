@@ -86,6 +86,8 @@ module Fidgit
         }.merge! options
       end
 
+      @items = nil
+
       super(options)
 
       @items = vertical spacing: 0, padding: 0
