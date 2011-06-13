@@ -65,6 +65,8 @@ module Fidgit
     event :selected
 
     def index(value); @items.index find(value); end
+    def x=(value); super(value); recalc; end
+    def y=(value); super(value); recalc; end
 
     # @option (see Composite#initialize)
     # @option options [Float] :x (cursor x, if in a GuiState)
@@ -135,7 +137,7 @@ module Fidgit
       super
 
       if @items
-        # Ensure the menu can't go over the edge of the screen. If it can't be avoided, align with left edge of screen.
+        # Ensure the menu can't go over the edge of the screen. If it can't be avoided, align with top-left edge of screen.
         rect.x = [[x, $window.width - width - padding_right].min, 0].max
         rect.y = [[y, $window.height - height - padding_bottom].min, 0].max
 
@@ -146,6 +148,8 @@ module Fidgit
         # Ensure that all items are of the same width.
         max_width = @items.each.to_a.map {|c| c.width }.max || 0
         @items.each {|c| c.rect.width = max_width }
+
+        @items.recalc # Move all the items inside the packer to correct ones.
       end
 
       nil
