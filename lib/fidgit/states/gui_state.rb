@@ -145,7 +145,7 @@ module Fidgit
       @tool_tip.draw if @tool_tip
       cursor.draw
 
-      nil
+      super
     end
 
     def setup
