@@ -67,7 +67,11 @@ module Fidgit
             center_x = (current_x + x + rect.width - padding_right) / 2.0
         end
 
-        font.draw_rel(@text, center_x, y + padding_top, z, rel_x, 0, 1, 1, @color)
+        # Make text centered alongside the icon
+        # TODO: Probably should have this as an option.
+        center_y = y + padding_top + ((y + height - padding_bottom) - (y + padding_top)) / 2.0
+
+        font.draw_rel(@text, center_x, center_y, z, rel_x, 0.5, 1, 1, @color)
       end
 
       nil
