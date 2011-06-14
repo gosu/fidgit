@@ -81,7 +81,11 @@ module Fidgit
         released_right_mouse_button: ->{ redirect_released_mouse_button(:right) },
   
         mouse_wheel_up: :redirect_mouse_wheel_up,
-        mouse_wheel_down: :redirect_mouse_wheel_down
+        mouse_wheel_down: :redirect_mouse_wheel_down,
+
+        x: -> { if @focus and (holding_any?(:left_control, :right_control)) then @focus.cut end },
+        c: -> { if @focus and (holding_any?(:left_control, :right_control)) then @focus.copy end },
+        v: -> { if @focus and (holding_any?(:left_control, :right_control)) then @focus.paste end }
       )
     end
 

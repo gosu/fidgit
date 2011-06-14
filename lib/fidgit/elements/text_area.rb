@@ -46,6 +46,27 @@ module Fidgit
       text[selection_range]
     end
 
+    # Sets the text within the selection. The caret will be placed at the end of the inserted text.
+    #
+    # @param [String] str Text to insert.
+    # @return [String] The new selection text.
+    def selection_text=(str)
+      from = [@text_input.selection_start, @text_input.caret_pos].min
+      new_length = str.length
+
+      full_text = text
+      full_text[selection_range] = str.encode('UTF-8', undef: :replace)
+      @text_input.text = full_text
+
+      @text_input.selection_start = @text_input.caret_pos = from + new_length
+
+      recalc # This may roll back the text if it is too long!
+
+      publish :changed, self.text
+
+      str
+    end
+
     # Position of the caret.
     #
     # @return [Integer] Number in range 0..text.length
@@ -340,6 +361,31 @@ module Fidgit
       end
 
       nil
+    end
+
+    public
+    # Cut the selection and copy it to the clipboard.
+    def cut
+      str = selection_text
+      unless selection_text.empty?
+        Clipboard.copy str
+        self.selection_text = ''
+      end
+    end
+
+    public
+    # Copy the selection to the clipboard.
+    def copy
+      str = selection_text
+      unless selection_text.empty?
+        Clipboard.copy str
+      end
+    end
+
+    public
+    # Paste the contents of the clipboard into the TextArea.
+    def paste
+      self.selection_text = Clipboard.paste
     end
 
     protected
