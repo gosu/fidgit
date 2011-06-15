@@ -38,5 +38,15 @@ module Fidgit
 
       super
     end
+
+    def show
+      $window.game_state_manager.push(self, finalize: false) unless $window.game_state_manager.game_states.include? self
+      nil
+    end
+
+    def hide
+      $window.game_state_manager.pop(setup: false) if $window.game_state_manager.current == self
+      nil
+    end
   end
 end
