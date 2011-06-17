@@ -9,12 +9,12 @@ module Fidgit
     def_delegators :@children, :size, :each, :find, :index, :[], :empty?, :map, :select, :inject
 
     def x=(value)
-      each {|c| c.x += value - x }
+      @children.each {|c| c.x += value - x }
       super(value)
     end
 
     def y=(value)
-      each {|c| c.y += value - y }
+      @children.each {|c| c.y += value - y }
       super(value)
     end
 
@@ -146,7 +146,7 @@ module Fidgit
     end
 
     def update
-      each { |c| c.update }
+      @children.each { |c| c.update }
 
       nil
     end
