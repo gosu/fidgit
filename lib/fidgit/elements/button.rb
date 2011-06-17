@@ -27,6 +27,8 @@ module Fidgit
 
       super(text, options)
 
+      self.text = text # Force shortcut to be written out properly.
+
       update_colors
     end
 
@@ -86,11 +88,13 @@ module Fidgit
         default(:background_color)
       end
 
-      @color = if enabled?
+      self.color = if enabled?
         default(:color)
       else
         default(:disabled, :color)
       end
+
+      @icon.enabled = enabled? if @icon
 
       nil
     end

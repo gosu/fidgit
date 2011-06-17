@@ -80,6 +80,11 @@ module Fidgit
       Group.new({parent: self}.merge!(options), &block)
     end
 
+    # Create an icon.
+    def image_frame(image, options = {}, &block)
+      ImageFrame.new(image, {parent: self}.merge!(options), &block)
+    end
+
     # Create a label within the container.
     def label(text, options = {})
       Label.new(text, {parent: self}.merge!(options))
@@ -165,7 +170,7 @@ module Fidgit
 
     protected
     def draw_foreground
-      each { |c| c.draw }
+      @children.each {|c| c.draw }
 
       font.draw self.class.name, x, y, z if Fidgit.debug_mode?
 
@@ -176,6 +181,29 @@ module Fidgit
     # Any container passed a block will allow you access to its methods.
     def post_init_block(&block)
       with(&block)
+    end
+
+    public
+    def to_s
+      "#{super} [#{@children.size} #{@children.size == 1 ? 'child' : 'children'}]"
+    end
+
+    public
+    def write_tree(indent = "", index = 0)
+      puts self
+
+      indent = indent + "  "
+
+      @children.each.with_index do |element, i|
+          print "#{indent}#{i}: "
+
+          case element
+            when Container
+              element.write_tree(indent)
+            else
+              puts element
+          end
+      end
     end
   end
 end

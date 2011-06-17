@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module Fidgit
-  class ToolTip < Label
+  class ToolTip < TextLine
     def x=(value); super(value); recalc; value; end
     def y=(value); super(value); recalc; value; end
     def hit?(x, y); false; end

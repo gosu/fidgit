@@ -18,7 +18,6 @@ module Fidgit
     def height=(value); ; end
 
     def add(element)
-      raise "MainPacker can only contain one packing element" unless empty?
       raise "MainPacker can only contain packing elements" unless element.is_a? Packer
       super(element)
     end

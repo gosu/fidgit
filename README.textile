@@ -99,6 +99,7 @@ Elements can be placed inside a packer or group.
 
 * _button(text, ...)_ - Button with text and/or icon (Block handles :clicked_left_mouse_button event).
 * _color_picker(...)_ - Red, green and blue sliders and colour indicator (Block handles :changed event).
+* _image_frame(image, ...)_ - Wrapper around a Gosu::Image to embed it in the GUI.
 * _label(text, ...)_ - Label with text and, optionally, an icon (No block accepted).
 * _slider(...)_ - Horizontal slider with handle (Block handles :changed event).
 * _text_area(...)_ - An multi-line element, containing editable text (Block handles :changed event).

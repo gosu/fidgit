@@ -4,8 +4,12 @@ module Fidgit
   # A vertically aligned element packing container.
 
   class Grid < Packer
+    # @return [Symbol]
+    attr_reader :type
+
     # @return [Integer]
     attr_reader :num_rows
+
     # @return [Integer]
     attr_reader :num_columns
 
@@ -82,11 +86,11 @@ module Fidgit
       @rows.each_with_index do |row, row_num|
         row.each_with_index do |element, column_num|
           fills = (element.align_h == :fill)
-          @widths[column_num] = [fills ? 0 : element.outer_width, @widths[column_num]].max
+          @widths[column_num] = [fills ? element.min_width : element.outer_width, @widths[column_num]].max
           filled_columns.push fills
 
           fills = (element.align_v == :fill)
-          @heights[row_num] = [fills ? 0 : element.outer_height, @heights[row_num]].max
+          @heights[row_num] = [fills ? element.min_width : element.outer_height, @heights[row_num]].max
           filled_rows.push fills
         end
       end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   class MenuPane < Composite
     # An item within the menu.
@@ -26,8 +24,9 @@ module Fidgit
 
       def draw_foreground
         super
+
         unless @shortcut_text.empty?
-          font.draw_rel("#{@shortcut_text}", rect.right - padding_right, y + ((height - font_size) / 2).floor, z, 1, 0, 1, 1, color)
+          font.draw_rel("#{@shortcut_text}", rect.right - padding_right, y + ((height - font.height) / 2).floor, z, 1, 0, 1, 1, color)
         end
 
         nil
@@ -36,7 +35,10 @@ module Fidgit
       protected
       def layout
         super
-        rect.width += font.text_width("  #{@shortcut_text}") unless @shortcut_text.empty?
+
+        # Ignore layout request when asked before TextLine has been created.
+        rect.width += font.text_width("  #{@shortcut_text}") unless @shortcut_text.empty? or @text.nil?
+
         nil
       end
     end
@@ -55,8 +57,6 @@ module Fidgit
         super '', options
       end
     end
-
-    # -------------------
 
     extend Forwardable
 
@@ -110,8 +110,11 @@ module Fidgit
     end
 
     def item(text, value, options = {}, &block)
-      options[:z] = z
-      item = Item.new(text, value, { parent: @items }.merge!(options), &block)
+      options = options.merge({
+         parent: @items,
+         z: z,
+      })
+      item = Item.new(text, value, options, &block)
 
       item.subscribe :left_mouse_button, method(:item_selected)
       item.subscribe :right_mouse_button, method(:item_selected)
@@ -146,7 +149,7 @@ module Fidgit
         @items.y = y + padding_top
 
         # Ensure that all items are of the same width.
-        max_width = @items.each.to_a.map {|c| c.width }.max || 0
+        max_width = @items.map(&:width).max || 0
         @items.each {|c| c.rect.width = max_width }
 
         @items.recalc # Move all the items inside the packer to correct ones.

@@ -4,6 +4,8 @@ module Fidgit
 class ComboBox < Button
   extend Forwardable
 
+  ARROW_IMAGE = "combo_arrow.png"
+
   def_delegators :@menu, :each
 
   event :changed
@@ -50,12 +52,12 @@ class ComboBox < Button
       end
     end
 
-    @@arrow ||= Gosu::Image["combo_arrow.png"]
+    @@arrow ||= Gosu::Image[ARROW_IMAGE]
 
     super('', options)
 
-    rect.height = [height, font_size + padding_top + padding_bottom].max
-    rect.width = [width, font_size * 4 + padding_left + padding_right].max
+    rect.height = [height, font.height + padding_top + padding_bottom].max
+    rect.width = [width, font.height * 4 + padding_left + padding_right].max
   end
 
   def item(text, value, options = {}, &block)
@@ -66,6 +68,8 @@ class ComboBox < Button
       self.text = item.text
       self.icon = item.icon
     end
+
+    recalc
 
     item
   end
@@ -93,7 +97,9 @@ class ComboBox < Button
   protected
   def layout
     super
-    rect.width += height  # Allow size for the arrow.
+
+    # Max width of all items + allow size for the arrow.
+    rect.width = [@menu.width + height, min_width].max
 
     nil
   end

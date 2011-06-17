@@ -37,7 +37,8 @@ module Fidgit
     VALID_ALIGN_H = [:left, :center, :right, :fill]
     VALID_ALIGN_V = [:top, :center, :bottom, :fill]
 
-    attr_reader :z, :tip, :font_size, :padding_top, :padding_right, :padding_bottom, :padding_left, :align_h, :align_v, :parent, :border_thickness
+    attr_reader :z, :tip, :padding_top, :padding_right, :padding_bottom, :padding_left,
+                :align_h, :align_v, :parent, :border_thickness, :font
 
     attr_accessor :background_color
 
@@ -75,8 +76,6 @@ module Fidgit
 
       @enabled = value
     end
-
-    def font; @font ||= Gosu::Font[@font_name, @font_size]; end
 
     def rect; @rect; end; protected :rect
 
@@ -116,7 +115,7 @@ module Fidgit
     #
     # @option options [String] :tip ('') Tool-tip text
     # @option options [String, :default] :font_name (:default, which resolves as the default Gosu font)
-    # @option options [String] :font_size (30)
+    # @option options [String] :font_height (30)
     #
     # @option options [Gosu::Color] :background_color (transparent)
     # @option options [Gosu::Color] :border_color (transparent)
@@ -143,7 +142,7 @@ module Fidgit
         z: 0,
         tip: '',
         font_name: default(:font_name),
-        font_size: default(:font_size),
+        font_height: default(:font_height),
         background_color: default(:background_color),
         border_color: default(:border_color),
         border_thickness: default(:border_thickness),
@@ -181,13 +180,13 @@ module Fidgit
 
       @z = options[:z]
       @tip = options[:tip].dup
-      @font_name = if options[:font_name].nil? or options[:font_name] == :default
+      font_name = if options[:font_name].nil? or options[:font_name] == :default
                      Gosu::default_font_name
                    else
                      options[:font_name].dup
                    end
 
-      @font_size = options[:font_size]
+      @font = Gosu::Font[font_name, options[:font_height]]
 
       @rect = Chingu::Rect.new(options[:x], options[:y], options[:width] || 0, options[:height] || 0)
     end
@@ -275,6 +274,11 @@ module Fidgit
     # By default, elements do not accept block arguments.
     def post_init_block(&block)
       raise ArgumentError, "does not accept a block"
+    end
+
+    public
+    def to_s
+      "#{self.class} (#{x}, #{y}) #{width}x#{height}"
     end
   end
 end

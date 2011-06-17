@@ -1,29 +1,58 @@
 # encoding: utf-8
 
 module Fidgit
-  class Label < Element
-    attr_accessor :color, :background_color, :border_color
-    attr_reader :text, :icon
+  class Label < Composite
+    ICON_POSITIONS = [:top, :bottom, :left, :right]
 
-    VALID_JUSTIFICATION = [:left, :right, :center]
+    attr_reader :icon_position
 
-    def text=(value)
-      @text = value
-      recalc
-      nil
+    attr_accessor :background_color, :border_color
+
+    def_delegators :@text, :text, :color, :font, :color=, :text=
+
+    def icon; @icon ? @icon.image : nil; end
+
+    def hit_element(x, y)
+      # The sub-elements should never get events.
+      hit?(x, y) ? self : nil
     end
 
-    def icon=(value)
-      @icon = value
-      recalc
-      nil
+    def icon=(icon)
+      raise ArgumentError.new("Icon must be a Gosu::Image") unless icon.is_a? Gosu::Image or icon.nil?
+
+      @contents.remove(@icon) if @icon.image
+      @icon.image = icon
+      position = [:left, :top].include?(icon_position) ? 0 : 1
+      @contents.insert(position, @icon) if @icon.image
+
+      icon
+    end
+
+    # Set the position of the icon, respective to the text.
+    def icon_position=(position)
+      raise ArgumentError.new("icon_position must be one of #{ICON_POSITIONS}") unless ICON_POSITIONS.include? position
+
+      @icon_position = position
+
+      case @icon_position
+        when :top, :bottom
+          @contents.instance_variable_set :@type, :fixed_columns
+          @contents.instance_variable_set :@num_columns, 1
+        when :left, :right
+          @contents.instance_variable_set :@type, :fixed_rows
+          @contents.instance_variable_set :@num_rows, 1
+      end
+
+      self.icon = @icon.image if @icon.image # Force the icon into the correct position.
+
+      position
     end
 
     # @param (see Element#initialize)
     # @param [String] text The string to display in the label.
     #
     # @option (see Element#initialize)
-    # @option options [Fidgit::Thumbnail, Gosu::Image, nil] :icon (nil)
+    # @option options [Gosu::Image, nil] :icon (nil)
     # @option options [:left, :right, :center] :justify (:left) Text justification.
     def initialize(text, options = {})
       options = {
@@ -31,74 +60,26 @@ module Fidgit
         justify: default(:justify),
         background_color: default(:background_color),
         border_color: default(:border_color),
+        icon_options: {},
+        font_name: default(:font_name),
+        font_height: default(:font_height),
+        icon_position: default(:icon_position),
       }.merge! options
-
-      @text = text.dup
-      @icon = options[:icon]
-      @color = options[:color].dup
-
-      raise "Justification must be one of #{VALID_JUSTIFICATION.inspect}" unless VALID_JUSTIFICATION.include? options[:justify]
-      @justify = options[:justify]
 
       super(options)
 
-      self.text = text # Forces stuff that manipulates text to work.
-    end
-
-    def draw_foreground
-      current_x = x + padding_left
-      if @icon
-        @icon.draw(current_x, y + padding_top, z)
-        current_x += @icon.width + padding_left
+      # Bit of a fudge since font info is managed circularly here!
+      # By using a grid, we'll be able to turn it around easily (in theory).
+      @contents = grid num_rows: 1, padding: 0, spacing_h: spacing_h, spacing_v: spacing_v, width: options[:width], height: options[:height], z: z do |contents|
+        @text = TextLine.new(text, parent: contents, justify: options[:justify], color: options[:color], padding: 0, z: z,
+                               font_name: options[:font_name], font_height: options[:font_height], align_h: :fill, align_v: :center)
       end
 
-      unless @text.empty?
-        case @justify
-          when :left
-            rel_x = 0.0
-            center_x = current_x
+      # Create an image frame, but don't show it unless there is an image in it.
+      @icon = ImageFrame.new(nil, options[:icon_options].merge(z: z, align: :center))
+      @icon.image = options[:icon]
 
-          when :right
-            rel_x = 1.0
-            center_x = x + rect.width - padding_right
-
-          when :center
-            rel_x = 0.5
-            center_x = (current_x + x + rect.width - padding_right) / 2.0
-        end
-
-        # Make text centered alongside the icon
-        # TODO: Probably should have this as an option.
-        center_y = y + padding_top + ((y + height - padding_bottom) - (y + padding_top)) / 2.0
-
-        font.draw_rel(@text, center_x, center_y, z, rel_x, 0.5, 1, 1, @color)
-      end
-
-      nil
-    end
-
-    protected
-    def layout
-      if @icon
-        if @text.empty?
-          rect.width = [padding_left + @icon.width + padding_right, min_width].max
-          rect.height = [padding_top + @icon.height + padding_bottom, min_height].max
-        else
-          # Todo: Use padding_h inside here? Probably by making this a Composite.
-          rect.width = [padding_left + @icon.width + [padding_left + padding_right].max + font.text_width(@text) + padding_right, min_width].max
-          rect.height = [padding_top + [@icon.height, font_size].max + padding_bottom, min_height].max
-        end
-      else
-        if @text.empty?
-          rect.width = [padding_left + padding_right, min_width].max
-          rect.height = [padding_top + padding_bottom, min_height].max
-        else
-          rect.width = [padding_left + font.text_width(@text) + padding_right, min_width].max
-          rect.height = [padding_top + font_size + padding_bottom, min_height].max
-        end
-      end
-
-      nil
+      self.icon_position = options[:icon_position]
     end
   end
 end

@@ -2,21 +2,9 @@ require_relative "helpers/helper"
 
 include Fidgit
 
-
-
 describe Label do
-  before :each do
-    Chingu::Window.new(10, 10, false)
-  end
-
-  after :each do
-    $window.close
-  end
-
-  describe "#intialize" do
-    it "should not accept a block" do
-      ->{ Label.new( "Hello world!") { } }.should raise_error ArgumentError
-    end
+  before :all do
+    $window = Chingu::Window.new(100, 100, false) unless $window
   end
 
   context "with default parameters" do
@@ -42,7 +30,7 @@ describe Label do
       subject.should be_enabled
     end
 
-    it "should not have an icon" do
+    it "should not have an image" do
       subject.icon.should be_nil
     end
   end

@@ -70,7 +70,7 @@ module Fidgit
           end
         end
 
-        @file_name_text = text_area(text: options[:file_name], max_height: font_size * 1.5, width: options[:width], border_thickness: 1)
+        @file_name_text = text_area(text: options[:file_name], max_height: font.height * 1.5, width: options[:width], border_thickness: 1)
 
         create_nav_buttons
 

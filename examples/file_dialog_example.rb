@@ -1,7 +1,7 @@
 require_relative 'helpers/example_window'
 
 
-Fidgit::Element.schema.merge_elements!(Element: { font_size: 15 })
+Fidgit::Element.schema.merge_elements!(Element: { font_height: 15 })
 
 class ExampleState < Fidgit::GuiState
   def initialize

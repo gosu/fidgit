@@ -33,6 +33,10 @@
     :border_color: ?light_gray
     :border_thickness: 2
     :shortcut_color: ?red
+    :padding_top: 2
+    :padding_right: 4
+    :padding_bottom: 2
+    :padding_left: 4
 
     :disabled:
       :background_color: ?very_dark_gray
@@ -63,7 +67,7 @@
     :padding_left: 0
 
   :Container: # < Element
-    :nothing: nil
+    {}
 
   :Element:
     :align_h: :left
@@ -73,12 +77,13 @@
     :border_color: ?none
     :border_thickness: 0
     :color: ?white
-    :font_size: 30
+    :font_height: 30
     :font_name: :default
     :padding_top: 2
     :padding_right: 4
     :padding_bottom: 2
     :padding_left: 4
+
 
   :FileBrowser: # < Composite
     :pattern: "*.*"
@@ -96,13 +101,21 @@
     :padding_left: 0
 
   :Horizontal: # < Grid
-    :nothing: nil
+    {}
 
   :HorizontalScrollBar: # < ScrollBar
     :height: ?scroll_bar_thickness
 
+  :ImageFrame: # <Element
+    :padding_top: 0
+    :padding_right: 0
+    :padding_bottom: 0
+    :padding_left: 0
+
   :Label: # < Element
     :justify: :left
+    :icon_position: :left
+
     :disabled:
       :color: ?light_gray
 
@@ -142,7 +155,7 @@
       :border_color: ?blue
 
   :ScrollArea: # < Composite
-    :nothing: nil
+    {}
 
   :ScrollBar: # < Composite
     :background_color: ?none
@@ -176,16 +189,28 @@
     :focused:
       :border_color: ?green
 
+  :TextLine: # < Element
+    :justify: :left
+    :padding_top: 0
+    :padding_right: 0
+    :padding_bottom: 0
+    :padding_left: 0
+
   :ToggleButton: # < Button
     :toggled:
       :border_color: ?red
 
   :ToolTip: # < Label
     :background_color: ?very_dark_gray
+    :font_height: 20
     :border_color: ?white
+    :padding_top: 2
+    :padding_right: 4
+    :padding_bottom: 2
+    :padding_left: 4
 
   :Vertical: # < Grid
-    :nothing: nil
+    {}
 
   :VerticalScrollBar: # < ScrollBar
     :width: ?scroll_bar_thickness

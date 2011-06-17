@@ -143,6 +143,14 @@ module Fidgit
       super
     end
 
+    def write_tree
+      puts "=== #{self.class} ==="
+      indent = "  "
+      @container.write_tree(indent)
+      @menu.write_tree(indent) if @menu
+      @tool_tip.write_tree(indent) if @tool_tip
+    end
+
     def draw
       @container.draw
       @menu.draw if @menu
