@@ -21,9 +21,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency('gosu', '~> 0.7.32')
+  s.add_dependency('gosu', '~> 0.7.33')
   s.add_dependency('chingu', '~> 0.9rc5')
-  s.add_dependency('clipboard', '~> 0.9.8')
+  s.add_dependency('clipboard', '~> 0.9.9')
   s.add_dependency('ffi', '~> 1.0.9') # if RUBY_PLATFORM =~ /mswin32|mingw32/ # Required by clipboard on Windows.
   s.add_development_dependency('rspec', '~> 2.1.0')
   s.add_development_dependency('texplay', '~> 0.3.5')
