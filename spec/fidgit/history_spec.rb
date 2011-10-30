@@ -56,6 +56,15 @@ module Fidgit
         @object.can_undo?.should be_true
         @object.can_redo?.should be_false
       end
+
+      it "should correctly delete any re-doable actions, even if there is only one" do
+        @object.do(History::Add.new(2))
+        @object.undo
+        @object.do(History::Add.new(3))
+        @object.undo
+
+        @object.can_undo?.should be_false
+      end
     end
 
     describe "undo()" do

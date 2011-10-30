@@ -35,7 +35,13 @@ module Fidgit
       raise ArgumentError, "Parameter, 'action', expected to be a #{Action}, but received: #{action}" unless action.is_a? Action
 
       # Remove all undone actions when a new one is performed.
-      @actions = @actions[0..@last_done] if can_redo?
+      if can_redo?
+        if @last_done == -1
+          @actions.clear
+        else
+          @actions = @actions[0..@last_done]
+        end
+      end
 
       # If history is too big, remove the oldest action.
       if @actions.size >= @max_size
