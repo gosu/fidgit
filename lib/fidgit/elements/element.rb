@@ -24,6 +24,11 @@ module Fidgit
     event :holding_right_mouse_button
     event :released_right_mouse_button
     event :clicked_right_mouse_button
+
+    event :middle_mouse_button
+    event :holding_middle_mouse_button
+    event :released_middle_mouse_button
+    event :clicked_middle_mouse_button
     
     event :mouse_wheel_up
     event :mouse_wheel_down
