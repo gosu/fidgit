@@ -178,6 +178,11 @@ module Fidgit
     def finalize
       unset_mouse_over
 
+      if @focus
+        @focus.publish :blur
+        @focus = nil
+      end
+
       @tool_tip = nil
 
       nil
