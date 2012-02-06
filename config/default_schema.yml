@@ -117,7 +117,7 @@
     :icon_position: :left
 
     :disabled:
-      :color: ?light_gray
+      :color: ?gray
 
   :List:
     :background_color: ?light_gray

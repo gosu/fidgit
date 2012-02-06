@@ -6,6 +6,7 @@ v0.2.1
 
 * Added: Click in ScrollBar gutter to scroll window by height/width of view window.
 * Added: Click and drag to select text in enabled TextArea.
+* Fixed: Color changes on disabling buttons.
 
 v0.2.0
 ------

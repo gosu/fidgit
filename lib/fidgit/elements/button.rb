@@ -82,17 +82,15 @@ module Fidgit
 
     protected
     def update_colors
-      @background_color = if @mouse_over and enabled?
-        default(:hover, :background_color)
-      else
-        default(:background_color)
+      [:color, :background_color, :border_color].each do |attribute|
+        send :"#{attribute.to_s}=", enabled? ? default(attribute) : default(:disabled, attribute)
       end
 
-      self.color = if enabled?
-        default(:color)
-      else
-        default(:disabled, :color)
-      end
+      self.background_color = if @mouse_over and enabled?
+                                default(:hover, :background_color)
+                              else
+                                default(:background_color)
+                              end
 
       @icon.enabled = enabled? if @icon
 
