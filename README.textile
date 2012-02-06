@@ -21,7 +21,7 @@ or for options screens and menus within a regular Gosu game.
 
 h2. License
 
-GPL v3 (see COPYING.txt)
+MIT (see COPYING.txt)
 
 h2. Requirements
 
