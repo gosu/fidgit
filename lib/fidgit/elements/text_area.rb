@@ -2,6 +2,8 @@
 
 module Fidgit
   class TextArea < Element
+    ENTITY_PLACEHOLDER = "*"
+
     # @return [Number]
     attr_reader :min_height
     # @return [Number]
@@ -14,13 +16,16 @@ module Fidgit
     # @return [Boolean]
     attr_writer :editable
 
+    # @return [String] Text, but stripped of tags.
+    attr_reader :stripped_text
+
     event :changed
     event :focus
     event :blur
 
-    # Is the area editable?
+    # Is the area editable? This will always be false if the Element is disabled.
     def editable?
-      enabled?
+      enabled? and @editable
     end
 
     # Text within the element.
@@ -43,7 +48,7 @@ module Fidgit
     #
     # @return [String]
     def selection_text
-      text[selection_range]
+      stripped_text[selection_range]
     end
 
     # Sets the text within the selection. The caret will be placed at the end of the inserted text.
@@ -52,10 +57,14 @@ module Fidgit
     # @return [String] The new selection text.
     def selection_text=(str)
       from = [@text_input.selection_start, @text_input.caret_pos].min
+      to = [@text_input.selection_start, @text_input.caret_pos].max
       new_length = str.length
 
       full_text = text
-      full_text[selection_range] = str.encode('UTF-8', undef: :replace)
+      tags_length_before = (0...from).inject(0) {|m, i| m + @tags[i].length }
+      tags_length_inside = (from...to).inject(0) {|m, i| m + @tags[i].length }
+      range = (selection_range.first + tags_length_before)...(selection_range.last + tags_length_before + tags_length_inside)
+      full_text[range] = str.encode('UTF-8', undef: :replace)
       @text_input.text = full_text
 
       @text_input.selection_start = @text_input.caret_pos = from + new_length
@@ -79,7 +88,7 @@ module Fidgit
     # @param [Integer] pos Position of caret in the text.
     # @return [Integer] New position of caret.
     def caret_position=(position)
-      raise ArgumentError, "Caret position must be in the range 0 to the length of the text (inclusive)" unless position.between?(0, text.length)
+      raise ArgumentError, "Caret position must be in the range 0 to the length of the text (inclusive)" unless position.between?(0, stripped_text.length)
       @text_input.caret_pos = position
 
       position
@@ -105,6 +114,7 @@ module Fidgit
     # @option options [Integer] :min_height
     # @option options [Integer] :max_height (Infinite)
     # @option options [Number] :line_spacing (0)
+    # @option options [Boolean] :editable (true)
     def initialize(options = {}, &block)
       options = {
         text: '',
@@ -116,6 +126,7 @@ module Fidgit
         caret_period: default(:caret_period),
         focused_border_color: default(:focused, :border_color),
         selection_color: default(:selection_color),
+        editable: true,
       }.merge! options
 
       @line_spacing = options[:line_spacing]
@@ -123,6 +134,7 @@ module Fidgit
       @caret_period = options[:caret_period]
       @focused_border_color = options[:focused_border_color].dup
       @selection_color = options[:selection_color].dup
+      @editable = options[:editable]
 
       @lines = [''] # List of lines of wrapped text.
       @caret_positions = [[0, 0]] # [x, y] of each position the caret can be in.
@@ -131,8 +143,10 @@ module Fidgit
       @old_text = ''
       @old_caret_position = 0
       @old_selection_start = 0
+      @tags = Hash.new("") # Hash of tags embedded in the text.
 
       @text_input.text = options[:text].dup
+      @stripped_text = '' # Text stripped of xml tags.
 
       super(options)
 
@@ -195,14 +209,20 @@ module Fidgit
     # @return [nil]
     def draw_foreground
       # Always roll back changes made by the user unless the text is editable.
-      if not editable? and text != @old_text
-        @text_input.text = @old_text
-        @text_input.selection_start = @old_selection_start
-        self.caret_position = @old_caret_position
-      else
+      if editable? or text == @old_text
         recalc if focused? # Workaround for Windows draw/update bug.
         @old_caret_position = caret_position
         @old_selection_start = @text_input.selection_start
+      else
+        roll_back
+      end
+
+      if caret_position > stripped_text.length
+        self.caret_position = stripped_text.length
+      end
+
+      if @text_input.selection_start >= stripped_text.length
+        @text_input.selection_start = stripped_text.length
       end
 
       # Draw the selection.
@@ -236,7 +256,8 @@ module Fidgit
     # Helper for #recalc
     # @return [Integer]
     def position_letters_in_word(word, line_width)
-      word.each_char do |c|
+      # Strip tags before measuring word.
+      word.gsub(/<[^>]*>|&[^;];/, '').each_char do |c|
         char_width = font.text_width(c)
         line_width += char_width
         @caret_positions.push [line_width, y_at_line(@lines.size)]
@@ -271,8 +292,23 @@ module Fidgit
       word = ''
       word_width = 0
 
-      text.each_char do |char|
-        char_width = (char == "\n") ? 0 : font.text_width(char)
+      strip_tags
+
+      stripped_text.each_char.with_index do |char, i|
+        tag = @tags[i]
+
+        # \x0 is just a place-holder for an entity: &entity;
+        if char == ENTITY_PLACEHOLDER
+          char = tag
+          tag = ""
+        end
+
+        case char
+          when "\n"
+            char_width = 0
+          else
+            char_width = font.text_width char
+        end
 
         overall_width = line_width + (line_width == 0 ? 0 : space_width) + word_width + char_width
         if overall_width > max_width and not (char == ' ' and not word.empty?)
@@ -282,7 +318,7 @@ module Fidgit
             position_letters_in_word(word, line_width)
 
             # Push as much of the current word as possible as a complete line.
-            @lines.push word + (char == ' ' ? '' : '-')
+            @lines.push word + tag + (char == ' ' ? '' : '-')
             line_width = font.text_width(word)
 
             word = ''
@@ -294,18 +330,18 @@ module Fidgit
             line = ''
           end
 
-          @char_widths[-1] += (width - line_width - padding_left - padding_right) unless @char_widths.empty?
+          widen_last_character line_width
           line_width = 0
         end
 
         case char
           when "\n"
             # A new-line ends the word and puts it on the line.
-            line += word
+            line += word + tag
             line_width = position_letters_in_word(word, line_width)
             @caret_positions.push [line_width, y_at_line(@lines.size)]
-            @char_widths[-1] += (width - line_width - (padding_left + padding_right)) unless @char_widths.empty?
             @char_widths.push 0
+            widen_last_character line_width
             @lines.push line
             word = ''
             word_width = 0
@@ -314,7 +350,7 @@ module Fidgit
 
           when ' '
             # A space ends a word and puts it on the line.
-            line += word + char
+            line += word + tag + char
             line_width = position_letters_in_word(word, line_width)
             line_width += space_width
             @caret_positions.push [line_width, y_at_line(@lines.size)]
@@ -330,14 +366,15 @@ module Fidgit
             end
 
             # Start building up a new word.
-            word += char
+            word += tag + char
             word_width += char_width
         end
       end
 
       # Add any remaining word on the last line.
       unless word.empty?
-        position_letters_in_word(word, line_width)
+        line_width = position_letters_in_word(word, line_width)
+        @char_widths << width - line_width - padding_left - padding_right
         line += word
       end
 
@@ -351,25 +388,32 @@ module Fidgit
         @old_caret_position = caret_position
         @old_selection_start = @text_input.selection_start
       else
-        # Roll back!
-        @lines = old_lines
-        @caret_positions = old_caret_positions
-        @char_widths = old_char_widths
-        @text_input.text = @old_text
-        self.caret_position = @old_caret_position
-        @text_input.selection_start = @old_selection_start
+        roll_back
       end
 
       nil
+    end
+
+    protected
+    def roll_back
+      @text_input.text = @old_text
+      self.caret_position = @old_caret_position
+      @text_input.selection_start = @old_selection_start
+      recalc
+    end
+
+    protected
+    def widen_last_character(line_width)
+      @char_widths[-1] += (width - line_width - padding_left - padding_right) unless @char_widths.empty?
     end
 
     public
     # Cut the selection and copy it to the clipboard.
     def cut
       str = selection_text
-      unless selection_text.empty?
+      unless str.empty?
         Clipboard.copy str
-        self.selection_text = ''
+        self.selection_text = '' if editable?
       end
     end
 
@@ -377,9 +421,7 @@ module Fidgit
     # Copy the selection to the clipboard.
     def copy
       str = selection_text
-      unless selection_text.empty?
-        Clipboard.copy str
-      end
+      Clipboard.copy str unless str.empty?
     end
 
     public
@@ -392,6 +434,29 @@ module Fidgit
     # Use block as an event handler.
     def post_init_block(&block)
       subscribe :changed, &block
+    end
+
+    protected
+    # Strip XML tags and entities ("<c=000000></c>" and "&entity;")
+    # @note Entities will mess up the system because we don't know how wide they are.
+    def strip_tags
+      tags_length = 0
+      @tags = Hash.new('')
+
+      @stripped_text = text.gsub(%r[(<[^>]*?>|&[^;]+;)]) do |tag|
+        pos = $`.length - tags_length
+        tags_length += tag.length
+        @tags[pos] += tag
+
+        # Entities need to have a non-printing character that can represent them.
+        # Still not right, but does mean there are the right number of characters.
+        if tag[0] == '&'
+          tags_length -= 1
+          ENTITY_PLACEHOLDER # Will be expanded later.
+        else
+          '' # Tags don't use up space, so ignore them.
+        end
+      end
     end
   end
 end
