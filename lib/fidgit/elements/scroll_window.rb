@@ -2,8 +2,7 @@
 
 module Fidgit
   class ScrollWindow < Composite
-	  def content; @view.content; end
-	
+    def content; @view.content; end
     def offset_x; @view.offset_x; end
     def offset_x=(value); @view.offset_x = value; end
     def offset_y; @view.offset_y; end
@@ -13,9 +12,8 @@ module Fidgit
     def view_height; @view.height; end
     def content_width; @view.content.width; end
     def content_height; @view.content.height; end
-	
-	def width=(value); super(value); end
-	def height=(value); super(value); end
+    def width=(value); super(value); end
+    def height=(value); super(value); end
 
     def initialize(options = {})
       options = {
