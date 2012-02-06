@@ -62,6 +62,67 @@ module Fidgit
           subject.stub! :handler
           ->{ subject.subscribe(:frog, subject.method(:handler)) { } }.should raise_error ArgumentError
         end
+
+        it "should return a Subscription" do
+          handler = proc {}
+          result = subject.subscribe(:frog, &handler)
+          result.should be_a Fidgit::Event::Subscription
+          result.handler.should be handler
+          result.publisher.should be subject
+          result.event.should equal :frog
+        end
+
+        it "should return a Subscription that can use Subscription#unsubscribe" do
+          handler_ran = false
+          subscription = subject.subscribe(:frog) { handler_ran = true }
+          subscription.unsubscribe
+          subject.publish :frog
+          handler_ran.should be_false
+        end
+      end
+
+      describe "#unsubscribe" do
+        it "should accept a Subscription" do
+          handler_ran = false
+          subscription = subject.subscribe(:frog) { handler_ran = true }
+          subject.unsubscribe subscription
+          subject.publish :frog
+          handler_ran.should be_false
+        end
+
+        it "should accept a handler" do
+          handler_ran = false
+          handler = proc { handler_ran = true }
+          subject.subscribe(:frog, &handler)
+          subject.unsubscribe handler
+          subject.publish :frog
+          handler_ran.should be_false
+        end
+
+        it "should accept an event and handler" do
+          handler_ran = false
+          handler = proc { handler_ran = true }
+          subject.subscribe(:frog, &handler)
+          subject.unsubscribe :frog, handler
+          subject.publish :frog
+          handler_ran.should be_false
+        end
+
+        it "should require 1..2 arguments" do
+          ->{ subject.unsubscribe }.should raise_error ArgumentError
+          ->{ subject.unsubscribe 1, 2, 3 }.should raise_error ArgumentError
+        end
+
+        it "should fail with bad types" do
+          ->{ subject.unsubscribe 1 }.should raise_error TypeError
+          ->{ subject.unsubscribe 1, ->{} }.should raise_error TypeError
+          ->{ subject.unsubscribe :event, 2 }.should raise_error TypeError
+        end
+
+        it "should fail if passed a Subscription to another object" do
+          subscription = Fidgit::Event::Subscription.new(Object.new.extend(Fidgit::Event), :event, proc {})
+          ->{ subject.unsubscribe subscription }.should raise_error ArgumentError
+        end
       end
 
       describe "#publish" do
