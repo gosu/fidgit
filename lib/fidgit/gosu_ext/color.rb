@@ -84,6 +84,12 @@ module Gosu
       "%02x%02x%02x" % [red, green, blue]
     end
 
+    # Colorize text for in-line rendering by Gosu.
+    # e.g. "frog" => "<c=00ff9a>frog</c>"
+    def colorize(text)
+      "<c=#{to_hex}>#{text}</c>"
+    end
+
     # Show the Color as <RGBA [0, 0, 0, 0]> or, if opaque, <RGB [0, 0, 0]> (Gosu default is '(ARGB:0/0/0/0)')
     def to_s
       if opaque?
