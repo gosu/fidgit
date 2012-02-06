@@ -121,6 +121,7 @@ module Fidgit
     # @option options [String] :tip ('') Tool-tip text
     # @option options [String, :default] :font_name (:default, which resolves as the default Gosu font)
     # @option options [String] :font_height (30)
+    # @option options [Gosu::Font] :font Use this instead of :font_name and :font_height
     #
     # @option options [Gosu::Color] :background_color (transparent)
     # @option options [Gosu::Color] :border_color (transparent)
@@ -191,9 +192,16 @@ module Fidgit
                      options[:font_name].dup
                    end
 
-      @font = Gosu::Font[font_name, options[:font_height]]
+      @font = options[:font] || Gosu::Font[font_name, options[:font_height]]
 
       @rect = Chingu::Rect.new(options[:x], options[:y], options[:width] || 0, options[:height] || 0)
+    end
+
+    def font=(font)
+      raise TypeError unless font.is_a? Gosu::Font
+      @font = font
+      recalc
+      font
     end
 
     def recalc
