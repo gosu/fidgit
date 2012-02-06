@@ -19,9 +19,15 @@ module Fidgit
     # @return [String] Text, but stripped of tags.
     attr_reader :stripped_text
 
+    event :begin_drag
+    event :update_drag
+    event :end_drag
+
     event :changed
     event :focus
     event :blur
+
+    def drag?(button); button == :left; end
 
     # Is the area editable? This will always be false if the Element is disabled.
     def editable?
@@ -161,6 +167,21 @@ module Fidgit
 
       subscribe :left_mouse_button, method(:click_in_text)
       subscribe :right_mouse_button, method(:click_in_text)
+
+      # Handle dragging.
+      subscribe :begin_drag do |sender, x, y|
+        # Store position of the handle when it starts to drag.
+        @drag_start_pos = [x - self.x, y - self.y]
+      end
+
+      subscribe :update_drag do |sender, x, y|
+        index = text_index_at_position(x, y)
+        self.caret_position = [index, @stripped_text.length].min if index
+      end
+
+      subscribe :end_drag do
+        @drag_start_pos = nil
+      end
     end
 
     # @return [nil]
@@ -168,14 +189,8 @@ module Fidgit
       publish :focus unless focused?
 
       # Move caret to position the user clicks on.
-      mouse_x, mouse_y = x - (self.x + padding_left), y - (self.y + padding_top)
-      @char_widths.each_with_index do |width, i|
-        char_x, char_y = @caret_positions[i]
-        if mouse_x.between?(char_x, char_x + width) and mouse_y.between?(char_y, char_y + font.height)
-          self.caret_position = @text_input.selection_start = i
-          break
-        end
-      end
+      index = text_index_at_position x, y
+      self.caret_position = @text_input.selection_start = [index, @stripped_text.length].min if index
 
       nil
     end
@@ -244,6 +259,21 @@ module Fidgit
         left, top = x + padding_left + caret_x, y + padding_top + caret_y
         draw_rect left, top, 1, font.height, z, @caret_color
       end
+    end
+
+    protected
+    # Index of character in reference to the displayable text.
+    def text_index_at_position(x, y)
+      # Move caret to position the user clicks on.
+      mouse_x, mouse_y = x - (self.x + padding_left), y - (self.y + padding_top)
+      @char_widths.each.with_index do |width, i|
+        char_x, char_y = @caret_positions[i]
+        if mouse_x.between?(char_x, char_x + width) and mouse_y.between?(char_y, char_y + font.height)
+          return i
+        end
+      end
+
+      nil # Didn't find a character at that position.
     end
 
     # y position of the

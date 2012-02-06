@@ -4,7 +4,8 @@ Fidgit changelog
 v0.2.1
 ------
 
-* Detected click in scroll-bar gutter to scroll window by height/width of view window.
+* Added: Click in ScrollBar gutter to scroll window by height/width of view window.
+* Added: Click and drag to select text in enabled TextArea.
 
 v0.2.0
 ------
