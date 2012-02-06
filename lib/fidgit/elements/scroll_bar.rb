@@ -47,6 +47,10 @@ module Fidgit
       @handle_container = Container.new(parent: self, width: options[:width], height: options[:height]) do
         @handle = Handle.new(parent: self, x: x, y: y, background_color: options[:handle_color])
       end
+
+      subscribe :left_mouse_button do |sender, x, y|
+        clicked_to_move x, y
+      end
     end
   end
 
@@ -81,6 +85,11 @@ module Fidgit
     def handle_dragged_to(x, y)
       @owner.offset_x = @owner.content_width * ((x - self.x) / width.to_f)
     end
+
+    def clicked_to_move(x, y)
+      new_x = x < @handle.x ? @handle.x - @handle.width : @handle.x + @handle.width
+      handle_dragged_to new_x, @handle.y
+    end
   end
 
   class VerticalScrollBar < ScrollBar
@@ -109,6 +118,11 @@ module Fidgit
 
     def handle_dragged_to(x, y)
       @owner.offset_y = @owner.content_height * ((y - self.y) / height.to_f)
+    end
+
+    def clicked_to_move(x, y)
+      new_y = y < @handle.y ? @handle.y - @handle.height : @handle.y + @handle.height
+      handle_dragged_to @handle.x, new_y
     end
   end
 end

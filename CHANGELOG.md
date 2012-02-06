@@ -1,6 +1,11 @@
 Fidgit changelog
 ================
 
+v0.2.1
+------
+
+* Detected click in scroll-bar gutter to scroll window by height/width of view window.
+
 v0.2.0
 ------
 
