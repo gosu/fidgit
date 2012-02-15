@@ -1,6 +1,11 @@
 Fidgit changelog
 ================
 
+v0.2.2
+------
+
+* Prevented ToggleButton border colour changing.
+
 v0.2.1
 ------
 

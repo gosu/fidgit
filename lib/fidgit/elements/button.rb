@@ -82,7 +82,7 @@ module Fidgit
 
     protected
     def update_colors
-      [:color, :background_color, :border_color].each do |attribute|
+      [:color, :background_color].each do |attribute|
         send :"#{attribute.to_s}=", enabled? ? default(attribute) : default(:disabled, attribute)
       end
 
