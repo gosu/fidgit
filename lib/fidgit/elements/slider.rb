@@ -27,7 +27,11 @@ module Fidgit
         end
 
         subscribe :update_drag do |sender, x, y|
-          parent.handle_dragged_to x - @drag_start_pos[0], y - @drag_start_pos[1]
+          if parent.enabled?
+            parent.handle_dragged_to x - @drag_start_pos[0], y - @drag_start_pos[1]
+          else
+            publish :end_drag
+          end
         end
 
         subscribe :end_drag do

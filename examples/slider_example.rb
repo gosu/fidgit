@@ -7,7 +7,7 @@ class ExampleState < Fidgit::GuiState
     vertical do
       horizontal do
         # Discrete values (0..100)
-        slider = slider(width: 100, range: 0..5, value: 3) do |sender, value|
+        slider = slider(width: 100, range: 0..5, value: 3, tip: "Discrete value is") do |sender, value|
           @discrete_label.text = "Discrete slider is at #{value}"
         end
 
@@ -17,11 +17,15 @@ class ExampleState < Fidgit::GuiState
       horizontal do
         # Continuous values (0.0..1.0)
 
-        slider = slider(width: 100, range: 0.0..100.0, value: 77.2) do |sender, value|
+        slider = slider(width: 100, range: 0.0..100.0, value: 77.2, tip: "Continuous value is") do |sender, value|
           @continuous_label.text = "Continuous slider is at #{"%.03f" % value}%"
         end
 
         @continuous_label = label "Continuous slider is at #{"%.03f" % slider.value}%"
+      end
+
+      horizontal do
+        slider(width: 100, range: 0.0..100.0, value: 77.2, tip: "Disabled slider value is", enabled: false)
       end
     end
   end
