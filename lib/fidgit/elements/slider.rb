@@ -34,6 +34,8 @@ module Fidgit
           @drag_start_pos = nil
         end
       end
+
+      def tip; parent.tip; end
     end
 
     event :changed
