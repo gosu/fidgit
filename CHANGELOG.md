@@ -1,6 +1,13 @@
 Fidgit changelog
 ================
 
+v0.2.3
+------
+
+* Exposed #handle accessor for Slider.
+* Made Slider accept being disabled.
+* Made Slider handle show tip.
+
 v0.2.2
 ------
 

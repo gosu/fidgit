@@ -44,7 +44,7 @@ module Fidgit
 
     event :changed
 
-    attr_reader :value, :range
+    attr_reader :value, :range, :handle
 
     # @param (see Composite#initialize)
     #
@@ -65,7 +65,7 @@ module Fidgit
       @range = options[:range].dup
       @groove_color = options[:groove_color].dup
       @groove_thickness = options[:groove_thickness]
-      @continuous = @range.min.is_a?(Float) or @range.max.is_a?(Float)
+      @continuous = @range.min.is_a?(Float) || @range.max.is_a?(Float)
 
       super(options)
 
