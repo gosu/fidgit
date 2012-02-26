@@ -34,7 +34,7 @@ module Fidgit
 
     def text=(value)
       if @shortcut
-        super value.sub(/#{@shortcut}/i) {|char| "<c=#{@shortcut_color.to_hex}>#{char}</c>" }
+        super value.sub(/#{Regexp.escape @shortcut}/i) {|char| "<c=#{@shortcut_color.to_hex}>#{char}</c>" }
       else
         super value
       end
