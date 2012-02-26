@@ -46,6 +46,7 @@ module Fidgit
                 :align_h, :align_v, :parent, :border_thickness, :font
 
     attr_accessor :background_color
+    attr_writer :tip
 
     def x; rect.x; end
     def x=(value); rect.x = value; end
