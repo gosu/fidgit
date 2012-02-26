@@ -5,6 +5,7 @@ v0.2.2
 ------
 
 * Prevented ToggleButton border colour changing.
+* More careful about stripping out html tags in TextArea.
 
 v0.2.1
 ------

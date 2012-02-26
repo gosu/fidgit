@@ -3,6 +3,7 @@
 module Fidgit
   class TextArea < Element
     ENTITY_PLACEHOLDER = "*"
+    ENTITIES_AND_TAGS_PATTERN = %r%<[a-z](?:=[a-f0-9]+)?>|</[a-z]>|&\w+;%i
 
     # @return [Number]
     attr_reader :min_height
@@ -282,12 +283,13 @@ module Fidgit
       lines_number * (font.height + line_spacing)
     end
 
+
     protected
     # Helper for #recalc
     # @return [Integer]
     def position_letters_in_word(word, line_width)
       # Strip tags before measuring word.
-      word.gsub(/<[^>]*>|&[^;];/, '').each_char do |c|
+      word.gsub(ENTITIES_AND_TAGS_PATTERN, '').each_char do |c|
         char_width = font.text_width(c)
         line_width += char_width
         @caret_positions.push [line_width, y_at_line(@lines.size)]
@@ -473,7 +475,7 @@ module Fidgit
       tags_length = 0
       @tags = Hash.new('')
 
-      @stripped_text = text.gsub(%r[(<[^>]*?>|&[^;]+;)]) do |tag|
+      @stripped_text = text.gsub(ENTITIES_AND_TAGS_PATTERN) do |tag|
         pos = $`.length - tags_length
         tags_length += tag.length
         @tags[pos] += tag
