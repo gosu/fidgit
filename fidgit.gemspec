@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('ffi', '~> 1.0.11')
 
   s.add_development_dependency('rspec', '~> 2.8.0')
-  s.add_development_dependency('texplay', '~> 0.3.5')
+  s.add_development_dependency('texplay', '~> 0.4.3')
   s.add_development_dependency('rake')
   s.add_development_dependency('yard')
   s.add_development_dependency('RedCloth', "~> 4.2.9")
