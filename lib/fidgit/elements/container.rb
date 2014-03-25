@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'forwardable'
 
 module Fidgit
   # A container that contains Elements.

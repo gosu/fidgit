@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module Fidgit
   class MenuPane < Composite
     # An item within the menu.
