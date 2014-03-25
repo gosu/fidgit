@@ -37,6 +37,7 @@ Requirements
 * Gosu gem 0.7.27.1
   * [Installing Gosu dependencies on Linux](http://code.google.com/p/gosu/wiki/GettingStartedOnLinux) (On Win32 and OS X there are binary gems available)
 * Chingu gem 0.9rc4.
+* Clipboard gem
 
 
 Example
