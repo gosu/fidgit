@@ -27,7 +27,7 @@ class ExampleState < Fidgit::GuiState
   end
 end
 
-class ExampleAfterState < GuiState
+class ExampleAfterState < Fidgit::GuiState
   def initialize
     super
 
