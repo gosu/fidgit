@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   class ColorWell < RadioButton
     alias_method :color, :value

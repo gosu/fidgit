@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'chingu'
 require 'clipboard'
 
@@ -13,7 +12,7 @@ require_relative "fidgit/window"
 
 require_relative "fidgit/chingu_ext/window"
 require_relative "fidgit/gosu_ext/color"
-require_relative "fidgit/gosu_ext/gosu_module"
+require_relative "fidgit/gosu_ext/image"
 require_relative "fidgit/standard_ext/hash"
 
 require_relative "fidgit/elements/element"

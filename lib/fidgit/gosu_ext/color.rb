@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Gosu
   class Color
     # Is the color completely transparent?

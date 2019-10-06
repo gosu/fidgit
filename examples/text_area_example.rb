@@ -4,9 +4,7 @@ class ExampleState < Fidgit::GuiState
   def initialize
     super
 
-    Gosu.register_entity(:entity, Gosu::Image["head_icon.png"])
-
-    string = "<c=3333ff>Hello, my name</c> is <c=ff0000>Brian</c> the&entity;&entity;snail!"
+    string = "<c=3333ff>Hello, my name</c> is <c=ff0000>Brian</c> the snail!"
     horizontal do
       vertical do
         label 'disabled'

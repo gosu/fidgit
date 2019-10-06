@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   class Selection
     MIN_DRAG_DISTANCE = 2

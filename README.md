@@ -7,14 +7,12 @@ Fidgit is a GUI framework built on [Gosu](http://libgosu.org/) and [Chingu](http
 Description
 -----------
 
-The API is inspired by [Shoes](http://shoesrb.com/), but since Shoes is very simplistic, the level of functionality is
-based around [FXRuby](http://www.fxruby.org/) and other GUI APIs.
+The API is inspired by [Shoes](https://shoesrb.com/), but since Shoes is very simplistic, the level of functionality is
+based around [FXRuby](https://www.fxruby.org/) and other GUI APIs.
 Fidgit was originally developed as a part of the Sidney game, but as it got more complex, it was obvious it would be
 useful to separate them.
 
-_WARNING: THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT AND THE API IS LIABLE TO CONTINUOUS CHANGE AND IT IS QUITE UNSTABLE!_
-
-Read the Yard documentation at [rubydoc.info](http://rubydoc.info/github/Spooner/fidgit/master)
+Read the Yard documentation at [rubydoc.info](https://rubydoc.info/github/gosu/fidgit/master)
 
 
 Aim
@@ -28,16 +26,6 @@ License
 -------
 
 MIT (see COPYING.txt)
-
-
-Requirements
-------------
-
-* Ruby 1.9.2 or higher.
-* Gosu gem 0.7.27.1
-  * [Installing Gosu dependencies on Linux](http://code.google.com/p/gosu/wiki/GettingStartedOnLinux) (On Win32 and OS X there are binary gems available)
-* Chingu gem 0.9rc4.
-* Clipboard gem
 
 
 Example

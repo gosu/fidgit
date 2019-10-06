@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # The Fidgit GUI framework for Gosu.
 module Fidgit
   class << self

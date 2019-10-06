@@ -1,9 +1,6 @@
-# encoding: utf-8
-
 module Fidgit
   class TextArea < Element
-    ENTITY_PLACEHOLDER = "*"
-    ENTITIES_AND_TAGS_PATTERN = %r%<[a-z](?:=[a-f0-9]+)?>|</[a-z]>|&\w+;%i
+    TAGS_PATTERN = %r%<[a-z](?:=[a-f0-9]+)?>|</[a-z]>%i
 
     # @return [Number]
     attr_reader :min_height
@@ -38,7 +35,7 @@ module Fidgit
     # Text within the element.
     # @return [String]
     def text
-      @text_input.text.force_encoding 'UTF-8'
+      @text_input.text.force_encoding '-8'
     end
 
     # Returns the range of the selection.
@@ -71,7 +68,7 @@ module Fidgit
       tags_length_before = (0...from).inject(0) {|m, i| m + @tags[i].length }
       tags_length_inside = (from...to).inject(0) {|m, i| m + @tags[i].length }
       range = (selection_range.first + tags_length_before)...(selection_range.last + tags_length_before + tags_length_inside)
-      full_text[range] = str.encode('UTF-8', undef: :replace)
+      full_text[range] = str.encode('-8', undef: :replace)
       @text_input.text = full_text
 
       @text_input.selection_start = @text_input.caret_pos = from + new_length
@@ -329,12 +326,6 @@ module Fidgit
       stripped_text.each_char.with_index do |char, i|
         tag = @tags[i]
 
-        # \x0 is just a place-holder for an entity: &entity;
-        if char == ENTITY_PLACEHOLDER
-          char = tag
-          tag = ""
-        end
-
         case char
           when "\n"
             char_width = 0
@@ -469,25 +460,15 @@ module Fidgit
     end
 
     protected
-    # Strip XML tags and entities ("<c=000000></c>" and "&entity;")
-    # @note Entities will mess up the system because we don't know how wide they are.
+    # Strip XML tags ("<c=000000></c>")
     def strip_tags
       tags_length = 0
       @tags = Hash.new('')
 
-      @stripped_text = text.gsub(ENTITIES_AND_TAGS_PATTERN) do |tag|
+      @stripped_text = text.gsub(TAGS_PATTERN) do |tag|
         pos = $`.length - tags_length
         tags_length += tag.length
         @tags[pos] += tag
-
-        # Entities need to have a non-printing character that can represent them.
-        # Still not right, but does mean there are the right number of characters.
-        if tag[0] == '&'
-          tags_length -= 1
-          ENTITY_PLACEHOLDER # Will be expanded later.
-        else
-          '' # Tags don't use up space, so ignore them.
-        end
       end
     end
   end

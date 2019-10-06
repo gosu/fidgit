@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   # An object that manages Schema values. Usually loaded from a YAML file.
   #
