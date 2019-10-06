@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   # A composite element, made up of other elements (but manages them internally).
   class Composite < Packer

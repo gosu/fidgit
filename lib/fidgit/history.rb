@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   # Manages a history of actions, along with doing, undoing and redoing those actions.
   class History

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   class Label < Composite
     ICON_POSITIONS = [:top, :bottom, :left, :right]

@@ -1,4 +1,3 @@
-
 module Fidgit
   # A simple dialog that manages a message with a set of buttons beneath it.
   class MessageDialog < DialogState

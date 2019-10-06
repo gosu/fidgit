@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   # Container that auto-packs elements.
   #

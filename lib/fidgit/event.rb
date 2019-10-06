@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   # Adds simple event handling methods to an object (subscribe/publish pattern).
   #

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   # A button that toggles its value from false<->true when clicked.
   class ToggleButton < Button

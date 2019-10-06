@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   class List < Composite
     class Item < RadioButton

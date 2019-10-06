@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   class ScrollWindow < Composite
     def content; @view.content; end

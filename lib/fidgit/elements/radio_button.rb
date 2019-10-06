@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   class RadioButton < Button
     attr_reader :group, :value

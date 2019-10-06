@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Fidgit
   # A basic scrolling area. It is not managed in any way (use ScrollWindow for that).
   class ScrollArea < Container

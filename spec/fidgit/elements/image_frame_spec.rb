@@ -1,5 +1,4 @@
 require_relative 'helpers/helper'
-require_relative 'helpers/tex_play_helper'
 
 require 'fidgit'
 
