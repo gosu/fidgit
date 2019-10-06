@@ -1,7 +1,9 @@
 Fidgit
 ======
 
-Fidgit is a GUI framework built on [Gosu](http://libgosu.org/) and [Chingu](http://ippa.se/chingu)
+Fidgit is a GUI framework built on [Gosu](https://libgosu.org/) and [Chingu](https://ippa.se/chingu)
+
+⚠️ Neither Fidgit nor Chingu are being actively maintained. The current version mostly works, but only when installed from git (not `gem install fidgit`).
 
 
 Description
