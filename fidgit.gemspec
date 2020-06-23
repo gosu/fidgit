@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('clipboard', '~> 0.9')
 
   s.add_development_dependency('rspec', '~> 2.8')
-  s.add_development_dependency('rake', '~> 10.3')
+  s.add_development_dependency('rake', '~> 12.3', '=> 12.3.3')
   s.add_development_dependency('yard', '~> 0.9.11')
   s.add_development_dependency('RedCloth', '~> 4.2', '>= 4.2.9')
 end
